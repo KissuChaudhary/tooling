@@ -15,7 +15,6 @@ import {
   PenTool,
   Mail,
   ShoppingBag,
-  ArrowDown,
   Rocket,
   Clock,
   Search,
