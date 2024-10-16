@@ -101,7 +101,12 @@ body {
   }
 
   .btn-secondary {
-    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80;
+    @apply bg-secondary text-secondary-foreground; /* Base styles */
+    transition: opacity 0.2s ease; /* Smooth transition */
+  }
+
+  .btn-secondary:hover {
+    opacity: 0.8; /* 80% opacity on hover */
   }
 
   .card {
@@ -117,4 +122,4 @@ body {
   .text-balance {
     text-wrap: balance;
   }
-}
+    }
