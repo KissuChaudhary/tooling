@@ -1,20 +1,28 @@
+'use client'
 
-import './globals.css';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import './globals.css'
+import { ThemeProvider } from 'next-themes'
+import Header from '../components/Header'
+import Footer from '../components/Footer'
 
-interface LayoutProps {
+export default function RootLayout({
+  children,
+}: {
   children: React.ReactNode
-}
-
-export default function Layout({ children }: LayoutProps) {
+}) {
   return (
-    <div className="flex flex-col min-h-screen">
-      <Header />
-      <main className="flex-grow container mx-auto px-4 py-8">
-        {children}
-      </main>
-      <Footer />
-    </div>
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <div className="flex flex-col min-h-screen">
+            <Header />
+            <main className="flex-grow container mx-auto px-4 py-8">
+              {children}
+            </main>
+            <Footer />
+          </div>
+        </ThemeProvider>
+      </body>
+    </html>
   )
 }
