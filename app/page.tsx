@@ -112,30 +112,31 @@ export default function SazeAILandingPage() {
 
         {/* Testimonials */}
         <section className="bg-gradient-to-r from-indigo-600 to-purple-600 py-20 text-white">
-          <div className="container mx-auto px-4">
-            <h2 className="text-4xl font-bold text-center mb-12">What Our Users Say</h2>
-            <div className="grid md:grid-cols-3 gap-8">
-              {[
-                { name: "Alex Johnson", role: "Content Creator", quote: "Saze AI has revolutionized my writing process. I can now produce high-quality content in half the time!", rating: 5 },
-                { name: "Sarah Lee", role: "Marketing Manager", quote: "The variety of tools available is impressive. Saze AI has become an indispensable part of our marketing strategy.", rating: 5 },
-                { name: "Michael Chen", role: "Student", quote: "As a non-native English speaker, Saze AI helps me write better essays and improve my language skills.", rating: 4 }
-              ].map((testimonial, index) => (
-                <Card key={index} className="bg-white/10 backdrop-blur-lg p-6">
-                  <CardContent>
-                    <div className="flex mb-4">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className={`h-5 w-5 ${i < testimonial.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-400'}`} />
-                      ))}
-                    </div>
-                    <p className="mb-4 italic">"{testimonial.quote}"</p>
-                    <p className="font-semibold">{testimonial.name}</p>
-                    <p className="text-sm">{testimonial.role}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl font-bold text-center mb-12">What Our Users Say</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              { name: "Alex Johnson", role: "Content Creator", quote: "Saze AI has revolutionized my writing process. I can now produce high-quality content in half the time!", rating: 5 },
+              { name: "Sarah Lee", role: "Marketing Manager", quote: "The variety of tools available is impressive. Saze AI has become an indispensable part of our marketing strategy.", rating: 5 },
+              { name: "Michael Chen", role: "Student", quote: "As a non-native English speaker, Saze AI helps me write better essays and improve my language skills.", rating: 4 }
+            ].map((testimonial, index) => (
+              <Card key={index} className="bg-white/10 backdrop-blur-lg p-6">
+                <CardContent>
+                  <div className="flex mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className={`h-5 w-5 ${i < testimonial.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-400'}`} />
+                    ))}
+                  </div>
+                  <p className="mb-4 italic">&quot;{testimonial.quote}&quot;</p>
+                  <p className="font-semibold">{testimonial.name}</p>
+                  <p className="text-sm">{testimonial.role}</p>
+                </CardContent>
+              </Card>
+            ))}
           </div>
-        </section>
+        </div>
+      </section>
+
 
         {/* Use Cases Section */}
         <section id="use-cases" className="container mx-auto px-4 py-20">
