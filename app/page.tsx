@@ -5,7 +5,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
 import Image from "next/image"
 import { motion, Variants } from "framer-motion"
-import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram } from "react-icons/fa6"
 import {
   ArrowRight,
   Check,
@@ -23,6 +22,7 @@ import {
   UserCheck,
   Layout,
 } from "lucide-react"
+import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram } from "react-icons/fa6"
 
 export default function Page() {
   const fadeIn: Variants = {
@@ -85,12 +85,51 @@ export default function Page() {
         />
         <div className="container mx-auto px-4 relative z-20 flex flex-col lg:flex-row items-center justify-between">
           {/* Floating icons */}
-          <div className="hidden lg:block absolute left-0 top-1/2 transform -translate-y-1/2 space-y-8">
-            <Image src="/placeholder.svg" alt="AI Logo" width={60} height={60} />
-            <Image src="/placeholder.svg" alt="Star Logo" width={60} height={60} />
-            <Image src="/placeholder.svg" alt="Gemini Logo" width={120} height={40} />
-            <Image src="/placeholder.svg" alt="Circular Logo" width={60} height={60} />
-            <Image src="/placeholder.svg" alt="Emoji" width={60} height={60} />
+          <div className="hidden lg:flex flex-col fixed left-4 top-1/2 transform -translate-y-1/2 space-y-8 z-30">
+            <motion.a
+              href="#"
+              className="text-blue-600 hover:scale-110 transition-transform"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <FaFacebookF size={24} className="animate-pulse" />
+            </motion.a>
+            <motion.a
+              href="#"
+              className="text-sky-500 hover:scale-110 transition-transform"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4 }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <FaTwitter size={24} className="animate-pulse" />
+            </motion.a>
+            <motion.a
+              href="#"
+              className="text-blue-700 hover:scale-110 transition-transform"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.6 }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <FaLinkedinIn size={24} className="animate-pulse" />
+            </motion.a>
+            <motion.a
+              href="#"
+              className="text-pink-600 hover:scale-110 transition-transform"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.8 }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <FaInstagram size={24} className="animate-pulse" />
+            </motion.a>
           </div>
 
           {/* Main Content */}
