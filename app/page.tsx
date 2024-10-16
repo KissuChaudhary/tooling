@@ -69,6 +69,13 @@ export default function Page() {
     { name: "OnPage Pro", icon: Layout },
   ]
 
+  const steps = [
+    { title: "Choose a Tool", description: "Select from our wide range of AI text tools", icon: Zap },
+    { title: "Input Your Content", description: "Paste your text or start writing from scratch", icon: PenTool },
+    { title: "Let AI Work Its Magic", description: "Our advanced AI processes and enhances your content", icon: Sparkles },
+    { title: "Review and Edit", description: "Fine-tune the AI-generated results to perfection", icon: Check },
+  ]
+
   return (
     <div className="bg-background text-foreground">
       {/* Hero Section */}
@@ -159,13 +166,13 @@ export default function Page() {
 
         {/* Bottom logo */}
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
-          <a href="https://www.producthunt.com/posts/saze-ai?utm_source=badge-featured&amp;utm_medium=badge&amp;utm_souce=badge-saze-ai" target="_blank">
-    <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=455121&amp;theme=light" alt="Saze AI - AI-Powered Content Creation Tools for Writers and Creators | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54">
-  </a>
+          <a href="https://www.producthunt.com/posts/saze-ai?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-saze-ai" target="_blank" rel="noopener noreferrer">
+            <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=455121&theme=light" alt="Saze AI - AI-Powered Content Creation Tools for Writers and Creators | Product Hunt" style={{ width: '250px', height: '54px' }} width="250" height="54" />
+          </a>
         </div>
       </section>
 
-       {/* Features Section */}
+      {/* Features Section */}
       <section id="features" className="py-20 bg-gradient-to-b from-gray-50 to-white">
         <div className="container mx-auto px-4">
           <motion.h2
@@ -208,35 +215,34 @@ export default function Page() {
       </section>
 
       <section className="py-20 bg-gradient-to-b from-blue-50 to-white">
-      <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center mb-12">
-          How <span className="text-blue-600">Saze AI</span> Works
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {steps.map((step, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-white rounded-lg shadow-lg p-6 flex items-start"
-            >
-              <div className="flex-shrink-0 mr-4">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                  <step.icon className="w-6 h-6 text-blue-600" />
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl font-bold text-center mb-12">
+            How <span className="text-blue-600">Saze AI</span> Works
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {steps.map((step, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="bg-white rounded-lg shadow-lg p-6 flex items-start"
+              >
+                <div className="flex-shrink-0 mr-4">
+                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                    <step.icon className="w-6 h-6 text-blue-600" />
+                  </div>
                 </div>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
-                <p className="text-gray-600">{step.description}</p>
-              </div>
-            </motion.div>
-          ))}
+                <div>
+                  <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
+                  <p className="text-gray-600">{step.description}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-        
       {/* Our Toolkit Section */}
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
@@ -298,7 +304,11 @@ export default function Page() {
               { title: "Content Marketing", description: "Create engaging blog posts, articles, and social media content with AI assistance.", icon:  PenTool },
               { title: "Academic Writing", description: "Improve essays, research papers, and theses with advanced language models.", icon: Book  },
               { title: "Business Communications", description: "Craft professional emails, reports, and presentations effortlessly.", icon: Mail },
-              { title: "Creative Writing", description: "Generate story ideas, overcome writer&apos;s block, and enhance your narrative.", icon: Sparkles },
+              { 
+                title: "Creative Writing",
+                description: "Generate story ideas, overcome writer&apos;s block, and enhance your narrative.",
+                icon: Sparkles
+              },
               { title: "SEO Optimization", description: "Optimize your content for search engines and improve your online visibility.", icon: Zap },
               { title: "Product Descriptions", description: "Create compelling product descriptions that convert browsers into buyers.", icon: ShoppingBag },
             ].map((useCase, index) => (
