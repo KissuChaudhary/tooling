@@ -1,5 +1,6 @@
 import React, { TextareaHTMLAttributes, forwardRef } from 'react'
 
+// This interface is intentionally left empty for future extensibility
 export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {}
 
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
