@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
 import Image from "next/image"
 import { motion, Variants } from "framer-motion"
+import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram } from "react-icons/fa6"
 import {
   ArrowRight,
   Check,
@@ -22,7 +23,6 @@ import {
   UserCheck,
   Layout,
 } from "lucide-react"
-import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram } from "react-icons/fa6"
 
 export default function Page() {
   const fadeIn: Variants = {
@@ -83,9 +83,9 @@ export default function Page() {
             backgroundSize: '30px 30px',
           }}
         />
-        <div className="container mx-auto px-4 relative z-20 flex flex-col lg:flex-row items-center justify-between">
+        <div className="container mx-auto px-4 relative z-20">
           {/* Floating icons */}
-          <div className="hidden lg:flex flex-col fixed left-4 top-1/2 transform -translate-y-1/2 space-y-8 z-30">
+          <div className="hidden lg:flex flex-col space-y-8 z-30">
             <motion.a
               href="#"
               className="text-blue-600 hover:scale-110 transition-transform"
@@ -94,6 +94,7 @@ export default function Page() {
               transition={{ delay: 0.2 }}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
+              style={{ left: '70px', position: 'absolute', top: '-104px' }}
             >
               <FaFacebookF size={24} className="animate-pulse" />
             </motion.a>
@@ -105,6 +106,7 @@ export default function Page() {
               transition={{ delay: 0.4 }}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
+              style={{ left: '70px', position: 'absolute', top: '-52px' }}
             >
               <FaTwitter size={24} className="animate-pulse" />
             </motion.a>
@@ -116,6 +118,7 @@ export default function Page() {
               transition={{ delay: 0.6 }}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
+              style={{ left: '70px', position: 'absolute', top: '0px' }}
             >
               <FaLinkedinIn size={24} className="animate-pulse" />
             </motion.a>
@@ -127,13 +130,14 @@ export default function Page() {
               transition={{ delay: 0.8 }}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
+              style={{ left: '70px', position: 'absolute', top: '52px' }}
             >
               <FaInstagram size={24} className="animate-pulse" />
             </motion.a>
           </div>
 
           {/* Main Content */}
-          <div className="text-center lg:w-1/2 mb-8 lg:mb-0">
+          <div className="text-center w-full">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 text-[#1e3a8a]">
               Empower your business with Generative AI
             </h1>
@@ -151,111 +155,88 @@ export default function Page() {
               </Button>
             </div>
           </div>
-
-          {/* Images */}
-          <div className="lg:w-1/2 relative h-[400px]">
-            <Image 
-              src="/placeholder.svg?height=400&width=500" 
-              alt="Business people working" 
-              layout="fill"
-              objectFit="cover"
-              className="rounded-lg shadow-lg"
-            />
-            <Image 
-              src="/placeholder.svg?height=200&width=300" 
-              alt="AI assistant" 
-              width={300} 
-              height={200} 
-              className="absolute -bottom-10 -left-10 rounded-lg shadow-lg"
-            />
-          </div>
         </div>
 
         {/* Bottom logo */}
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
-          <Image src="/placeholder.svg?height=30&width=100" alt="GPT logo" width={100} height={30} />
+          <a href="https://www.producthunt.com/posts/saze-ai?utm_source=badge-featured&amp;utm_medium=badge&amp;utm_souce=badge-saze-ai" target="_blank">
+    <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=455121&amp;theme=light" alt="Saze AI - AI-Powered Content Creation Tools for Writers and Creators | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54">
+  </a>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="container mx-auto px-4 py-20">
-        <motion.h2
-          variants={fadeIn}
-          initial="initial"
-          animate="animate"
-          transition={{ duration: 0.6 }}
-          className="text-3xl sm:text-4xl font-bold text-center mb-12"
-        >
-          Why Choose Saze AI?
-        </motion.h2>
-        <motion.div
-          variants={stagger}
-          initial="initial"
-          animate="animate"
-          className="grid md:grid-cols-3 gap-8"
-        >
-          {[
-            { title: "40+ AI Tools", description: "Access a wide range of specialized AI writing tools", icon: Zap },
-            { title: "Boost Productivity", description: "Save time and effort in your writing process", icon: Rocket },
-            { title: "Enhance Quality", description: "Improve the clarity and impact of your content", icon: Sparkles },
-          ].map((feature, index) => (
-            <motion.div key={index} variants={fadeIn}>
-              <Card className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden">
-                <CardHeader className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-pink-500/10 dark:from-purple-900/20 dark:to-pink-900/20 transform scale-95 group-hover:scale-100 transition-transform duration-300" />
-                  <feature.icon className="h-12 w-12 text-primary mb-4" />
-                  <CardTitle>{feature.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">{feature.description}</p>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </motion.div>
+       {/* Features Section */}
+      <section id="features" className="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div className="container mx-auto px-4">
+          <motion.h2
+            variants={fadeIn}
+            initial="initial"
+            animate="animate"
+            transition={{ duration: 0.6 }}
+            className="text-4xl sm:text-5xl font-bold text-center mb-16 text-gray-900"
+          >
+            Why Choose <span className="text-blue-600">Saze AI</span>?
+          </motion.h2>
+          <motion.div
+            variants={stagger}
+            initial="initial"
+            animate="animate"
+            className="grid md:grid-cols-3 gap-12"
+          >
+            {[
+              { title: "40+ AI Tools", description: "Access a wide range of specialized AI writing tools", icon: Zap, color: "bg-yellow-400" },
+              { title: "Boost Productivity", description: "Save time and effort in your writing process", icon: Rocket, color: "bg-green-400" },
+              { title: "Enhance Quality", description: "Improve the clarity and impact of your content", icon: Sparkles, color: "bg-purple-400" },
+            ].map((feature, index) => (
+              <motion.div key={index} variants={fadeIn} className="relative">
+                <div className="absolute inset-0 bg-white rounded-3xl shadow-xl transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
+                <Card className="relative bg-white rounded-3xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl">
+                  <CardHeader className="pb-0">
+                    <div className={`w-16 h-16 ${feature.color} rounded-full flex items-center justify-center mb-4`}>
+                      <feature.icon className="h-8 w-8 text-white" />
+                    </div>
+                    <CardTitle className="text-2xl font-bold mb-2">{feature.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">{feature.description}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
       </section>
 
-      {/* How It Works Section */}
-      <section className="container mx-auto px-4 py-20">
-        <motion.h2
-          variants={fadeIn}
-          initial="initial"
-          animate="animate"
-          transition={{ duration: 0.6 }}
-          className="text-3xl sm:text-4xl font-bold text-center mb-12"
-        >
-          How Saze AI Works
-        </motion.h2>
-        <motion.div
-          variants={stagger}
-          initial="initial"
-          animate="animate"
-          className="flex flex-col md:flex-row justify-center items-center gap-8"
-        >
-          {[
-            { step: 1, title: "Choose a Tool", description: "Select from our wide range of AI text tools", icon: Zap },
-            { step: 2, title: "Input Your Content", description: "Paste your text or start writing from scratch", icon: PenTool },
-            { step: 3, title: "Let AI Work Its Magic", description: "Our advanced AI processes and enhances your content", icon: Sparkles },
-            { step: 4, title: "Review and Edit", description: "Fine-tune the AI-generated results to perfection", icon: Check },
-          ].map((item, index) => (
-            <motion.div key={index} variants={fadeIn} className="text-center">
-              <div className="w-20 h-20 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold mx-auto mb-4 relative">
-                {item.step}
-                <motion.div
-                  className="absolute inset-0 rounded-full border-4 border-primary"
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                />
+      <section className="py-20 bg-gradient-to-b from-blue-50 to-white">
+      <div className="container mx-auto px-4">
+        <h2 className="text-4xl font-bold text-center mb-12">
+          How <span className="text-blue-600">Saze AI</span> Works
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {steps.map((step, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="bg-white rounded-lg shadow-lg p-6 flex items-start"
+            >
+              <div className="flex-shrink-0 mr-4">
+                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                  <step.icon className="w-6 h-6 text-blue-600" />
+                </div>
               </div>
-              <item.icon className="h-8 w-8 mx-auto mb-2 text-primary" />
-              <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-              <p className="text-muted-foreground">{item.description}</p>
+              <div>
+                <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
+                <p className="text-gray-600">{step.description}</p>
+              </div>
             </motion.div>
           ))}
-        </motion.div>
-      </section>
+        </div>
+      </div>
+    </section>
 
+        
       {/* Our Toolkit Section */}
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
@@ -324,7 +305,7 @@ export default function Page() {
               <motion.div key={index} variants={fadeIn}>
                 <Card className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 h-full">
                   <CardHeader>
-                    <div className="rounded-full bg-primary/10 p-3 w-12 h-12 mb-4 group-hover:bg-primary/20 transition-colors duration-300">
+                    <div className="rounded-full  bg-primary/10 p-3 w-12 h-12 mb-4 group-hover:bg-primary/20 transition-colors duration-300">
                       <useCase.icon className="h-6 w-6 text-primary" />
                     </div>
                     <CardTitle>{useCase.title}</CardTitle>
