@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
 import Image from "next/image"
 import { motion, Variants } from "framer-motion"
+import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram } from "react-icons/fa"
 import {
   ArrowRight,
   Check,
@@ -37,7 +38,14 @@ export default function Page() {
       }
     }
   }
-
+export default function Page() {
+  const socialIcons = [
+    { Icon: FaFacebookF, color: "text-blue-600" },
+    { Icon: FaTwitter, color: "text-sky-500" },
+    { Icon: FaLinkedinIn, color: "text-blue-700" },
+    { Icon: FaInstagram, color: "text-pink-600" },
+  ]
+  
   const testimonials = [
     {
       quote: "Scalenut&apos;s content is profound and factual. I rely on the \"quora answer\" and SEO modules to craft long-form content swiftly. Impressive results!",
@@ -74,99 +82,97 @@ export default function Page() {
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center overflow-hidden">
         <div 
-          className="absolute inset-0 z-0 opacity-20 dark:opacity-10"
+          className="absolute inset-0 z-0"
           style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, rgba(153, 133, 255, 0.5) 1px, transparent 0)`,
-            backgroundSize: '40px 40px',
+            backgroundImage: `
+              linear-gradient(rgba(42, 101, 230, 0.1) 1.5px, transparent 1.5px), 
+              linear-gradient(to right, rgba(42, 101, 230, 0.1) 1.5px, transparent 1.5px)
+            `,
+            backgroundSize: '30px 30px',
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/30 to-pink-500/30 dark:from-purple-900/30 dark:to-pink-900/30 z-10" />
         <div className="container mx-auto px-4 relative z-20">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="flex flex-col lg:flex-row items-center justify-between">
+            {/* Social Media Icons */}
+            <div className="fixed left-4 top-1/2 transform -translate-y-1/2 hidden lg:flex flex-col gap-4 z-30">
+              {socialIcons.map(({ Icon, color }, index) => (
+                <motion.a
+                  key={index}
+                  href="#"
+                  className={`${color} hover:scale-110 transition-transform`}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.2 }}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <Icon size={24} className="animate-pulse" />
+                </motion.a>
+              ))}
+            </div>
+
+            {/* Main Content */}
             <motion.div
-              initial="initial"
-              animate="animate"
-              variants={fadeIn}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
+              className="text-center lg:text-left lg:w-1/2 mb-8 lg:mb-0"
             >
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400">
-                Unleash the Power of AI in Your Writing
+              <div className="flex items-center justify-center lg:justify-start space-x-4 mb-6">
+                <Image src="/placeholder.svg" alt="AI Logo" width={40} height={40} />
+                <Image src="/placeholder.svg" alt="Gemini Logo" width={100} height={40} />
+              </div>
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 text-[#1e3a8a]">
+                Empower your business with Generative AI
               </h1>
               <p className="text-xl text-muted-foreground mb-8">
-                Saze AI offers over 40 cutting-edge AI text tools to enhance your writing, boost productivity, and unlock your creative potential.
+                Harness the Potential of Large Language Models (LLMs) for Business Innovation.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/tools">
-                  <Button size="lg" className="w-full sm:w-auto group bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
-                    Explore AI Tools
-                    <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                  </Button>
-                </Link>
-                <Link href="#features">
-                  <Button size="lg" variant="outline" className="w-full sm:w-auto group border-purple-600 dark:border-purple-400 text-purple-600 dark:text-purple-400 hover:bg-purple-600/10">
-                    Learn More
-                    <ArrowDown className="ml-2 h-5 w-5 transition-transform group-hover:translate-y-1" />
-                  </Button>
-                </Link>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <Button size="lg" className="w-full sm:w-auto group bg-[#4f46e5] hover:bg-[#4338ca]">
+                  Get Started
+                  <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                </Button>
+                <Button size="lg" variant="outline" className="w-full sm:w-auto group">
+                  Book a Demo
+                  <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                </Button>
               </div>
             </motion.div>
+
+            {/* Images */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8 }}
-              className="relative"
+              className="relative w-full lg:w-1/2 h-[300px] sm:h-[400px] lg:h-[500px]"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/30 to-pink-500/30 rounded-2xl filter blur-xl"></div>
-              <Card className="relative bg-background/80 backdrop-blur-sm border-2 border-purple-500/20 rounded-2xl overflow-hidden shadow-2xl">
-                <CardHeader className="bg-gradient-to-r from-purple-600/10 to-pink-600/10 p-6">
-                  <CardTitle className="text-2xl font-bold text-purple-600 dark:text-purple-400">AI-Powered Writing Assistant</CardTitle>
-                </CardHeader>
-                <CardContent className="p-6">
-                  <div className="space-y-4">
-                    {[
-                      "Generate creative content",
-                      "Improve grammar and style",
-                      "Enhance readability",
-                      "Optimize for SEO"
-                    ].map((feature, index) => (
-                      <motion.div 
-                        key={index}
-                        className="flex items-center"
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                      >
-                        <Check className="text-green-500 mr-2 h-6 w-6" />
-                        <span className="text-lg">{feature}</span>
-                      </motion.div>
-                    ))}
-                  </div>
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
-                  >
-                    <Button className="mt-8 w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-lg py-6">
-                      Try it now
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Button>
-                  </motion.div>
-                </CardContent>
-              </Card>
+              <Image 
+                src="/placeholder.svg?height=400&width=500" 
+                alt="Business people working" 
+                layout="fill"
+                objectFit="cover"
+                className="rounded-lg shadow-lg"
+              />
+              <Image 
+                src="/placeholder.svg?height=200&width=300" 
+                alt="AI assistant" 
+                width={300} 
+                height={200} 
+                className="absolute -bottom-10 -left-10 rounded-lg shadow-lg hidden sm:block"
+              />
             </motion.div>
           </div>
         </div>
-        <motion.div 
-          className="absolute bottom-10 left-1/2 transform -translate-x-1/2"
+
+        {/* Bottom AI Tools Image */}
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1 }}
+          className="absolute bottom-4 left-1/2 transform -translate-x-1/2"
         >
-          <Link href="#features">
-            <Button variant="ghost" size="sm" className="rounded-full animate-bounce">
-              <ArrowDown className="h-6 w-6" />
-            </Button>
-          </Link>
+          <Image src="/placeholder.svg?height=50&width=150" alt="AI tools" width={150} height={50} />
         </motion.div>
       </section>
 
