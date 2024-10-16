@@ -53,7 +53,6 @@ export default function LinkedInBioPage() {
         <meta name="description" content={metadata.description} />
       </Head>
 
-      {/* Schema for LinkedIn Bio Generator */}
       <Script id="schema-linkedin-bio" type="application/ld+json">
         {JSON.stringify({
           "@context": "https://schema.org",
@@ -128,7 +127,7 @@ export default function LinkedInBioPage() {
         <section className="py-12 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl font-extrabold text-gray-900 mb-8 text-center">
-              How to Use Unrealshot AI's LinkedIn Bio Generator
+              How to Use Unrealshot AI&apos;s LinkedIn Bio Generator
             </h2>
             <div className="space-y-8">
               <StepItem
@@ -172,16 +171,15 @@ export default function LinkedInBioPage() {
 
         {/* Existing SEO content */}
         <section className="max-w-7xl mx-auto mt-12">
-        
           <h2 className="text-xl font-semibold mt-8">How Our AI LinkedIn Bio Generator Works</h2>
           <p className="mt-4">
-            Our <strong>AI LinkedIn bio generator</strong> is designed to make creating your LinkedIn bio quick and easy. Simply provide a few key details, and the AI will generate a perfectly written bio for you. Here’s how to use it:
+            Our <strong>AI LinkedIn bio generator</strong> is designed to make creating your LinkedIn bio quick and easy. Simply provide a few key details, and the AI will generate a perfectly written bio for you. Here&apos;s how to use it:
           </p>
           <ol className="list-decimal list-inside mt-4">
             <li>Enter your job title or profession.</li>
             <li>Describe your experience or expertise in a few sentences.</li>
             <li>Choose your preferred tone—formal, friendly, or casual.</li>
-            <li>Click "Generate", and your new LinkedIn bio is ready to use instantly.</li>
+            <li>Click &quot;Generate&quot;, and your new LinkedIn bio is ready to use instantly.</li>
           </ol>
           <p className="mt-4">
             No need to second-guess your words. Our <strong>AI LinkedIn bio generator</strong> does the work for you, giving you a polished bio in seconds.
@@ -196,7 +194,6 @@ export default function LinkedInBioPage() {
             <li><strong>Tailored Results:</strong> Your bio is unique to you, reflecting your professional journey and accomplishments.</li>
           </ul>
 
-       
           <h3 className="text-xl font-semibold mt-8">Use Cases for Our AI LinkedIn Bio Generator</h3>
           <p className="mt-4">
             Our <strong>AI LinkedIn bio generator</strong> is perfect for anyone looking to enhance their LinkedIn profile:
@@ -204,26 +201,23 @@ export default function LinkedInBioPage() {
           <ul className="list-disc list-inside mt-4">
             <li><strong>Job Seekers:</strong> Stand out to recruiters with a bio that highlights your key skills and experience.</li>
             <li><strong>Freelancers:</strong> Craft a compelling bio that attracts clients and showcases your expertise.</li>
-            <li><strong>Career Changers:</strong> If you’re transitioning to a new industry or role, use the generator to create a bio that fits your new career path.</li>
+            <li><strong>Career Changers:</strong> If you&apos;re transitioning to a new industry or role, use the generator to create a bio that fits your new career path.</li>
             <li><strong>Business Owners:</strong> Highlight your entrepreneurial achievements and the unique value your business offers.</li>
           </ul>
 
-         
-
           <h3 className="text-xl font-semibold mt-8">Explore More with UnrealShot AI</h3>
           <p className="mt-4">
-  Want to take your LinkedIn profile to the next level? After generating your perfect bio, head over to our homepage and try our 
-  <a href="https://www.unrealshot.com/" className="text-blue-600 underline hover:text-indigo-800"> AI headshot generator </a> 
-  for professional, AI-generated headshots that enhance your LinkedIn profile.
-</p>
-
+            Want to take your LinkedIn profile to the next level? After generating your perfect bio, head over to our homepage and try our 
+            <a href="https://www.unrealshot.com/" className="text-blue-600 underline hover:text-indigo-800"> AI headshot generator </a> 
+            for professional, AI-generated headshots that enhance your LinkedIn profile.
+          </p>
 
           <h3 className="text-xl font-semibold mt-8">Get Started with Our Free LinkedIn Bio Generator AI</h3>
           <p className="mt-4">
-            Creating a LinkedIn bio doesn’t have to be a challenge. With our <strong>free LinkedIn bio generator</strong>, you’ll have a professional bio ready in seconds. Take the guesswork out of writing, and let AI do the work for you. Try it now, and give your LinkedIn profile the boost it needs to stand out.
+            Creating a LinkedIn bio doesn&apos;t have to be a challenge. With our <strong>free LinkedIn bio generator</strong>, you&apos;ll have a professional bio ready in seconds. Take the guesswork out of writing, and let AI do the work for you. Try it now, and give your LinkedIn profile the boost it needs to stand out.
           </p>
-      </section>
+        </section>
       </div>
     </>
   );
-}
+            }
