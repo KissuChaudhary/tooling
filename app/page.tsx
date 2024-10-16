@@ -74,16 +74,13 @@ export default function Page() {
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center overflow-hidden">
         <div 
-          className="absolute inset-0 z-0"
+          className="absolute inset-0 z-0 opacity-20 dark:opacity-10"
           style={{
-            backgroundImage: `
-              linear-gradient(rgba(153, 133, 255, 0.294) 1.5px, transparent 1px), 
-              linear-gradient(to right, rgba(153, 133, 255, 0.294) 1.5px, transparent 1px)
-            `,
-            backgroundSize: '90px 90px',
+            backgroundImage: `radial-gradient(circle at 1px 1px, rgba(153, 133, 255, 0.5) 1px, transparent 0)`,
+            backgroundSize: '40px 40px',
           }}
         />
-        <div className="absolute inset-0 dark:from-purple-900/30 dark:to-pink-900/30 z-10" />
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/30 to-pink-500/30 dark:from-purple-900/30 dark:to-pink-900/30 z-10" />
         <div className="container mx-auto px-4 relative z-20">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <motion.div
@@ -92,7 +89,7 @@ export default function Page() {
               variants={fadeIn}
               transition={{ duration: 0.8 }}
             >
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400">
                 Unleash the Power of AI in Your Writing
               </h1>
               <p className="text-xl text-muted-foreground mb-8">
@@ -100,13 +97,13 @@ export default function Page() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link href="/tools">
-                  <Button size="lg" className="w-full sm:w-auto group">
+                  <Button size="lg" className="w-full sm:w-auto group bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
                     Explore AI Tools
                     <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                   </Button>
                 </Link>
                 <Link href="#features">
-                  <Button size="lg" variant="outline" className="w-full sm:w-auto group">
+                  <Button size="lg" variant="outline" className="w-full sm:w-auto group border-purple-600 dark:border-purple-400 text-purple-600 dark:text-purple-400 hover:bg-purple-600/10">
                     Learn More
                     <ArrowDown className="ml-2 h-5 w-5 transition-transform group-hover:translate-y-1" />
                   </Button>
@@ -119,43 +116,58 @@ export default function Page() {
               transition={{ duration: 0.8 }}
               className="relative"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/30 to-pink-500/30 rounded-lg filter blur-xl"></div>
-              <Card className="relative bg-background/80 backdrop-blur-sm border-2 border-purple-500/20">
-                <CardHeader>
-                  <CardTitle>AI-Powered Writing Assistant</CardTitle>
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/30 to-pink-500/30 rounded-2xl filter blur-xl"></div>
+              <Card className="relative bg-background/80 backdrop-blur-sm border-2 border-purple-500/20 rounded-2xl overflow-hidden shadow-2xl">
+                <CardHeader className="bg-gradient-to-r from-purple-600/10 to-pink-600/10 p-6">
+                  <CardTitle className="text-2xl font-bold text-purple-600 dark:text-purple-400">AI-Powered Writing Assistant</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-6">
                   <div className="space-y-4">
-                    <div className="flex items-center">
-                      <Check className="text-green-500 mr-2" />
-                      <span>Generate creative content</span>
-                    </div>
-                    <div className="flex items-center">
-                      <Check className="text-green-500 mr-2" />
-                      <span>Improve grammar and style</span>
-                    </div>
-                    <div className="flex items-center">
-                      <Check className="text-green-500 mr-2" />
-                      <span>Enhance readability</span>
-                    </div>
-                    <div className="flex items-center">
-                      <Check className="text-green-500 mr-2" />
-                      <span>Optimize for SEO</span>
-                    </div>
+                    {[
+                      "Generate creative content",
+                      "Improve grammar and style",
+                      "Enhance readability",
+                      "Optimize for SEO"
+                    ].map((feature, index) => (
+                      <motion.div 
+                        key={index}
+                        className="flex items-center"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                      >
+                        <Check className="text-green-500 mr-2 h-6 w-6" />
+                        <span className="text-lg">{feature}</span>
+                      </motion.div>
+                    ))}
                   </div>
-                  <Button className="mt-6 w-full">Try it now</Button>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 }}
+                  >
+                    <Button className="mt-8 w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-lg py-6">
+                      Try it now
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                  </motion.div>
                 </CardContent>
               </Card>
             </motion.div>
           </div>
         </div>
-        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2">
+        <motion.div 
+          className="absolute bottom-10 left-1/2 transform -translate-x-1/2"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1 }}
+        >
           <Link href="#features">
             <Button variant="ghost" size="sm" className="rounded-full animate-bounce">
               <ArrowDown className="h-6 w-6" />
             </Button>
           </Link>
-        </div>
+        </motion.div>
       </section>
 
       {/* Features Section */}
