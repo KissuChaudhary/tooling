@@ -41,7 +41,7 @@ export default function Page() {
 
   const testimonials = [
     {
-      quote: "Scalenut's content is profound and factual. I rely on the \"quora answer\" and SEO modules to craft long-form content swiftly. Impressive results!",
+      quote: "Scalenut&apos;s content is profound and factual. I rely on the \"quora answer\" and SEO modules to craft long-form content swiftly. Impressive results!",
       name: "Benedict T.",
       role: "SEO Consultant",
       image: "/placeholder.svg"
