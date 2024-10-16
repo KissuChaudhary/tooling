@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
 import Image from "next/image"
 import { motion, Variants } from "framer-motion"
-import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram } from "react-icons/fa"
+import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram } from "react-icons/fa6"
 import {
   ArrowRight,
   Check,
@@ -15,7 +15,6 @@ import {
   PenTool,
   Mail,
   ShoppingBag,
-  ArrowDown,
   Rocket,
   Clock,
   Search,
@@ -38,7 +37,8 @@ export default function Page() {
       }
     }
   }
-const socialIcons = [
+
+  const socialIcons = [
     { Icon: FaFacebookF, color: "text-blue-600" },
     { Icon: FaTwitter, color: "text-sky-500" },
     { Icon: FaLinkedinIn, color: "text-blue-700" },
@@ -47,7 +47,7 @@ const socialIcons = [
   
   const testimonials = [
     {
-      quote: "Scalenut&apos;s content is profound and factual. I rely on the \"quora answer\" and SEO modules to craft long-form content swiftly. Impressive results!",
+      quote: "Scalenut's content is profound and factual. I rely on the \"quora answer\" and SEO modules to craft long-form content swiftly. Impressive results!",
       name: "Benedict T.",
       role: "SEO Consultant",
       image: "/placeholder.svg"
@@ -313,9 +313,9 @@ const socialIcons = [
           >
             {[
               { title: "Content Marketing", description: "Create engaging blog posts, articles, and social media content with AI assistance.", icon:  PenTool },
-              { title: "Academic Writing", description: "Improve essays, research papers, and theses with advanced language models.", icon: Book },
+              { title: "Academic Writing", description: "Improve essays, research papers, and theses with advanced language models.", icon: Book  },
               { title: "Business Communications", description: "Craft professional emails, reports, and presentations effortlessly.", icon: Mail },
-              { title: "Creative Writing", description: "Generate story ideas, overcome writer&apos;s block, and enhance your narrative.", icon: Sparkles },
+              { title: "Creative Writing", description: "Generate story ideas, overcome writer's block, and enhance your narrative.", icon: Sparkles },
               { title: "SEO Optimization", description: "Optimize your content for search engines and improve your online visibility.", icon: Zap },
               { title: "Product Descriptions", description: "Create compelling product descriptions that convert browsers into buyers.", icon: ShoppingBag },
             ].map((useCase, index) => (
@@ -348,7 +348,7 @@ const socialIcons = [
           >
             <h2 className="text-3xl sm:text-4xl font-bold text-blue-600 mb-4">LOVE IS IN THE SCALE</h2>
             <p className="text-2xl sm:text-3xl font-bold text-gray-900">
-              Trusted by <span className="text-blue-600">1 Mn+ marketers</span> of the world&apos;s leading brands
+              Trusted by <span className="text-blue-600">1 Mn+ marketers</span> of the world's leading brands
             </p>
           </motion.div>
           <div className="flex justify-end mb-8">
