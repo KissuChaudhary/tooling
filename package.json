@@ -17,6 +17,7 @@
     "next": "14.2.15",
     "openai": "^4.67.3",
     "react": "^18",
+    "next-themes": "latest"
     "react-dom": "^18",
     "tailwind-merge": "^2.5.4"
   },
