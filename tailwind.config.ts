@@ -34,6 +34,11 @@ const config: Config = {
       },
     },
   },
+  variants: {
+    extend: {
+      backgroundColor: ['hover'], // Ensure hover variants are enabled for background color
+    },
+  },
   plugins: [],
 };
 
