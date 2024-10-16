@@ -2,10 +2,12 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
+import Layout from '../components/Layout'
 import { ArrowRight, Check, Star, Zap, Edit, Book, Sparkles, MessageSquare, FileText, PenTool, Mail, Share2, ShoppingBag } from "lucide-react"
 
 export default function SazeAILandingPage() {
   return (
+    <Layout>
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
       <header className="container mx-auto px-4 py-6 flex justify-between items-center">
         <div className="text-2xl font-bold text-purple-800">Saze AI</div>
@@ -177,5 +179,6 @@ export default function SazeAILandingPage() {
 
      
     </div>
+    </Layout>
   )
 }
