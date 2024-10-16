@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Github } from 'lucide-react'
+import { Menu, X} from 'lucide-react'
 
 const menuItems = [
   { name: 'Home', href: '/' },
