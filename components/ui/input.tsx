@@ -1,5 +1,6 @@
 import * as React from "react"
 
+// This interface is intentionally left empty for future extensibility
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
 
