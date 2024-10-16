@@ -2,9 +2,9 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { motion, Variants } from "framer-motion"
 import Link from "next/link"
 import Image from "next/image"
+import { motion, Variants } from "framer-motion"
 import {
   ArrowRight,
   Check,
@@ -27,11 +27,10 @@ import {
 export default function Page() {
   const fadeIn: Variants = {
     initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.6 }
+    animate: { opacity: 1, y: 0 }
   }
 
-  const stagger = {
+  const stagger: Variants = {
     animate: {
       transition: {
         staggerChildren: 0.1
@@ -41,7 +40,7 @@ export default function Page() {
 
   const testimonials = [
     {
-      quote: "Scalenut&apos;s content is profound and factual. I rely on the \"quora answer\" and SEO modules to craft long-form content swiftly. Impressive results!",
+      quote: "Scalenut's content is profound and factual. I rely on the \"quora answer\" and SEO modules to craft long-form content swiftly. Impressive results!",
       name: "Benedict T.",
       role: "SEO Consultant",
       image: "/placeholder.svg"
@@ -88,8 +87,9 @@ export default function Page() {
         <div className="container mx-auto px-4 relative z-20">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial="initial"
+              animate="animate"
+              variants={fadeIn}
               transition={{ duration: 0.8 }}
             >
               <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600">
@@ -161,7 +161,10 @@ export default function Page() {
       {/* Features Section */}
       <section id="features" className="container mx-auto px-4 py-20">
         <motion.h2
-          {...fadeIn}
+          variants={fadeIn}
+          initial="initial"
+          animate="animate"
+          transition={{ duration: 0.6 }}
           className="text-3xl sm:text-4xl font-bold text-center mb-12"
         >
           Why Choose Saze AI?
@@ -196,7 +199,10 @@ export default function Page() {
       {/* How It Works Section */}
       <section className="container mx-auto px-4 py-20">
         <motion.h2
-          {...fadeIn}
+          variants={fadeIn}
+          initial="initial"
+          animate="animate"
+          transition={{ duration: 0.6 }}
           className="text-3xl sm:text-4xl font-bold text-center mb-12"
         >
           How Saze AI Works
@@ -274,7 +280,10 @@ export default function Page() {
       <section id="use-cases" className="py-20">
         <div className="container mx-auto px-4">
           <motion.h2
-            {...fadeIn}
+            variants={fadeIn}
+            initial="initial"
+            animate="animate"
+            transition={{ duration: 0.6 }}
             className="text-3xl sm:text-4xl font-bold text-center mb-12"
           >
             AI Writing Use Cases
@@ -289,7 +298,7 @@ export default function Page() {
               { title: "Content Marketing", description: "Create engaging blog posts, articles, and social media content with AI assistance.", icon:  PenTool },
               { title: "Academic Writing", description: "Improve essays, research papers, and theses with advanced language models.", icon: Book },
               { title: "Business Communications", description: "Craft professional emails, reports, and presentations effortlessly.", icon: Mail },
-              { title: "Creative Writing", description: "Generate story ideas, overcome writer&apos;s block, and enhance your narrative.", icon: Sparkles },
+              { title: "Creative Writing", description: "Generate story ideas, overcome writer's block, and enhance your narrative.", icon: Sparkles },
               { title: "SEO Optimization", description: "Optimize your content for search engines and improve your online visibility.", icon: Zap },
               { title: "Product Descriptions", description: "Create compelling product descriptions that convert browsers into buyers.", icon: ShoppingBag },
             ].map((useCase, index) => (
@@ -312,7 +321,7 @@ export default function Page() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-gray-50">
+      <section  className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -322,7 +331,7 @@ export default function Page() {
           >
             <h2 className="text-3xl sm:text-4xl font-bold text-blue-600 mb-4">LOVE IS IN THE SCALE</h2>
             <p className="text-2xl sm:text-3xl font-bold text-gray-900">
-              Trusted by <span className="text-blue-600">1 Mn+ marketers</span> of the world&apos;s leading brands
+              Trusted by <span className="text-blue-600">1 Mn+ marketers</span> of the world's leading brands
             </p>
           </motion.div>
           <div className="flex justify-end mb-8">
