@@ -2,9 +2,9 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { motion, Variants } from "framer-motion"
 import Link from "next/link"
 import Image from "next/image"
-import { motion } from "framer-motion"
 import {
   ArrowRight,
   Check,
@@ -25,7 +25,7 @@ import {
 } from "lucide-react"
 
 export default function Page() {
-  const fadeIn = {
+  const fadeIn: Variants = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
     transition: { duration: 0.6 }
