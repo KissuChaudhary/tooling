@@ -14,25 +14,25 @@ export default function Header() {
   }, [])
 
   return (
-    <header className="bg-white dark:bg-gray-800 shadow-md">
+    <header className="bg-background border-b border-border">
       <div className="container mx-auto px-4 py-6 flex justify-between items-center">
-        <Link href="/" className="text-2xl font-bold text-gray-800 dark:text-white">
+        <Link href="/" className="text-2xl font-bold text-foreground">
           Your Logo
         </Link>
         <nav>
           <ul className="flex space-x-4">
             <li>
-              <Link href="/" className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white">
+              <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">
                 Home
               </Link>
             </li>
             <li>
-              <Link href="/about" className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white">
+              <Link href="/about" className="text-muted-foreground hover:text-foreground transition-colors">
                 About
               </Link>
             </li>
             <li>
-              <Link href="/contact" className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white">
+              <Link href="/contact" className="text-muted-foreground hover:text-foreground transition-colors">
                 Contact
               </Link>
             </li>
@@ -41,14 +41,14 @@ export default function Header() {
         <button
           aria-label="Toggle Dark Mode"
           type="button"
-          className="p-2 bg-gray-200 dark:bg-gray-700 rounded-md"
+          className="btn btn-secondary"
           onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
         >
           {mounted && (
             theme === 'dark' ? (
-              <Sun className="text-yellow-500 w-5 h-5" />
+              <Sun className="w-5 h-5" />
             ) : (
-              <Moon className="text-gray-700 w-5 h-5" />
+              <Moon className="w-5 h-5" />
             )
           )}
         </button>
