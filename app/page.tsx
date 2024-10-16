@@ -83,7 +83,7 @@ export default function Page() {
             backgroundSize: '90px 90px',
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-pink-500/20 dark:from-purple-900/30 dark:to-pink-900/30 z-10" />
+        <div className="absolute inset-0 dark:from-purple-900/30 dark:to-pink-900/30 z-10" />
         <div className="container mx-auto px-4 relative z-20">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <motion.div
