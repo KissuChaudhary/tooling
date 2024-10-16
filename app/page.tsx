@@ -38,8 +38,7 @@ export default function Page() {
       }
     }
   }
-export default function Page() {
-  const socialIcons = [
+const socialIcons = [
     { Icon: FaFacebookF, color: "text-blue-600" },
     { Icon: FaTwitter, color: "text-sky-500" },
     { Icon: FaLinkedinIn, color: "text-blue-700" },
