@@ -6,7 +6,7 @@ import { ArrowRight, Check, Star, Zap, Edit, Book, Sparkles, MessageSquare, File
 
 export default function SazeAILandingPage() {
   return (
-    <Layout>
+    
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
       <header className="container mx-auto px-4 py-6 flex justify-between items-center">
         <div className="text-2xl font-bold text-purple-800">Saze AI</div>
@@ -178,6 +178,6 @@ export default function SazeAILandingPage() {
 
      
     </div>
-    </Layout>
+   
   )
 }
