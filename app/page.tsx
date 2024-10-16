@@ -15,6 +15,7 @@ import {
   PenTool,
   Mail,
   ShoppingBag,
+  ArrowDown,
   Rocket,
   Clock,
   Search,
@@ -38,16 +39,9 @@ export default function Page() {
     }
   }
 
-  const socialIcons = [
-    { Icon: FaFacebookF, color: "text-blue-600" },
-    { Icon: FaTwitter, color: "text-sky-500" },
-    { Icon: FaLinkedinIn, color: "text-blue-700" },
-    { Icon: FaInstagram, color: "text-pink-600" },
-  ]
-  
   const testimonials = [
     {
-      quote: "Scalenut's content is profound and factual. I rely on the \"quora answer\" and SEO modules to craft long-form content swiftly. Impressive results!",
+      quote: "Scalenut&apos;s content is profound and factual. I rely on the \"quora answer\" and SEO modules to craft long-form content swiftly. Impressive results!",
       name: "Benedict T.",
       role: "SEO Consultant",
       image: "/placeholder.svg"
@@ -79,7 +73,7 @@ export default function Page() {
   return (
     <div className="bg-background text-foreground">
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center overflow-hidden">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <div 
           className="absolute inset-0 z-0"
           style={{
@@ -90,89 +84,59 @@ export default function Page() {
             backgroundSize: '30px 30px',
           }}
         />
-        <div className="container mx-auto px-4 relative z-20">
-          <div className="flex flex-col lg:flex-row items-center justify-between">
-            {/* Social Media Icons */}
-            <div className="fixed left-4 top-1/2 transform -translate-y-1/2 hidden lg:flex flex-col gap-4 z-30">
-              {socialIcons.map(({ Icon, color }, index) => (
-                <motion.a
-                  key={index}
-                  href="#"
-                  className={`${color} hover:scale-110 transition-transform`}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.2 }}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <Icon size={24} className="animate-pulse" />
-                </motion.a>
-              ))}
+        <div className="container mx-auto px-4 relative z-20 flex flex-col lg:flex-row items-center justify-between">
+          {/* Floating icons */}
+          <div className="hidden lg:block absolute left-0 top-1/2 transform -translate-y-1/2 space-y-8">
+            <Image src="/placeholder.svg" alt="AI Logo" width={60} height={60} />
+            <Image src="/placeholder.svg" alt="Star Logo" width={60} height={60} />
+            <Image src="/placeholder.svg" alt="Gemini Logo" width={120} height={40} />
+            <Image src="/placeholder.svg" alt="Circular Logo" width={60} height={60} />
+            <Image src="/placeholder.svg" alt="Emoji" width={60} height={60} />
+          </div>
+
+          {/* Main Content */}
+          <div className="text-center lg:w-1/2 mb-8 lg:mb-0">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 text-[#1e3a8a]">
+              Empower your business with Generative AI
+            </h1>
+            <p className="text-xl text-muted-foreground mb-8">
+              Harness the Potential of Large Language Models (LLMs) for Business Innovation.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" className="w-full sm:w-auto group bg-[#4f46e5] hover:bg-[#4338ca]">
+                Get Started
+                <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+              </Button>
+              <Button size="lg" variant="outline" className="w-full sm:w-auto group">
+                Book a Demo
+                <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+              </Button>
             </div>
+          </div>
 
-            {/* Main Content */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="text-center lg:text-left lg:w-1/2 mb-8 lg:mb-0"
-            >
-              <div className="flex items-center justify-center lg:justify-start space-x-4 mb-6">
-                <Image src="/placeholder.svg" alt="AI Logo" width={40} height={40} />
-                <Image src="/placeholder.svg" alt="Gemini Logo" width={100} height={40} />
-              </div>
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 text-[#1e3a8a]">
-                Empower your business with Generative AI
-              </h1>
-              <p className="text-xl text-muted-foreground mb-8">
-                Harness the Potential of Large Language Models (LLMs) for Business Innovation.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <Button size="lg" className="w-full sm:w-auto group bg-[#4f46e5] hover:bg-[#4338ca]">
-                  Get Started
-                  <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                </Button>
-                <Button size="lg" variant="outline" className="w-full sm:w-auto group">
-                  Book a Demo
-                  <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                </Button>
-              </div>
-            </motion.div>
-
-            {/* Images */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8 }}
-              className="relative w-full lg:w-1/2 h-[300px] sm:h-[400px] lg:h-[500px]"
-            >
-              <Image 
-                src="/placeholder.svg?height=400&width=500" 
-                alt="Business people working" 
-                layout="fill"
-                objectFit="cover"
-                className="rounded-lg shadow-lg"
-              />
-              <Image 
-                src="/placeholder.svg?height=200&width=300" 
-                alt="AI assistant" 
-                width={300} 
-                height={200} 
-                className="absolute -bottom-10 -left-10 rounded-lg shadow-lg hidden sm:block"
-              />
-            </motion.div>
+          {/* Images */}
+          <div className="lg:w-1/2 relative h-[400px]">
+            <Image 
+              src="/placeholder.svg?height=400&width=500" 
+              alt="Business people working" 
+              layout="fill"
+              objectFit="cover"
+              className="rounded-lg shadow-lg"
+            />
+            <Image 
+              src="/placeholder.svg?height=200&width=300" 
+              alt="AI assistant" 
+              width={300} 
+              height={200} 
+              className="absolute -bottom-10 -left-10 rounded-lg shadow-lg"
+            />
           </div>
         </div>
 
-        {/* Bottom AI Tools Image */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1 }}
-          className="absolute bottom-4 left-1/2 transform -translate-x-1/2"
-        >
-          <Image src="/placeholder.svg?height=50&width=150" alt="AI tools" width={150} height={50} />
-        </motion.div>
+        {/* Bottom logo */}
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
+          <Image src="/placeholder.svg?height=30&width=100" alt="GPT logo" width={100} height={30} />
+        </div>
       </section>
 
       {/* Features Section */}
@@ -315,7 +279,7 @@ export default function Page() {
               { title: "Content Marketing", description: "Create engaging blog posts, articles, and social media content with AI assistance.", icon:  PenTool },
               { title: "Academic Writing", description: "Improve essays, research papers, and theses with advanced language models.", icon: Book  },
               { title: "Business Communications", description: "Craft professional emails, reports, and presentations effortlessly.", icon: Mail },
-              { title: "Creative Writing", description: "Generate story ideas, overcome writer's block, and enhance your narrative.", icon: Sparkles },
+              { title: "Creative Writing", description: "Generate story ideas, overcome writer&apos;s block, and enhance your narrative.", icon: Sparkles },
               { title: "SEO Optimization", description: "Optimize your content for search engines and improve your online visibility.", icon: Zap },
               { title: "Product Descriptions", description: "Create compelling product descriptions that convert browsers into buyers.", icon: ShoppingBag },
             ].map((useCase, index) => (
@@ -348,7 +312,7 @@ export default function Page() {
           >
             <h2 className="text-3xl sm:text-4xl font-bold text-blue-600 mb-4">LOVE IS IN THE SCALE</h2>
             <p className="text-2xl sm:text-3xl font-bold text-gray-900">
-              Trusted by <span className="text-blue-600">1 Mn+ marketers</span> of the world's leading brands
+              Trusted by <span className="text-blue-600">1 Mn+ marketers</span> of the world&apos;s leading brands
             </p>
           </motion.div>
           <div className="flex justify-end mb-8">
