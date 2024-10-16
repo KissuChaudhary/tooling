@@ -1,20 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import {
   ArrowRight,
   Check,
   Star,
   Zap,
-  Edit,
   Book,
   Sparkles,
-  MessageSquare,
-  FileText,
   PenTool,
   Mail,
-  Share2,
   ShoppingBag,
 } from "lucide-react";
 
