@@ -1,59 +1,58 @@
-"use client";
+'use client'
 
-import Link from 'next/link';
-import { useState } from 'react';
-import { Menu, X } from 'lucide-react';
-
-const menuItems = [
-  { name: 'Home', href: '/' },
-  { name: 'Tools', href: '/tools' },
-  { name: 'About', href: '/about' },
-  { name: 'Contact', href: '/contact' },
-];
+import Link from 'next/link'
+import { useTheme } from 'next-themes'
+import { useState, useEffect } from 'react'
+import { Moon, Sun } from 'lucide-react'
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false)
+  const { theme, setTheme } = useTheme()
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   return (
-    <header className="bg-background shadow-md">
-      <nav className="container mx-auto px-4 py-4 flex justify-between items-center">
-        <Link href="/" className="text-2xl font-bold text-primary">
-          AI Tools Hub
+    <header className="bg-white dark:bg-gray-800 shadow-md">
+      <div className="container mx-auto px-4 py-6 flex justify-between items-center">
+        <Link href="/" className="text-2xl font-bold text-gray-800 dark:text-white">
+          Your Logo
         </Link>
-        <div className="hidden md:flex space-x-4">
-          {menuItems.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              className="text-foreground hover:text-primary transition-colors"
-            >
-              {item.name}
-            </Link>
-          ))}
-        </div>
-        <button
-          className="md:hidden text-foreground"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </nav>
-      {isOpen && (
-        <div className="md:hidden bg-background">
-          <nav className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-            {menuItems.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="text-foreground hover:text-primary transition-colors"
-                onClick={() => setIsOpen(false)}
-              >
-                {item.name}
+        <nav>
+          <ul className="flex space-x-4">
+            <li>
+              <Link href="/" className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white">
+                Home
               </Link>
-            ))}
-          </nav>
-        </div>
-      )}
+            </li>
+            <li>
+              <Link href="/about" className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white">
+                About
+              </Link>
+            </li>
+            <li>
+              <Link href="/contact" className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white">
+                Contact
+              </Link>
+            </li>
+          </ul>
+        </nav>
+        <button
+          aria-label="Toggle Dark Mode"
+          type="button"
+          className="p-2 bg-gray-200 dark:bg-gray-700 rounded-md"
+          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+        >
+          {mounted && (
+            theme === 'dark' ? (
+              <Sun className="text-yellow-500 w-5 h-5" />
+            ) : (
+              <Moon className="text-gray-700 w-5 h-5" />
+            )
+          )}
+        </button>
+      </div>
     </header>
-  );
+  )
 }
