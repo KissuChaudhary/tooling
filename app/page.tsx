@@ -141,7 +141,7 @@ export default function Page() {
 
         {/* Main Content */}
         <div className="text-center w-full space-y-8">
-          <div className="flex justify-center">
+          <div className="flex justify-center hero-bh">
             <span className="text-lg font-bold bg-clip-text text-transparent animate-gradient px-4 py-1.5 rounded-lg gradient-text text-small">
               TRUSTED BY THOUSANDS, LOVED BY ALL
             </span>
