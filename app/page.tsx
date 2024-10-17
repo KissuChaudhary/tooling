@@ -368,24 +368,24 @@ export default function Page() {
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {toolkit.map((tool, index) => (
-  <Link key={index} href={toolkit.link} passHref >
+  <Link key={index} href={tool.link} passHref> {/* Changed toolkit.link to tool.link */}
     <Card className="group transition-all duration-300 hover:shadow-xl hover:scale-105">
       <CardHeader className="relative pb-0">
         <div className="absolute top-4 left-4 bg-gray-100 rounded-full p-3 transition-all duration-300 group-hover:scale-110">
-          {toolkit.icon}
+          {tool.icon} {/* Changed toolkit.icon to tool.icon */}
         </div>
-        {toolkit.badge && (
+        {tool.badge && ( /* Changed toolkit.badge to tool.badge */}
           <Badge 
             variant="secondary" 
             className={`absolute top-4 right-4 text-xs font-semibold ${tool.badge.color} px-2 py-1 rounded-md`}
           >
-            {toolkit.badge.text}
+            {tool.badge.text} {/* Changed toolkit.badge.text to tool.badge.text */}
           </Badge>
         )}
       </CardHeader>
       <CardContent className="pt-16">
-        <CardTitle className="text-xl font-bold mb-2">{toolkit.title}</CardTitle>
-        <CardDescription className="text-sm">{toolkit.description}</CardDescription>
+        <CardTitle className="text-xl font-bold mb-2">{tool.title}</CardTitle> {/* Changed toolkit.title to tool.title */}
+        <CardDescription className="text-sm">{tool.description}</CardDescription> {/* Changed toolkit.description to tool.description */}
       </CardContent>
     </Card>
   </Link>
