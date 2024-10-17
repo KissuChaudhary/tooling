@@ -122,10 +122,10 @@ export default function ToolsPage() {
   return (
     <div className="min-h-screen py-16">
       <main className="container mx-auto px-6">
-        <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 mb-6 text-center animate-fade-in-down">
+        <h1 className="text-5xl md:text-6xl font-extrabold mb-6 text-center animate-fade-in-down">
           Explore All Free AI Tools
         </h1>
-        <p className="text-xl md:text-2xl text-gray-700 mb-16 text-center max-w-3xl mx-auto animate-fade-in-up">
+        <p className="text-xl md:text-2xl mb-16 text-center max-w-3xl mx-auto animate-fade-in-up">
           Unleash your creativity and boost productivity with our cutting-edge AI-powered tools.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
