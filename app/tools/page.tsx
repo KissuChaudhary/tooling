@@ -38,29 +38,84 @@ const tools = [
     link: "/tools/ai-thesis-statement"
   },
   {
-    icon: <Feather className="h-8 w-8 text-indigo-500" />,
-    title: "AI Poem Generator",
-    description: "Craft beautiful poems with the help of AI.",
-    link: "/tools/ai-poem-generator"
-  },
-  {
-    icon: <MessageSquare className="h-8 w-8 text-pink-500" />,
+    icon: <MessageSquare className="h-8 w-8 text-indigo-500" />,
     title: "AI Answer Generator",
     description: "Receive precise answers to your questions using AI.",
     link: "/tools/ai-answer-generator"
   },
   {
-    icon: <User className="h-8 w-8 text-teal-500" />,
+    icon: <Feather className="h-8 w-8 text-pink-500" />,
+    title: "AI Metaphor Generator",
+    description: "Generate creative metaphors to enhance your writing.",
+    link: "/tools/ai-metaphor-generator",
+    badge: { text: "Hot", color: "bg-red-500" }
+  },
+  {
+    icon: <Feather className="h-8 w-8 text-teal-500" />,
+    title: "AI Poem Generator",
+    description: "Craft beautiful poems with the help of AI.",
+    link: "/tools/ai-poem-generator"
+  },
+  {
+    icon: <User className="h-8 w-8 text-orange-500" />,
     title: "AI Character Generator",
     description: "Create unique characters for your stories or projects.",
     link: "/tools/ai-character-generator"
   },
   {
-    icon: <Search className="h-8 w-8 text-orange-500" />,
+    icon: <BookOpen className="h-8 w-8 text-emerald-500" />,
+    title: "AI Conclusion Generator",
+    description: "Generate impactful conclusions for your writing.",
+    link: "/tools/ai-conclusion-generator"
+  },
+  {
+    icon: <Sunrise className="h-8 w-8 text-amber-500" />,
+    title: "AI Haiku Generator",
+    description: "Generate traditional haikus with AI assistance.",
+    link: "/tools/ai-haiku-generator"
+  },
+  {
+    icon: <PenTool className="h-8 w-8 text-cyan-500" />,
+    title: "AI Intro Writer",
+    description: "Create engaging introductions for your content.",
+    link: "/tools/ai-intro-writer"
+  },
+  {
+    icon: <Music className="h-8 w-8 text-rose-500" />,
+    title: "AI Lyric Generator",
+    description: "Compose unique lyrics for your music projects.",
+    link: "/tools/ai-lyric-generator"
+  },
+  {
+    icon: <Puzzle className="h-8 w-8 text-violet-500" />,
+    title: "AI Plot Generator",
+    description: "Generate intriguing plot ideas for your stories.",
+    link: "/tools/ai-plot-generator"
+  },
+  {
+    icon: <Quote className="h-8 w-8 text-lime-500" />,
+    title: "AI Quotes Generator",
+    description: "Get inspiring and thought-provoking quotes.",
+    link: "/tools/ai-quotes-generator"
+  },
+  {
+    icon: <Music className="h-8 w-8 text-fuchsia-500" />,
+    title: "AI Rhyme Generator",
+    description: "Find perfect rhymes for your poems and lyrics.",
+    link: "/tools/ai-rhyme-generator"
+  },
+  {
+    icon: <Search className="h-8 w-8 text-sky-500" />,
     title: "AI SEO Title Generator",
     description: "Generate effective SEO titles to boost your content visibility.",
     link: "/tools/ai-seo-title-generator",
     badge: { text: "Popular", color: "bg-green-500" }
+  },
+  {
+    icon: <Repeat className="h-8 w-8 text-indigo-500" />,
+    title: "AI Paraphrasing Tool",
+    description: "Rephrase your text in different writing styles to reach your audience.",
+    link: "/tools/ai-paraphrasing-tool"
   }
 ]
 
@@ -74,7 +129,7 @@ export default function ToolsPage() {
         <p className="text-xl md:text-2xl text-gray-700 mb-16 text-center max-w-3xl mx-auto animate-fade-in-up">
           Unleash your creativity and boost productivity with our cutting-edge AI-powered tools.
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {tools.map((tool, index) => (
             <Card key={index} className="group transition-all duration-300 hover:shadow-xl hover:scale-105">
               <CardHeader className="relative pb-0">
@@ -91,8 +146,8 @@ export default function ToolsPage() {
                 )}
               </CardHeader>
               <CardContent className="pt-16">
-                <CardTitle className="text-2xl font-bold mb-2">{tool.title}</CardTitle>
-                <CardDescription className="text-base">{tool.description}</CardDescription>
+                <CardTitle className="text-xl font-bold mb-2">{tool.title}</CardTitle>
+                <CardDescription className="text-sm">{tool.description}</CardDescription>
               </CardContent>
               <CardFooter>
                 <Link href={tool.link} passHref className="w-full">
