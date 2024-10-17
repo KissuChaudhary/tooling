@@ -145,6 +145,11 @@ export default function Page() {
 
           {/* Main Content */}
           <div className="text-center w-full">
+            <div className="flex justify-center hero-bg">
+          <span className="text-lg font-bold bg-clip-text text-transparent animate-gradient px-4 py-1.5 rounded-lg gradient-text text-small">
+            TRUSTED BY THOUSANDS, LOVED BY ALL
+          </span>
+        </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 text-[#1e3a8a]">
               Empower your business with Generative AI
             </h1>
