@@ -130,28 +130,28 @@ export default function ToolsPage() {
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {tools.map((tool, index) => (
-      <Link href={tool.link} passHref className="w-full">
-            <Card key={index} className="group transition-all duration-300 hover:shadow-xl hover:scale-105">
-              <CardHeader className="relative pb-0">
-                <div className="absolute top-4 left-4 bg-gray-100 rounded-full p-3 transition-all duration-300 group-hover:scale-110">
-                  {tool.icon}
-                </div>
-                {tool.badge && (
-                  <Badge 
-                    variant="secondary" 
-                    className={`absolute top-4 right-4 text-xs font-semibold text-white ${tool.badge.color} px-2 py-1 rounded-md`}
-                  >
-                    {tool.badge.text}
-                  </Badge>
-                )}
-              </CardHeader>
-              <CardContent className="pt-16">
-                <CardTitle className="text-xl font-bold mb-2">{tool.title}</CardTitle>
-                <CardDescription className="text-sm">{tool.description}</CardDescription>
-              </CardContent>
-            </Card>
-      </Link>
-          ))}
+  <Link key={index} href={tool.link} passHref >
+    <Card className="group transition-all duration-300 hover:shadow-xl hover:scale-105">
+      <CardHeader className="relative pb-0">
+        <div className="absolute top-4 left-4 bg-gray-100 rounded-full p-3 transition-all duration-300 group-hover:scale-110">
+          {tool.icon}
+        </div>
+        {tool.badge && (
+          <Badge 
+            variant="secondary" 
+            className={`absolute top-4 right-4 text-xs font-semibold text-white ${tool.badge.color} px-2 py-1 rounded-md`}
+          >
+            {tool.badge.text}
+          </Badge>
+        )}
+      </CardHeader>
+      <CardContent className="pt-16">
+        <CardTitle className="text-xl font-bold mb-2">{tool.title}</CardTitle>
+        <CardDescription className="text-sm">{tool.description}</CardDescription>
+      </CardContent>
+    </Card>
+  </Link>
+))}
         </div>
       </main>
     </div>
