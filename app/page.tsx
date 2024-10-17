@@ -80,103 +80,99 @@ export default function Page() {
     <div className="bg-background text-foreground">
       {/* Hero Section */}
       <section className="relative h-[90vh] flex items-center justify-center overflow-hidden">
-        <div 
-          className="absolute inset-0 z-0"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(42, 101, 230, 0.1) 1.5px, transparent 1.5px), 
-              linear-gradient(to right, rgba(42, 101, 230, 0.1) 1.5px, transparent 1.5px)
-            `,
-            backgroundSize: '30px 30px',
-          }}
-        />
-        <div className="container mx-auto px-4 relative z-20">
-          {/* Floating icons */}
-          <div className="hidden lg:flex flex-col space-y-8 z-30">
-            <motion.a
-              href="#"
-              className="text-blue-600 hover:scale-110 transition-transform"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              style={{ left: '70px', position: 'absolute', top: '-104px' }}
-            >
-              <FaFacebookF size={24} className="animate-pulse" />
-            </motion.a>
-            <motion.a
-              href="#"
-              className="text-sky-500 hover:scale-110 transition-transform"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 }}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              style={{ left: '70px', position: 'absolute', top: '-52px' }}
-            >
-              <FaTwitter size={24} className="animate-pulse" />
-            </motion.a>
-            <motion.a
-              href="#"
-              className="text-blue-700 hover:scale-110 transition-transform"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.6 }}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              style={{ left: '70px', position: 'absolute', top: '0px' }}
-            >
-              <FaLinkedinIn size={24} className="animate-pulse" />
-            </motion.a>
-            <motion.a
-              href="#"
-              className="text-pink-600 hover:scale-110 transition-transform"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.8 }}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              style={{ left: '70px', position: 'absolute', top: '52px' }}
-            >
-              <FaInstagram size={24} className="animate-pulse" />
-            </motion.a>
-          </div>
-
-          {/* Main Content */}
-          <div className="text-center w-full">
-            <div className="flex justify-center hero-bg">
-          <span className="text-lg mb-6 font-bold bg-clip-text text-transparent animate-gradient px-4 py-1.5 rounded-lg gradient-text text-small">
-            TRUSTED BY THOUSANDS, LOVED BY ALL
-          </span>
-        </div>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 text-[#1e3a8a]">
-              Empower your business with Generative AI
-            </h1>
-            <p className="text-xl text-muted-foreground mb-8">
-              Harness the Potential of Large Language Models (LLMs) for Business Innovation.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="w-full sm:w-auto group bg-[#4f46e5] hover:bg-[#4338ca]">
-                Get Started
-                <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-              </Button>
-              <Button size="lg" variant="outline" className="w-full sm:w-auto group">
-                Book a Demo
-                <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-              </Button>
-            </div>
-            {/* Bottom logo */}
-        <div className="flex flex-col py-12 sm:flex-row gap-4 justify-center">
-          <a href="https://www.producthunt.com/posts/saze-ai?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-saze-ai" target="_blank" rel="noopener noreferrer">
-            <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=455121&theme=light" alt="Saze AI - AI-Powered Content Creation Tools for Writers and Creators | Product Hunt" style={{ width: '250px', height: '54px' }} width="250" height="54" />
-          </a>
-        </div>
-          </div>
+      <div 
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(42, 101, 230, 0.1) 1.5px, transparent 1.5px), 
+            linear-gradient(to right, rgba(42, 101, 230, 0.1) 1.5px, transparent 1.5px)
+          `,
+          backgroundSize: '30px 30px',
+        }}
+      />
+      <div className="container mx-auto px-4 relative z-20">
+        {/* Floating icons */}
+        <div className="hidden lg:flex flex-col space-y-8 z-30 absolute left-0 top-1/2 transform -translate-y-1/2">
+          <motion.a
+            href="#"
+            className="text-blue-600 hover:scale-110 transition-transform"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <FaFacebookF size={24} className="animate-pulse" />
+          </motion.a>
+          <motion.a
+            href="#"
+            className="text-sky-500 hover:scale-110 transition-transform"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <FaTwitter size={24} className="animate-pulse" />
+          </motion.a>
+          <motion.a
+            href="#"
+            className="text-blue-700 hover:scale-110 transition-transform"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.6 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <FaLinkedinIn size={24} className="animate-pulse" />
+          </motion.a>
+          <motion.a
+            href="#"
+            className="text-pink-600 hover:scale-110 transition-transform"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.8 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <FaInstagram size={24} className="animate-pulse" />
+          </motion.a>
         </div>
 
-        
-      </section>
+        {/* Main Content */}
+        <div className="text-center w-full space-y-8">
+          <div className="flex justify-center">
+            <span className="text-lg font-bold bg-clip-text text-transparent animate-gradient px-4 py-1.5 rounded-lg gradient-text text-small">
+              TRUSTED BY THOUSANDS, LOVED BY ALL
+            </span>
+          </div>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-[#1e3a8a]">
+            Empower your business with Generative AI
+          </h1>
+          <p className="text-xl text-muted-foreground">
+            Harness the Potential of Large Language Models (LLMs) for Business Innovation.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" className="w-full sm:w-auto group bg-[#4f46e5] hover:bg-[#4338ca]">
+              Get Started
+              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+            </Button>
+            <Button size="lg" variant="outline" className="w-full sm:w-auto group">
+              Book a Demo
+              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+            </Button>
+          </div>
+          {/* Bottom logo */}
+          <div className="flex justify-center pt-8">
+            <a href="https://www.producthunt.com/posts/saze-ai?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-saze-ai" target="_blank" rel="noopener noreferrer">
+              <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=455121&theme=light" alt="Saze AI - AI-Powered Content Creation Tools for Writers and Creators | Product Hunt" style={{ width: '250px', height: '54px' }} width="250" height="54" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+ 
+              
 
       {/* Features Section */}
       <section id="features" className="py-20 bg-gradient-to-b from-gray-50 to-white">
