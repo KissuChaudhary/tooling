@@ -88,7 +88,7 @@ export default function Page() {
     { title: "Review and Edit", description: "Fine-tune the AI-generated results to perfection", icon: Check },
   ]
 
-  const tools = [
+  const toolkit = [
   {
     icon: <Zap className="h-8 w-8 text-yellow-500" />,
     title: "AI Essay Writer",
@@ -382,25 +382,25 @@ export default function Page() {
           Designed To Increase Your creativity and boost productivity.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {tools.map((tool, index) => (
-  <Link key={index} href={tool.link} passHref >
+          {toolkit.map((tool, index) => (
+  <Link key={index} href={toolkit.link} passHref >
     <Card className="group transition-all duration-300 hover:shadow-xl hover:scale-105">
       <CardHeader className="relative pb-0">
         <div className="absolute top-4 left-4 bg-gray-100 rounded-full p-3 transition-all duration-300 group-hover:scale-110">
-          {tool.icon}
+          {toolkit.icon}
         </div>
-        {tool.badge && (
+        {toolkit.badge && (
           <Badge 
             variant="secondary" 
             className={`absolute top-4 right-4 text-xs font-semibold ${tool.badge.color} px-2 py-1 rounded-md`}
           >
-            {tool.badge.text}
+            {toolkit.badge.text}
           </Badge>
         )}
       </CardHeader>
       <CardContent className="pt-16">
-        <CardTitle className="text-xl font-bold mb-2">{tool.title}</CardTitle>
-        <CardDescription className="text-sm">{tool.description}</CardDescription>
+        <CardTitle className="text-xl font-bold mb-2">{toolkit.title}</CardTitle>
+        <CardDescription className="text-sm">{toolkit.description}</CardDescription>
       </CardContent>
     </Card>
   </Link>
