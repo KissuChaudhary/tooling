@@ -146,7 +146,7 @@ export default function Page() {
           {/* Main Content */}
           <div className="text-center w-full">
             <div className="flex justify-center hero-bg">
-          <span className="text-lg font-bold bg-clip-text text-transparent animate-gradient px-4 py-1.5 rounded-lg gradient-text text-small">
+          <span className="text-lg mb-6 font-bold bg-clip-text text-transparent animate-gradient px-4 py-1.5 rounded-lg gradient-text text-small">
             TRUSTED BY THOUSANDS, LOVED BY ALL
           </span>
         </div>
