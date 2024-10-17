@@ -166,15 +166,16 @@ export default function Page() {
                 <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Button>
             </div>
-          </div>
-        </div>
-
-        {/* Bottom logo */}
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
+            {/* Bottom logo */}
+        <div className="left-1/2 transform -translate-x-1/2">
           <a href="https://www.producthunt.com/posts/saze-ai?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-saze-ai" target="_blank" rel="noopener noreferrer">
             <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=455121&theme=light" alt="Saze AI - AI-Powered Content Creation Tools for Writers and Creators | Product Hunt" style={{ width: '250px', height: '54px' }} width="250" height="54" />
           </a>
         </div>
+          </div>
+        </div>
+
+        
       </section>
 
       {/* Features Section */}
