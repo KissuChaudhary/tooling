@@ -28,12 +28,7 @@ import {
   Mail,
   ShoppingBag,
   Rocket,
-  Clock,
   Search,
-  BarChart2,
-  Link as LinkIcon,
-  UserCheck,
-  Layout,
 } from "lucide-react"
 
 export default function Page() {
