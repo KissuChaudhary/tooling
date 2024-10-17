@@ -5,7 +5,7 @@ import { useTheme } from 'next-themes'
 import { useState, useEffect } from 'react'
 import { Moon, Sun, Menu, X } from 'lucide-react'
 
-export default function Header() {
+export default function Component() {
   const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -43,7 +43,7 @@ export default function Header() {
           <button
             aria-label="Toggle Menu"
             type="button"
-            className="md:hidden w-10 h-10 flex items-center justify-center rounded-full bg-primary text-primary-foreground transition-transform duration-300 ease-in-out"
+            className="md:hidden w-10 h-10 flex items-center justify-center rounded-full bg-primary text-primary-foreground transition-transform duration-300 ease-in-out z-50"
             onClick={toggleMenu}
           >
             <div className={`transition-transform duration-300 ease-in-out ${isMenuOpen ? 'rotate-90' : 'rotate-0'}`}>
@@ -56,21 +56,37 @@ export default function Header() {
           </button>
         </div>
       </div>
-      <div className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${isMenuOpen ? 'max-h-64' : 'max-h-0'}`}>
-        <nav className="bg-background border-t border-border">
-          <ul className="flex flex-col space-y-4 p-4">
+      <div 
+        className={`fixed top-0 left-0 w-full h-full bg-background/95 backdrop-blur-sm transition-opacity duration-300 ease-in-out md:hidden ${
+          isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+      >
+        <nav className="h-full flex items-center justify-center">
+          <ul className="flex flex-col space-y-8 text-center">
             <li>
-              <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors duration-200" onClick={toggleMenu}>
+              <Link 
+                href="/" 
+                className="text-3xl font-bold text-foreground hover:text-primary transition-colors duration-200" 
+                onClick={toggleMenu}
+              >
                 Home
               </Link>
             </li>
             <li>
-              <Link href="/about" className="text-muted-foreground hover:text-foreground transition-colors duration-200" onClick={toggleMenu}>
+              <Link 
+                href="/about" 
+                className="text-3xl font-bold text-foreground hover:text-primary transition-colors duration-200" 
+                onClick={toggleMenu}
+              >
                 About
               </Link>
             </li>
             <li>
-              <Link href="/contact" className="text-muted-foreground hover:text-foreground transition-colors duration-200" onClick={toggleMenu}>
+              <Link 
+                href="/contact" 
+                className="text-3xl font-bold text-foreground hover:text-primary transition-colors duration-200" 
+                onClick={toggleMenu}
+              >
                 Contact
               </Link>
             </li>
