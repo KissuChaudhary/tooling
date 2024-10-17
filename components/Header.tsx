@@ -43,7 +43,7 @@ export default function Component() {
           <button
             aria-label="Toggle Menu"
             type="button"
-            className="md:hidden w-10 h-10 flex items-center justify-center rounded-full bg-primary text-primary-foreground transition-transform duration-300 ease-in-out z-50"
+            className="md:hidden w-10 h-10 flex items-center justify-center rounded-full bg-primary text-primary-foreground transition-transform duration-300 ease-in-out z-[1000]"
             onClick={toggleMenu}
           >
             <div className={`transition-transform duration-300 ease-in-out ${isMenuOpen ? 'rotate-90' : 'rotate-0'}`}>
@@ -57,7 +57,7 @@ export default function Component() {
         </div>
       </div>
       <div 
-        className={`fixed top-0 left-0 w-full h-full bg-background transition-opacity duration-300 ease-in-out md:hidden ${
+        className={`fixed top-0 left-0 w-full h-full bg-background transition-opacity duration-300 ease-in-out md:hidden z-[999] ${
           isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
       >
