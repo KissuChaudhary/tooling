@@ -121,45 +121,98 @@ const tools = [
 
 export default function ToolsPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 via-purple-100 to-blue-100 py-16">
+    <div className={`min-h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'} py-16`}>
+
       <main className="container mx-auto px-6">
-        <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 mb-6 text-center animate-fade-in-down">
+
+        <h1 className={`text-5xl md:text-6xl font-extrabold mb-6 text-center ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+
           Discover Our AI Tools
+
         </h1>
-        <p className="text-xl md:text-2xl text-gray-700 mb-16 text-center max-w-3xl mx-auto animate-fade-in-up">
+
+        <p className={`text-xl md:text-2xl mb-16 text-center max-w-3xl mx-auto ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+
           Unleash your creativity and boost productivity with our cutting-edge AI-powered tools.
+
         </p>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+
           {tools.map((tool, index) => (
-            <Card key={index} className="group transition-all duration-300 hover:shadow-xl hover:scale-105">
-              <CardHeader className="relative pb-0">
-                <div className="absolute top-4 left-4 bg-gray-100 rounded-full p-3 transition-all duration-300 group-hover:scale-110">
-                  {tool.icon}
-                </div>
-                {tool.badge && (
-                  <Badge 
-                    variant="secondary" 
-                    className={`absolute top-4 right-4 text-xs font-semibold text-white ${tool.badge.color} px-2 py-1 rounded-md`}
-                  >
-                    {tool.badge.text}
-                  </Badge>
-                )}
-              </CardHeader>
-              <CardContent className="pt-16">
-                <CardTitle className="text-xl font-bold mb-2">{tool.title}</CardTitle>
-                <CardDescription className="text-sm">{tool.description}</CardDescription>
-              </CardContent>
-              <CardFooter>
-                <Link href={tool.link} passHref className="w-full">
-                  <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                    Try Now <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-              </CardFooter>
-            </Card>
+
+            <Link href={tool.link} key={index} className="group">
+
+              <Card className={`h-full transition-all duration-300 hover:shadow-xl hover:scale-105 ${theme === 'dark' ? 'bg-gray-800 hover:bg-gray-700' : 'bg-white hover:bg-gray-50'}`}>
+
+                <CardHeader className="relative pb-0">
+
+                  <div className={`absolute top-4 left-4 rounded-full p-3 transition-all duration-300 group-hover:scale-110 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100'}`}>
+
+                    {tool.icon}
+
+                  </div>
+
+                  {tool.badge && (
+
+                    <Badge 
+
+                      variant="secondary" 
+
+                      className={`absolute top-4 right-4 text-xs font-semibold ${
+
+                        theme === 'dark' 
+
+                          ? 'text-white' 
+
+                          : tool.badge.color === 'bg-green-500' 
+
+                            ? 'text-green-800' 
+
+                            : tool.badge.color === 'bg-blue-500' 
+
+                              ? 'text-blue-800' 
+
+                              : 'text-red-800'
+
+                      } ${tool.badge.color} px-2 py-1 rounded-md`}
+
+                    >
+
+                      {tool.badge.text}
+
+                    </Badge>
+
+                  )}
+
+                </CardHeader>
+
+                <CardContent className="pt-16">
+
+                  <CardTitle className={`text-xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+
+                    {tool.title}
+
+                  </CardTitle>
+
+                  <CardDescription className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+
+                    {tool.description}
+
+                  </CardDescription>
+
+                </CardContent>
+
+              </Card>
+
+            </Link>
+
           ))}
+
         </div>
+
       </main>
+
     </div>
   )
 }
