@@ -1,14 +1,26 @@
 'use client'
 
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardDescription, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
 import Image from "next/image"
+import { Badge } from "@/components/ui/badge"
 import { motion, Variants } from "framer-motion"
 import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram } from "react-icons/fa6"
 import {
   ArrowRight,
+  Brain,
+  Lightbulb,
+  Feather,
   Check,
+  MessageSquare,
+  User,
+  BookOpen,
+  Sunrise,
+  Music,
+  Puzzle,
+  Repeat,
+  Quote,
   Zap,
   Book,
   Sparkles,
@@ -75,6 +87,121 @@ export default function Page() {
     { title: "Let AI Work Its Magic", description: "Our advanced AI processes and enhances your content", icon: Sparkles },
     { title: "Review and Edit", description: "Fine-tune the AI-generated results to perfection", icon: Check },
   ]
+
+  const tools = [
+  {
+    icon: <Zap className="h-8 w-8 text-yellow-500" />,
+    title: "AI Essay Writer",
+    description: "Generate well-structured essays on any topic with ease.",
+    link: "/tools/ai-essay-writer",
+    badge: { text: "Popular", color: "bg-green-500" }
+  },
+  {
+    icon: <Sparkles className="h-8 w-8 text-purple-500" />,
+    title: "AI Text Improver",
+    description: "Enhance your writing with AI-powered suggestions and improvements.",
+    link: "/tools/ai-text-improver"
+  },
+  {
+    icon: <Brain className="h-8 w-8 text-blue-500" />,
+    title: "AI Story Generator",
+    description: "Create engaging stories with advanced AI algorithms.",
+    link: "/tools/ai-story-generator",
+    badge: { text: "New", color: "bg-blue-500" }
+  },
+  {
+    icon: <Lightbulb className="h-8 w-8 text-green-500" />,
+    title: "AI Pickup Lines",
+    description: "Get creative and fun pickup lines for any occasion.",
+    link: "/tools/ai-pickup-lines"
+  },
+  {
+    icon: <PenTool className="h-8 w-8 text-red-500" />,
+    title: "AI Thesis Statement",
+    description: "Generate compelling thesis statements for your essays.",
+    link: "/tools/ai-thesis-statement"
+  },
+  {
+    icon: <MessageSquare className="h-8 w-8 text-indigo-500" />,
+    title: "AI Answer Generator",
+    description: "Receive precise answers to your questions using AI.",
+    link: "/tools/ai-answer-generator"
+  },
+  {
+    icon: <Feather className="h-8 w-8 text-pink-500" />,
+    title: "AI Metaphor Generator",
+    description: "Generate creative metaphors to enhance your writing.",
+    link: "/tools/ai-metaphor-generator",
+    badge: { text: "Hot", color: "bg-red-500" }
+  },
+  {
+    icon: <Feather className="h-8 w-8 text-teal-500" />,
+    title: "AI Poem Generator",
+    description: "Craft beautiful poems with the help of AI.",
+    link: "/tools/ai-poem-generator"
+  },
+  {
+    icon: <User className="h-8 w-8 text-orange-500" />,
+    title: "AI Character Generator",
+    description: "Create unique characters for your stories or projects.",
+    link: "/tools/ai-character-generator"
+  },
+  {
+    icon: <BookOpen className="h-8 w-8 text-emerald-500" />,
+    title: "AI Conclusion Generator",
+    description: "Generate impactful conclusions for your writing.",
+    link: "/tools/ai-conclusion-generator"
+  },
+  {
+    icon: <Sunrise className="h-8 w-8 text-amber-500" />,
+    title: "AI Haiku Generator",
+    description: "Generate traditional haikus with AI assistance.",
+    link: "/tools/ai-haiku-generator"
+  },
+  {
+    icon: <PenTool className="h-8 w-8 text-cyan-500" />,
+    title: "AI Intro Writer",
+    description: "Create engaging introductions for your content.",
+    link: "/tools/ai-intro-writer"
+  },
+  {
+    icon: <Music className="h-8 w-8 text-rose-500" />,
+    title: "AI Lyric Generator",
+    description: "Compose unique lyrics for your music projects.",
+    link: "/tools/ai-lyric-generator"
+  },
+  {
+    icon: <Puzzle className="h-8 w-8 text-violet-500" />,
+    title: "AI Plot Generator",
+    description: "Generate intriguing plot ideas for your stories.",
+    link: "/tools/ai-plot-generator"
+  },
+  {
+    icon: <Quote className="h-8 w-8 text-lime-500" />,
+    title: "AI Quotes Generator",
+    description: "Get inspiring and thought-provoking quotes.",
+    link: "/tools/ai-quotes-generator"
+  },
+  {
+    icon: <Music className="h-8 w-8 text-fuchsia-500" />,
+    title: "AI Rhyme Generator",
+    description: "Find perfect rhymes for your poems and lyrics.",
+    link: "/tools/ai-rhyme-generator"
+  },
+  {
+    icon: <Search className="h-8 w-8 text-sky-500" />,
+    title: "AI SEO Title Generator",
+    description: "Generate effective SEO titles to boost your content visibility.",
+    link: "/tools/ai-seo-title-generator",
+    badge: { text: "Popular", color: "bg-green-500" }
+  },
+  {
+    icon: <Repeat className="h-8 w-8 text-indigo-500" />,
+    title: "AI Paraphrasing Tool",
+    description: "Rephrase your text in different writing styles to reach your audience.",
+    link: "/tools/ai-paraphrasing-tool"
+  }
+]
 
   return (
     <div className="bg-background text-foreground">
@@ -246,41 +373,41 @@ export default function Page() {
 
       {/* Our Toolkit Section */}
       <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-2">Our Toolkit</h2>
-          <p className="text-xl text-center text-gray-600 mb-12">Designed To Increase Your Organic Traffic</p>
-          
-          <div className="flex flex-col md:flex-row gap-8">
-            <div className="w-full md:w-1/3 space-y-2">
-              {tools.map((tool, index) => (
-                <div
-                  key={index}
-                  className={`flex items-center p-3 rounded-lg transition-colors ${
-                    index === 4 ? 'bg-black text-white' : 'hover:bg-gray-100'
-                  }`}
-                >
-                  <tool.icon className="h-5 w-5 mr-3" />
-                  <span className="font-medium">{tool.name}</span>
-                </div>
-              ))}
-            </div>
-            
-            <div className="w-full md:w-2/3">
-              <Card className="shadow-lg">
-                <CardContent className="p-6">
-                  <h3 className="text-2xl font-bold mb-2">Link Manager</h3>
-                  <p className="text-gray-600 mb-6">
-                    Drive sales and extend brand reach with convincing content that converts, driving success and engaging your audience.
-                  </p>
-                  <Button variant="default" className="bg-black text-white hover:bg-gray-800">
-                    Try For Free
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
+        <div className="min-h-screen py-16">
+      
+        <h2 className="text-5xl md:text-6xl font-extrabold mb-6 text-center animate-fade-in-down">
+          Our Toolkit
+        </h2>
+        <p className="text-xl md:text-2xl mb-16 text-center max-w-3xl mx-auto animate-fade-in-up">
+          Designed To Increase Your creativity and boost productivity.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          {tools.map((tool, index) => (
+  <Link key={index} href={tool.link} passHref >
+    <Card className="group transition-all duration-300 hover:shadow-xl hover:scale-105">
+      <CardHeader className="relative pb-0">
+        <div className="absolute top-4 left-4 bg-gray-100 rounded-full p-3 transition-all duration-300 group-hover:scale-110">
+          {tool.icon}
         </div>
+        {tool.badge && (
+          <Badge 
+            variant="secondary" 
+            className={`absolute top-4 right-4 text-xs font-semibold ${tool.badge.color} px-2 py-1 rounded-md`}
+          >
+            {tool.badge.text}
+          </Badge>
+        )}
+      </CardHeader>
+      <CardContent className="pt-16">
+        <CardTitle className="text-xl font-bold mb-2">{tool.title}</CardTitle>
+        <CardDescription className="text-sm">{tool.description}</CardDescription>
+      </CardContent>
+    </Card>
+  </Link>
+))}
+        </div>
+     
+    </div>
       </section>
 
       {/* Use Cases Section */}
