@@ -167,7 +167,7 @@ export default function Page() {
               </Button>
             </div>
             {/* Bottom logo */}
-        <div className="left-1/2 transform -translate-x-1/2">
+        <div className="flex flex-col py-12 sm:flex-row gap-4 justify-center">
           <a href="https://www.producthunt.com/posts/saze-ai?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-saze-ai" target="_blank" rel="noopener noreferrer">
             <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=455121&theme=light" alt="Saze AI - AI-Powered Content Creation Tools for Writers and Creators | Product Hunt" style={{ width: '250px', height: '54px' }} width="250" height="54" />
           </a>
