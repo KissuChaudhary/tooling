@@ -141,13 +141,13 @@ export default function Page() {
 
         {/* Main Content */}
         <div className="text-center w-full space-y-8">
-          <div className="flex justify-center hero-bh">
+          <div className="flex justify-center hero-bg">
             <span className="text-lg font-bold bg-clip-text text-transparent animate-gradient px-4 py-1.5 rounded-lg gradient-text text-small">
               TRUSTED BY CREATORS, PRAISED BY ALL
             </span>
           </div>
-          <h1 className="text-4xl sm:text-5xl md:text-8xl font-bold text-[#1e3a8a]">
-            Saze AI: Write Anything, 100% Free
+          <h1 className="text-4xl sm:text-5xl md:text-8xl font-bold">
+            Saze AI: Write Anything, <span className="text-blue-600">100% Free</span> 
           </h1>
           <p className="text-xl text-muted-foreground">
             Sazeai.com is a free AI platform designed to make your work and learning easier with unlimited access to our free ai tools.</p>
