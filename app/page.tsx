@@ -71,16 +71,6 @@ export default function Page() {
     }
   ]
 
-  const tools = [
-    { name: "Cruise Mode", icon: Clock },
-    { name: "Keyword Planner", icon: Search },
-    { name: "Content Optimizer", icon: PenTool },
-    { name: "Traffic Analyzer", icon: BarChart2 },
-    { name: "Link Manager", icon: LinkIcon },
-    { name: "AI Humanizer", icon: UserCheck },
-    { name: "OnPage Pro", icon: Layout },
-  ]
-
   const steps = [
     { title: "Choose a Tool", description: "Select from our wide range of AI text tools", icon: Zap },
     { title: "Input Your Content", description: "Paste your text or start writing from scratch", icon: PenTool },
