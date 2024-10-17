@@ -131,3 +131,9 @@
     text-wrap: balance;
   }
 }
+
+    .hero-bg{
+  background-color: rgb(243 246 255);
+    display: inline-block;
+    border-radius: 8px;
+}
