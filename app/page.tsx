@@ -358,42 +358,40 @@ export default function Page() {
 
       {/* Our Toolkit Section */}
       <section className="py-20 bg-gray-50">
-        <div className="min-h-screen py-16">
-      
-        <h2 className="text-5xl md:text-6xl font-extrabold mb-6 text-center animate-fade-in-down">
-          Our Toolkit
-        </h2>
-        <p className="text-xl md:text-2xl mb-16 text-center max-w-3xl mx-auto animate-fade-in-up">
-          Designed To Increase Your creativity and boost productivity.
-        </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {toolkit.map((tool, index) => (
-  <Link key={index} href={tool.link} passHref> {/* Changed toolkit.link to tool.link */}
-    <Card className="group transition-all duration-300 hover:shadow-xl hover:scale-105">
-      <CardHeader className="relative pb-0">
-        <div className="absolute top-4 left-4 bg-gray-100 rounded-full p-3 transition-all duration-300 group-hover:scale-110">
-          {tool.icon} {/* Changed toolkit.icon to tool.icon */}
-        </div>
-        {tool.badge && ( /* Changed toolkit.badge to tool.badge */}
-          <Badge 
-            variant="secondary" 
-            className={`absolute top-4 right-4 text-xs font-semibold ${tool.badge.color} px-2 py-1 rounded-md`}
-          >
-            {tool.badge.text} {/* Changed toolkit.badge.text to tool.badge.text */}
-          </Badge>
-        )}
-      </CardHeader>
-      <CardContent className="pt-16">
-        <CardTitle className="text-xl font-bold mb-2">{tool.title}</CardTitle> {/* Changed toolkit.title to tool.title */}
-        <CardDescription className="text-sm">{tool.description}</CardDescription> {/* Changed toolkit.description to tool.description */}
-      </CardContent>
-    </Card>
-  </Link>
-))}
-        </div>
-     
+  <div className="min-h-screen py-16">
+    <h2 className="text-5xl md:text-6xl font-extrabold mb-6 text-center animate-fade-in-down">
+      Our Toolkit
+    </h2>
+    <p className="text-xl md:text-2xl mb-16 text-center max-w-3xl mx-auto animate-fade-in-up">
+      Designed To Increase Your creativity and boost productivity.
+    </p>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+      {toolkit?.map((tool, index) => (
+        <Link key={index} href={tool.link} passHref>
+          <Card className="group transition-all duration-300 hover:shadow-xl hover:scale-105">
+            <CardHeader className="relative pb-0">
+              <div className="absolute top-4 left-4 bg-gray-100 rounded-full p-3 transition-all duration-300 group-hover:scale-110">
+                {tool.icon}
+              </div>
+              {tool.badge && (
+                <Badge 
+                  variant="secondary" 
+                  className={`absolute top-4 right-4 text-xs font-semibold text-white ${tool.badge.color} px-2 py-1 rounded-md`}
+                >
+                  {tool.badge.text}
+                </Badge>
+              )}
+            </CardHeader>
+            <CardContent className="pt-16">
+              <CardTitle className="text-xl font-bold mb-2">{tool.title}</CardTitle>
+              <CardDescription className="text-sm">{tool.description}</CardDescription>
+            </CardContent>
+          </Card>
+        </Link>
+      ))}
     </div>
-      </section>
+  </div>
+</section>
 
       {/* Use Cases Section */}
       <section id="use-cases" className="py-20">
