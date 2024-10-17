@@ -139,7 +139,7 @@ export default function ToolsPage() {
         {tool.badge && (
           <Badge 
             variant="secondary" 
-            className={`absolute top-4 right-4 text-xs font-semibold text-white ${tool.badge.color} px-2 py-1 rounded-md`}
+            className={`absolute top-4 right-4 text-xs font-semibold ${tool.badge.color} px-2 py-1 rounded-md`}
           >
             {tool.badge.text}
           </Badge>
