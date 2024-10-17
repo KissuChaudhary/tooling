@@ -146,7 +146,7 @@ export default function Page() {
               TRUSTED BY THOUSANDS, LOVED BY ALL
             </span>
           </div>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-[#1e3a8a]">
+          <h1 className="text-4xl sm:text-5xl md:text-8xl font-bold text-[#1e3a8a]">
             Empower your business with Generative AI
           </h1>
           <p className="text-xl text-muted-foreground">
