@@ -143,22 +143,21 @@ export default function Page() {
         <div className="text-center w-full space-y-8">
           <div className="flex justify-center hero-bh">
             <span className="text-lg font-bold bg-clip-text text-transparent animate-gradient px-4 py-1.5 rounded-lg gradient-text text-small">
-              TRUSTED BY THOUSANDS, LOVED BY ALL
+              TRUSTED BY CREATORS, PRAISED BY ALL
             </span>
           </div>
           <h1 className="text-4xl sm:text-5xl md:text-8xl font-bold text-[#1e3a8a]">
-            Empower your business with Generative AI
+            Saze AI: Write Anything, 100% Free
           </h1>
           <p className="text-xl text-muted-foreground">
-            Harness the Potential of Large Language Models (LLMs) for Business Innovation.
-          </p>
+            Sazeai.com is a free AI platform designed to make your work and learning easier with unlimited access to our free ai tools.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="w-full sm:w-auto group bg-[#4f46e5] hover:bg-[#4338ca]">
-              Get Started
+              Explore Tools
               <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Button>
             <Button size="lg" variant="outline" className="w-full sm:w-auto group">
-              Book a Demo
+              Generate Image
               <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Button>
           </div>
