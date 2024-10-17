@@ -57,7 +57,7 @@ export default function Component() {
         </div>
       </div>
       <div 
-        className={`fixed top-0 left-0 w-full h-full bg-background/95 backdrop-blur-sm transition-opacity duration-300 ease-in-out md:hidden ${
+        className={`fixed top-0 left-0 w-full h-full bg-background transition-opacity duration-300 ease-in-out md:hidden ${
           isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
       >
