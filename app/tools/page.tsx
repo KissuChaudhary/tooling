@@ -1,8 +1,7 @@
 import Link from 'next/link'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowRight, Zap, Sparkles, Brain, Lightbulb, PenTool, Feather, MessageSquare, User, BookOpen, Sunrise, Music, Puzzle, Search, Repeat, Quote } from 'lucide-react'
+import { Zap, Sparkles, Brain, Lightbulb, PenTool, Feather, MessageSquare, User, BookOpen, Sunrise, Music, Puzzle, Search, Repeat, Quote } from 'lucide-react'
 
 const tools = [
   {
@@ -121,16 +120,17 @@ const tools = [
 
 export default function ToolsPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 via-purple-100 to-blue-100 py-16">
+    <div className="min-h-screen py-16">
       <main className="container mx-auto px-6">
         <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 mb-6 text-center animate-fade-in-down">
-          Discover Our AI Tools
+          Explore All Free AI Tools
         </h1>
         <p className="text-xl md:text-2xl text-gray-700 mb-16 text-center max-w-3xl mx-auto animate-fade-in-up">
           Unleash your creativity and boost productivity with our cutting-edge AI-powered tools.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {tools.map((tool, index) => (
+      <Link href={tool.link} passHref className="w-full">
             <Card key={index} className="group transition-all duration-300 hover:shadow-xl hover:scale-105">
               <CardHeader className="relative pb-0">
                 <div className="absolute top-4 left-4 bg-gray-100 rounded-full p-3 transition-all duration-300 group-hover:scale-110">
@@ -149,14 +149,8 @@ export default function ToolsPage() {
                 <CardTitle className="text-xl font-bold mb-2">{tool.title}</CardTitle>
                 <CardDescription className="text-sm">{tool.description}</CardDescription>
               </CardContent>
-              <CardFooter>
-                <Link href={tool.link} passHref className="w-full">
-                  <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                    Try Now <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-              </CardFooter>
             </Card>
+      </Link>
           ))}
         </div>
       </main>
