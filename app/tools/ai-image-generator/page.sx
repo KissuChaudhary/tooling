@@ -78,7 +78,13 @@ export default function AIImageGenerator() {
       {generatedImage && (
         <div className="mt-8">
           <h2 className="text-2xl font-bold mb-4">Generated Image</h2>
-          <Image src={generatedImage} alt="Generated image" width={512} height={512} className="rounded-lg shadow-lg" />
+          <div className="relative w-full" style={{ paddingBottom: '100%' }}>
+            <img
+              src={generatedImage}
+              alt="Generated image"
+              className="absolute top-0 left-0 w-full h-full object-contain rounded-lg shadow-lg"
+            />
+          </div>
         </div>
       )}
     </div>
