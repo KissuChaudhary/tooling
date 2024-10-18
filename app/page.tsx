@@ -523,7 +523,7 @@ const faqData = [
       </section>
 
 {/* FAQ Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-gradient-to-b from-blue-50 to-white">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-4">Frequently Asked Questions</h2>
           <p className="text-center text-gray-600 mb-12">Have more questions? Feel free to email us!</p>
