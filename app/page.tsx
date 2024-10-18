@@ -9,6 +9,7 @@ import { motion, Variants } from "framer-motion"
 import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram } from "react-icons/fa6"
 import {
   ArrowRight,
+  Heart,
   Brain,
   Lightbulb,
   Feather,
@@ -450,26 +451,28 @@ export default function Page() {
             transition={{ duration: 0.8 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl sm:text-4xl font-bold text-blue-600 mb-4">LOVE IS IN THE SCALE</h2>
-            <p className="text-2xl sm:text-3xl font-bold text-gray-900">
+            <p className="text-blue-600 font-semibold flex items-center justify-center">
+          LOVE IS IN THE WORDS <Heart className="w-4 h-4 text-red-500 ml-1" />
+        </p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
               Experience <span className="text-blue-600">The Difference</span> Through Our Users&apos; Eyes
-            </p>
+            </h2>
           </motion.div>
         
           <div className="grid md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="bg-blue-50 border-none shadow-lg">
+               <Card key={index} className="bg-blue-50 border-none shadow-lg">
                 <CardContent className="p-6">
                   <div className="mb-4">
                     <svg width="32" height="27" viewBox="0 0 32 27" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M0 26.0054V25.5054H0.5H10.5312C11.5367 25.5054 12.3617 24.6804 12.3617 23.6749V13.6437C12.3617 12.6382 11.5367 11.8132 10.5312 11.8132H0.5H0V11.3132V1.28205C0 0.276584 0.825 -0.548416 1.83047 -0.548416H30.1695C31.175 -0.548416 32 0.276584 32 1.28205V24.7233C32 25.7287 31.175 26.5537 30.1695 26.5537H1.83047C0.825 26.5537 0 25.7287 0 24.7233V26.0054Z" fill="#2563EB"/>
                     </svg>
                   </div>
-                  <p className="text-gray-700 mb-6">{testimonial.quote}</p>
+                  <div>
+                      <p className="text-gray-700 mb-6">{testimonial.quote}</p>
                       <p className="font-semibold text-gray-900">{testimonial.name}</p>
                       <p className="text-sm text-gray-600">{testimonial.role}</p>
                     </div>
-                  </div>
                 </CardContent>
               </Card>
             ))}
