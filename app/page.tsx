@@ -190,8 +190,9 @@ export default function Page() {
   }
 ]
 
-    const [openQuestion, setOpenQuestion] = useState<number | null>(null)
-  
+const [openQuestions, setOpenQuestions] = useState<{[key: number]: number | null}>({0: null, 1: null})
+
+
 const faqData = [
     {
       question: "How does saze it generate responses?",
@@ -228,8 +229,13 @@ const faqData = [
   ]
 
   const toggleQuestion = (index: number) => {
-    setOpenQuestion(openQuestion === index ? null : index)
+    const column = Math.floor(index / (faqData.length / 2))
+    setOpenQuestions(prev => ({
+      ...prev,
+      [column]: prev[column] === index ? null : index
+    }))
   }
+  
 
   return (
     <div className="bg-background text-foreground">
