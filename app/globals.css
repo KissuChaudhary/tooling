@@ -163,3 +163,8 @@
 footer a{
   color: inherit;
 }
+@media (max-width: 768px) {
+    .text-small {
+        font-size: .8rem;
+    }
+}
