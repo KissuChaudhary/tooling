@@ -310,12 +310,12 @@ const faqData = [
             </span>
           </div>
           <h1 className="text-4xl sm:text-5xl md:text-8xl font-bold">
-            Saze AI: Write Anything, <span className="text-blue-600">100% Free</span> 
+            Saze AI: Write Anything, <span className="text-indigo-600">100% Free</span> 
           </h1>
           <p className="text-xl text-muted-foreground">
             Sazeai.com is a free AI platform designed to make your work and learning easier with unlimited access to our free ai tools.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="w-full sm:w-auto group bg-[#4f46e5] hover:bg-[#4338ca]">
+            <Button size="lg" className="w-full sm:w-auto group bg-indigo-600 hover:bg-indigo-800">
               Explore Tools
               <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Button>
