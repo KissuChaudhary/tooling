@@ -34,13 +34,13 @@ export default function Header() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/about" className="text-muted-foreground hover:text-foreground transition-colors duration-200">
-                    About
+                  <Link href="/tools/ai-image-generator" className="text-muted-foreground hover:text-foreground transition-colors duration-200">
+                    AI Image Generator
                   </Link>
                 </li>
                 <li>
-                  <Link href="/contact" className="text-muted-foreground hover:text-foreground transition-colors duration-200">
-                    Contact
+                  <Link href="/tools" className="text-muted-foreground hover:text-foreground transition-colors duration-200">
+                    AI Tools
                   </Link>
                 </li>
               </ul>
