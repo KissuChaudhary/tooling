@@ -1,0 +1,89 @@
+'use client'
+
+import { useState } from 'react'
+import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Textarea } from "@/components/ui/textarea"
+
+type ImageSize = 'portrait' | 'square' | 'landscape'
+
+export default function AIImageGenerator() {
+  const [prompt, setPrompt] = useState('')
+  const [imageSize, setImageSize] = useState<ImageSize>('square')
+  const [generatedImage, setGeneratedImage] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+    try {
+      const response = await fetch('/api/generate-image', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ prompt, imageSize }),
+      })
+      if (!response.ok) {
+        throw new Error('Failed to generate image')
+      }
+      const data = await response.json()
+      setGeneratedImage(data.imageUrl)
+    } catch (error) {
+      console.error('Error generating image:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div>
+          <Label htmlFor="prompt">Image Description</Label>
+          <Textarea
+            id="prompt"
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            placeholder="Describe the image you want to generate..."
+            className="mt-1"
+            required
+          />
+        </div>
+        <div>
+          <Label>Image Size</Label>
+          <RadioGroup value={imageSize} onValueChange={(value: ImageSize) => setImageSize(value)} className="flex space-x-4 mt-1">
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="portrait" id="portrait" />
+              <Label htmlFor="portrait">Portrait</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="square" id="square" />
+              <Label htmlFor="square">Square</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="landscape" id="landscape" />
+              <Label htmlFor="landscape">Landscape</Label>
+            </div>
+          </RadioGroup>
+        </div>
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? 'Generating...' : 'Generate Image'}
+        </Button>
+      </form>
+      {generatedImage && (
+        <div className="mt-8">
+          <h2 className="text-2xl font-bold mb-4">Generated Image</h2>
+          <div className="relative w-full" style={{ paddingBottom: '100%' }}>
+            <img
+              src={generatedImage}
+              alt="Generated image"
+              className="absolute top-0 left-0 w-full h-full object-contain rounded-lg shadow-lg"
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
