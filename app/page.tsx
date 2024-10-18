@@ -376,7 +376,7 @@ const faqData = [
         </div>
       </section>
 
-      <section className="py-20 bg-gradient-to-b from-blue-50 to-white">
+      <section className="py-20 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-12">
             How <span className="text-blue-600">Saze AI</span> Works ?
@@ -388,7 +388,7 @@ const faqData = [
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-white rounded-lg shadow-lg p-6 flex items-start"
+                className="rounded-lg border shadow-lg p-6 flex items-start"
               >
                 <div className="flex-shrink-0 mr-4">
                   <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
@@ -397,7 +397,7 @@ const faqData = [
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
-                  <p className="text-gray-600">{step.description}</p>
+                  <p className="text-gray-400">{step.description}</p>
                 </div>
               </motion.div>
             ))}
@@ -406,7 +406,7 @@ const faqData = [
       </section>
 
       {/* Our Toolkit Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-gray-50 bg-gradient-to-b dark:from-gray-900 dark:to-gray-800">
   <div className="container mx-auto px-6">
     <h2 className="text-5xl md:text-6xl font-extrabold mb-6 text-center animate-fade-in-down">
       Our Toolkit
@@ -491,7 +491,7 @@ const faqData = [
       </section>
 
       {/* Testimonials Section */}
-      <section  className="py-20 bg-gray-50">
+      <section  className="py-20 bg-gradient-to-b dark:from-gray-900 dark:to-gray-800">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -502,7 +502,7 @@ const faqData = [
             <p className="text-blue-600 font-semibold flex items-center justify-center">
           LOVE IS IN THE WORDS <Heart className="w-4 h-4 text-red-500 ml-1" />
         </p>
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+            <h2 className="text-4xl font-bold text-center mb-4 text-gray-900 dark:text-white">
               Experience <span className="text-blue-600">The Difference</span> Through Our Users&apos; Eyes
             </h2>
           </motion.div>
@@ -517,9 +517,9 @@ const faqData = [
                     </svg>
                   </div>
                   <div>
-                      <p className="text-gray-700 mb-6">{testimonial.quote}</p>
-                      <p className="font-semibold text-gray-900">{testimonial.name}</p>
-                      <p className="text-sm text-gray-600">{testimonial.role}</p>
+                      <p className=" mb-6">{testimonial.quote}</p>
+                      <p className="font-semibold">{testimonial.name}</p>
+                      <p className="text-sm text-gray-500">{testimonial.role}</p>
                     </div>
                 </CardContent>
               </Card>
