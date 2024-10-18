@@ -358,7 +358,7 @@ export default function Page() {
 
       {/* Our Toolkit Section */}
       <section className="py-20 bg-gray-50">
-  <div className="min-h-screen py-16">
+  <div className="container mx-auto px-6">
     <h2 className="text-5xl md:text-6xl font-extrabold mb-6 text-center animate-fade-in-down">
       Our Toolkit
     </h2>
