@@ -109,15 +109,15 @@ export default function InstagramBioForm() {
 
   return (
     <div className="max-w-7xl mx-auto mt-10">
-      <h1 className="text-4xl font-extrabold mb-8 text-center text-gray-800 tracking-tight">Instagram Bio Generator</h1>
-      <p className="text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">Create Engaging Instagram Bios with Unrealshot AI – Unique, Trendy, and Instantly Captivating.</p>
+      <h1 className="text-4xl font-extrabold mb-8 text-center tracking-tight">Instagram Bio Generator</h1>
+      <p className="text-xl text-center mb-12 max-w-3xl mx-auto">Create Engaging Instagram Bios with Unrealshot AI – Unique, Trendy, and Instantly Captivating.</p>
       <div className="flex flex-col md:flex-row gap-8">
         <div className="w-full md:w-1/2 h-full p-6 border border-gray-200 rounded-xl shadow-sm">
           <form onSubmit={handleSubmit} className="space-y-6">
             {(Object.keys(formData) as Array<keyof FormData>).map((field) => (
               <div key={field} className="relative">
                 <div className="flex justify-between items-center mb-1">
-                  <label htmlFor={field} className="block text-sm font-medium text-gray-700 capitalize">
+                  <label htmlFor={field} className="block text-sm font-medium text-gray-400 capitalize">
                     {field.split(/(?=[A-Z])/).join(' ')}
                   </label>
                   <p className={`text-sm ${parseInt(wordCounts[field]) === wordLimits[field] ? 'text-orange-500' : 'text-gray-500'}`}>
