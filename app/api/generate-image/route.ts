@@ -5,16 +5,8 @@ const apiKey = process.env.STABILITY_API_KEY
 
 if (!apiKey) throw new Error('Missing Stability API key.')
 
-const imageSizes = {
-  portrait: { width: 512, height: 768 },
-  square: { width: 512, height: 512 },
-  landscape: { width: 768, height: 512 },
-}
-
 export async function POST(req: Request) {
-  const { prompt, imageSize } = await req.json()
-
-  const { width, height } = imageSizes[imageSize as keyof typeof imageSizes]
+  const { prompt, width, height, style } = await req.json()
 
   try {
     const response = await fetch(
@@ -37,6 +29,7 @@ export async function POST(req: Request) {
           width,
           steps: 30,
           samples: 1,
+          style_preset: style !== 'none' ? style : undefined,
         }),
       }
     )
