@@ -1,8 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['data:'],
+    remotePatterns: [
+      {
+        protocol: 'data',
+        hostname: '',
+      },
+    ],
   },
 }
 
-module.exports = nextConfig
+export default nextConfig
