@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardDescription, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
-import Image from "next/image"
 import { Badge } from "@/components/ui/badge"
 import { motion, Variants } from "framer-motion"
 import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram } from "react-icons/fa6"
@@ -277,7 +276,7 @@ export default function Page() {
           {/* Bottom logo */}
           <div className="flex justify-center pt-8">
             <a href="https://www.producthunt.com/posts/saze-ai?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-saze-ai" target="_blank" rel="noopener noreferrer">
-              <Image src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=455121&theme=light" alt="Saze AI - AI-Powered Content Creation Tools for Writers and Creators | Product Hunt" style={{ width: '250px', height: '54px' }} width="250" height="54" />
+              <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=455121&theme=light" alt="Saze AI - AI-Powered Content Creation Tools for Writers and Creators | Product Hunt" style={{ width: '250px', height: '54px' }} width="250" height="54" />
             </a>
           </div>
         </div>
@@ -305,12 +304,12 @@ export default function Page() {
             className="grid md:grid-cols-3 gap-12"
           >
             {[
-              { title: "40+ AI Tools", description: "Access a wide range of specialized AI writing tools", icon: Zap, color: "bg-yellow-400" },
+              { title: "40+ AI Tools", description: "Access a wide range of AI writing tools", icon: Zap, color: "bg-yellow-400" },
               { title: "Boost Productivity", description: "Save time and effort in your writing process", icon: Rocket, color: "bg-green-400" },
               { title: "Enhance Quality", description: "Improve the clarity and impact of your content", icon: Sparkles, color: "bg-purple-400" },
             ].map((feature, index) => (
               <motion.div key={index} variants={fadeIn} className="relative">
-                <div className="absolute inset-0 bg-white rounded-3xl shadow-xl transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
+                <div className="absolute inset-0 bg-white rounded-3xl shadow-sm transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
                 <Card className="relative bg-white rounded-3xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl">
                   <CardHeader className="pb-0">
                     <div className={`w-16 h-16 ${feature.color} rounded-full flex items-center justify-center mb-4`}>
@@ -331,7 +330,7 @@ export default function Page() {
       <section className="py-20 bg-gradient-to-b from-blue-50 to-white">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-12">
-            How <span className="text-blue-600">Saze AI</span> Works
+            How <span className="text-blue-600">Saze AI</span> Works ?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {steps.map((step, index) => (
@@ -377,7 +376,7 @@ export default function Page() {
               {tool.badge && (
                 <Badge 
                   variant="secondary" 
-                  className={`absolute top-4 right-4 text-xs font-semibold text-white ${tool.badge.color} px-2 py-1 rounded-md`}
+                  className={`absolute top-4 right-4 text-xs font-semibold ${tool.badge.color} px-2 py-1 rounded-md`}
                 >
                   {tool.badge.text}
                 </Badge>
