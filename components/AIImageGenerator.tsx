@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Input } from "@/components/ui/input"
 import { Download } from 'lucide-react'
 import Link from 'next/link'
 
@@ -18,10 +19,17 @@ const aspectRatioOptions: { [key in AspectRatio]: { width: number; height: numbe
   landscape: { width: 768, height: 512 },
 }
 
+const stylePresets = [
+  'none', '3d-model', 'analog-film', 'anime', 'cinematic', 'comic-book', 'digital-art', 
+  'enhance', 'fantasy-art', 'isometric', 'line-art', 'low-poly', 'modeling-compound', 
+  'neon-punk', 'origami', 'photographic', 'pixel-art', 'tile-texture'
+]
+
 export default function AIImageGenerator() {
   const [prompt, setPrompt] = useState('')
   const [aspectRatio, setAspectRatio] = useState<AspectRatio>('square')
   const [style, setStyle] = useState('none')
+  const [seed, setSeed] = useState<number>(0)
   const [generatedImage, setGeneratedImage] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -35,7 +43,7 @@ export default function AIImageGenerator() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ prompt, width, height, style }),
+        body: JSON.stringify({ prompt, width, height, style, seed }),
       })
       if (!response.ok) {
         throw new Error('Failed to generate image')
@@ -50,7 +58,7 @@ export default function AIImageGenerator() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold mb-2">FREE AI IMAGE GENERATOR</h1>
       <p className="text-lg text-gray-600 mb-8">Convert your text into images for FREE.</p>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -85,18 +93,32 @@ export default function AIImageGenerator() {
               </RadioGroup>
             </div>
             <div>
-              <Label htmlFor="style" className="text-lg font-semibold">Style</Label>
+              <Label htmlFor="style" className="text-lg font-semibold">Style Preset</Label>
               <Select value={style} onValueChange={setStyle}>
                 <SelectTrigger className="w-full mt-1">
-                  <SelectValue placeholder="Select a style" />
+                  <SelectValue placeholder="Select a style preset" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="none">None</SelectItem>
-                  <SelectItem value="cartoon">Cartoon</SelectItem>
-                  <SelectItem value="realistic">Realistic</SelectItem>
-                  <SelectItem value="abstract">Abstract</SelectItem>
+                  {stylePresets.map((preset) => (
+                    <SelectItem key={preset} value={preset}>
+                      {preset.charAt(0).toUpperCase() + preset.slice(1).replace(/-/g, ' ')}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
+            </div>
+            <div>
+              <Label htmlFor="seed" className="text-lg font-semibold">Seed</Label>
+              <Input
+                id="seed"
+                type="number"
+                value={seed}
+                onChange={(e) => setSeed(Number(e.target.value))}
+                min={0}
+                max={4294967295}
+                className="mt-1"
+                placeholder="Enter a seed number (0-4294967295)"
+              />
             </div>
             <div>
               <p className="text-sm text-gray-600">
