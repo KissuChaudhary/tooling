@@ -279,7 +279,7 @@ const faqData = [
           </motion.a>
           <motion.a
             href="#"
-            className="text-blue-700 hover:scale-110 transition-transform"
+            className="text-blue-700 bg-white p-3 rounded-lg shadow-lg hover:scale-110 transition-transform"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.6 }}
@@ -290,7 +290,8 @@ const faqData = [
           </motion.a>
           <motion.a
             href="#"
-            className="text-pink-600 hover:scale-110 transition-transform"
+            className="relative text-pink-600 bg-white p-3 rounded-lg shadow-lg hover:scale-110 transition-transform"
+            style={{ left: '-9rem' }}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.8 }}
