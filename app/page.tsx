@@ -256,7 +256,7 @@ const faqData = [
         <div className="hidden lg:flex flex-col space-y-8 z-30 absolute left-0 top-1/2 transform -translate-y-1/2">
           <motion.a
             href="#"
-            className="text-blue-600 hover:scale-110 transition-transform"
+            className="text-blue-600 bg-white p-3 rounded-lg shadow-lg hover:scale-110 transition-transform"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
@@ -267,7 +267,8 @@ const faqData = [
           </motion.a>
           <motion.a
             href="#"
-            className="text-sky-500 hover:scale-110 transition-transform"
+            className="relative text-sky-500 bg-white p-3 rounded-lg shadow-lg hover:scale-110 transition-transform"
+            style={{ left: '-9rem' }}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4 }}
