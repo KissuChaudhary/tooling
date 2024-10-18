@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -114,7 +115,7 @@ export default function AIImageGenerator() {
         <div className="relative">
           {generatedImage ? (
             <div className="relative">
-              <img
+              <Image
                 src={generatedImage}
                 alt="Generated image"
                 className="w-full h-auto rounded-lg shadow-lg"
