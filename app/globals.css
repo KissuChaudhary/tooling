@@ -94,9 +94,7 @@
     @apply text-2xl;
   }
 
-  a {
-    @apply text-primary hover:text-primary-foreground transition-colors;
-  }
+  
 }
 
 @layer components {
