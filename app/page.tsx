@@ -367,7 +367,7 @@ const faqData = [
           </motion.a>
           <motion.a
             href="#"
-            className="relative text-dark bg-white p-3 rounded-lg shadow-lg hover:scale-110 transition-transform"
+            className="relative text-dark-700 bg-white p-3 rounded-lg shadow-lg hover:scale-110 transition-transform"
             style={{ left: '9rem' }}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
