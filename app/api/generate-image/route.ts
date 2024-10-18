@@ -6,7 +6,7 @@ const apiKey = process.env.STABILITY_API_KEY
 if (!apiKey) throw new Error('Missing Stability API key.')
 
 export async function POST(req: Request) {
-  const { prompt, width, height, style } = await req.json()
+  const { prompt, width, height, style, seed } = await req.json()
 
   try {
     const response = await fetch(
@@ -30,6 +30,7 @@ export async function POST(req: Request) {
           steps: 30,
           samples: 1,
           style_preset: style !== 'none' ? style : undefined,
+          seed: seed !== 0 ? seed : undefined,
         }),
       }
     )
