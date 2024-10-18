@@ -523,27 +523,28 @@ const faqData = [
       </section>
 
 {/* FAQ Section */}
-      <section className="py-20 bg-gradient-to-b from-blue-50 to-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-4">Frequently Asked Questions</h2>
-          <p className="text-center text-gray-600 mb-12">Have more questions? Feel free to email us!</p>
+ 
+      <section className="py-20 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
+        <div className="container mx-auto px-4 text-gray-800 dark:text-gray-200">
+          <h2 className="text-4xl font-bold text-center mb-4 text-gray-900 dark:text-white">Frequently Asked Questions</h2>
+          <p className="text-center text-gray-600 dark:text-gray-400 mb-12">Have more questions? Feel free to email us!</p>
           <div className="grid md:grid-cols-2 gap-6">
             {faqData.map((faq, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
+              <div key={index} className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
                 <button
-                  className="w-full text-left p-4 focus:outline-none flex justify-between items-center"
+                  className="w-full text-left p-4 focus:outline-none flex justify-between items-center text-card-foreground"
                   onClick={() => toggleQuestion(index)}
                 >
-                  <span className="font-semibold">{faq.question}</span>
+                  <span className="font-semibold text-gray-900 dark:text-white">{faq.question}</span>
                   <ChevronDown
                     className={`w-5 h-5 transition-transform duration-300 ${
-                      openQuestion === index ? 'transform rotate-180' : ''
+                      openQuestions[Math.floor(index / (faqData.length / 2))] === index ? 'transform rotate-180' : ''
                     }`}
                   />
                 </button>
-                {openQuestion === index && (
-                  <div className="p-4 bg-gray-50">
-                    <p className="text-gray-700">{faq.answer}</p>
+                {openQuestions[Math.floor(index / (faqData.length / 2))] === index && (
+                  <div className="p-4 bg-gray-100 dark:bg-gray-700">
+                    <p className="text-gray-700 dark:text-gray-300">{faq.answer}</p>
                   </div>
                 )}
               </div>
@@ -551,6 +552,7 @@ const faqData = [
           </div>
         </div>
       </section>
+
     </div>
   )
 }
