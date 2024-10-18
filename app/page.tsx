@@ -6,7 +6,7 @@ import { Card, CardDescription, CardContent, CardHeader, CardTitle } from "@/com
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { motion, Variants } from "framer-motion"
-import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram } from "react-icons/fa6"
+import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram, FaYoutube, FaGoogle, FaTumblr, FaRobot } from "react-icons/fa6"
 import {
   ArrowRight,
   Heart,
@@ -330,6 +330,54 @@ const faqData = [
               <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=455121&theme=light" alt="Saze AI - AI-Powered Content Creation Tools for Writers and Creators | Product Hunt" style={{ width: '250px', height: '54px' }} width="250" height="54" />
             </a>
           </div>
+          <div className="hidden lg:flex flex-col space-y-8 z-30 absolute left-0 top-1/2 transform -translate-y-1/2">
+          <motion.a
+            href="#"
+            className="text-red-600 bg-white p-3 rounded-lg shadow-lg hover:scale-110 transition-transform"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <FaYoutube size={24} className="animate-pulse" />
+          </motion.a>
+          <motion.a
+            href="#"
+            className="relative text-sky-500 bg-white p-3 rounded-lg shadow-lg hover:scale-110 transition-transform"
+            style={{ left: '9rem' }}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <FaRobot size={24} className="animate-pulse" />
+          </motion.a>
+          <motion.a
+            href="#"
+            className="text-pink-700 bg-white p-3 rounded-lg shadow-lg hover:scale-110 transition-transform"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.6 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <FaTumblr size={24} className="animate-pulse" />
+          </motion.a>
+          <motion.a
+            href="#"
+            className="relative text-dark bg-white p-3 rounded-lg shadow-lg hover:scale-110 transition-transform"
+            style={{ left: '-9rem' }}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.8 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <FaGoogle size={24} className="animate-pulse" />
+          </motion.a>
+        </div>
         </div>
       </div>
     </section>
