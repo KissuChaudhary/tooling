@@ -15,7 +15,7 @@ interface BenefitCardProps {
 }
 
 const BenefitCard: React.FC<BenefitCardProps> = ({ icon, title, description }) => (
-  <div className="bg-gray-50 p-6 rounded-lg">
+  <div className="border p-6 rounded-lg">
     <div className="w-12 h-12 inline-flex items-center justify-center rounded-full bg-indigo-100 text-indigo-500 mb-4">
       {icon}
     </div>
@@ -44,9 +44,9 @@ export default function AIEssayWriterPage() {
         <AIEssayForm />
         
         {/* Benefits Section */}
-        <section className="py-12 bg-white">
+        <section className="py-12 bg-white bg-gradient-to-b dark:from-gray-900 dark:to-gray-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl mb-8 text-center">
+            <h2 className="text-3xl font-extrabold sm:text-4xl mb-8 text-center">
               Benefits of Using the AI Essay Writer
             </h2>
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
