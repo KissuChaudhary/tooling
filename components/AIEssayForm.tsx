@@ -89,7 +89,7 @@ export default function AIEssayForm() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto mt-10">
+    <div className="max-w-7xl p-6 mx-auto mt-10">
       <h1 className="text-4xl font-extrabold mb-8 text-center tracking-tight">AI Essay Writer</h1>
       <p className="text-xl text-center mb-12 max-w-3xl mx-auto">Generate well-structured essays with ease using our AI-powered tool.</p>
       <div className="flex flex-col md:flex-row gap-8">
