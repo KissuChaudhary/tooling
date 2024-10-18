@@ -2,13 +2,13 @@ import Link from 'next/link'
 
 export default function Footer() {
   return (
-    <footer className="bg-muted text-muted-foreground">
+    <footer className="bg-gray-50 pt-12 bg-gradient-to-b dark:from-gray-900 dark:to-gray-800">
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-foreground">About Us</h3>
+            <h3 className="text-lg font-semibold mb-4 text-foreground">Saze AI</h3>
             <p>
-              We are a company dedicated to providing excellent services and products to our customers.
+             SazeAI: Your ultimate AI-powered content generator. Create high-quality content effortlessly.
             </p>
           </div>
           <div>
@@ -34,15 +34,13 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-4 text-foreground">Contact Us</h3>
             <p>
-              Email: info@example.com<br />
-              Phone: (123) 456-7890<br />
-              Address: 123 Main St, City, Country
+              Email: support@sazeai.com<br />
             </p>
           </div>
         </div>
         <div className="mt-8 pt-8 border-t border-border">
           <p className="text-center">
-            © {new Date().getFullYear()} Your Company Name. All rights reserved.
+            © {new Date().getFullYear()} Saze AI. All rights reserved.
           </p>
         </div>
       </div>
