@@ -47,22 +47,22 @@ export default function Page() {
 
   const testimonials = [
     {
-      quote: "Scalenut&apos;s content is profound and factual. I rely on the \"quora answer\" and SEO modules to craft long-form content swiftly. Impressive results!",
-      name: "Benedict T.",
-      role: "SEO Consultant",
-      image: "/placeholder.svg"
+      quote: "Saze Al has revolutionized my writing process. I can now produce high-quality content in half the time!",
+      name: "Alex Johnson",
+      role: "Content Creator",
+    
     },
     {
-      quote: "Its long-form assistant is everything you need to create great article outlines. It shows you SERP data including your competitors & their article outlines.",
+      quote: "The variety of tools available is impressive. Saze Al has become an indispensable part of our marketing strategy.",
       name: "Carlos U.",
-      role: "Digital Marketing Consultant",
-      image: "/placeholder.svg"
+      role: "Marketing Manager",
+     
     },
     {
-      quote: "The keyword grouping is a great feature. I also like the AI content writing interface. The cruise mode is very user-friendly. I highly recommend it.",
+      quote: "As a non-native English speaker, Saze Al helps me write better essays and improve my language skills.",
       name: "Kavitha R.",
-      role: "International Marketing and Communications Representative",
-      image: "/placeholder.svg"
+      role: "Student",
+     
     }
   ]
 
@@ -452,15 +452,10 @@ export default function Page() {
           >
             <h2 className="text-3xl sm:text-4xl font-bold text-blue-600 mb-4">LOVE IS IN THE SCALE</h2>
             <p className="text-2xl sm:text-3xl font-bold text-gray-900">
-              Trusted by <span className="text-blue-600">1 Mn+ marketers</span> of the world&apos;s leading brands
+              Experience <span className="text-blue-600">The Difference</span> Through Our Users&apos; Eyes
             </p>
           </motion.div>
-          <div className="flex justify-end mb-8">
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
-              Try For Free
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </div>
+        
           <div className="grid md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
               <Card key={index} className="bg-blue-50 border-none shadow-lg">
@@ -471,15 +466,6 @@ export default function Page() {
                     </svg>
                   </div>
                   <p className="text-gray-700 mb-6">{testimonial.quote}</p>
-                  <div className="flex items-center">
-                    <Image
-                      src={testimonial.image}
-                      alt={testimonial.name}
-                      width={48}
-                      height={48}
-                      className="rounded-full mr-4"
-                    />
-                    <div>
                       <p className="font-semibold text-gray-900">{testimonial.name}</p>
                       <p className="text-sm text-gray-600">{testimonial.role}</p>
                     </div>
