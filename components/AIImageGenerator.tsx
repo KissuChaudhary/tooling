@@ -113,26 +113,37 @@ export default function AIImageGenerator() {
           </form>
         </div>
         <div className="relative">
-          {generatedImage ? (
-            <div className="relative">
-              <Image
-                src={generatedImage}
-                alt="Generated image"
-                className="w-full h-auto rounded-lg shadow-lg"
-              />
-              <a
-                href={generatedImage}
-                download="generated-image.png"
-                className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-100"
-              >
-                <Download className="w-6 h-6 text-gray-600" />
-              </a>
-            </div>
-          ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gray-100 rounded-lg">
-              <p className="text-gray-400 text-lg">Your Art Will Appear Here...</p>
-            </div>
-          )}
+          <div 
+            className="relative rounded-lg shadow-lg overflow-hidden"
+            style={{
+              width: `${aspectRatioOptions[aspectRatio].width}px`,
+              height: `${aspectRatioOptions[aspectRatio].height}px`,
+              maxWidth: '100%',
+              margin: '0 auto'
+            }}
+          >
+            {generatedImage ? (
+              <>
+                <Image
+                  src={generatedImage}
+                  alt="Generated image"
+                  layout="fill"
+                  objectFit="cover"
+                />
+                <a
+                  href={generatedImage}
+                  download="generated-image.png"
+                  className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 z-10"
+                >
+                  <Download className="w-6 h-6 text-gray-600" />
+                </a>
+              </>
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                <p className="text-gray-400 text-lg">Your Art Will Appear Here...</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
