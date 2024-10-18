@@ -40,7 +40,7 @@ export default function AIEssayWriterPage() {
           "url": "https://www.unrealshot.com/ai-essay-writer",
         })}
       </Script>
-      <div className="min-h-screen px-4 sm:px-6 lg:px-8" style={{ paddingBottom: '3rem' }}>
+      <div className="min-h-screen" style={{ paddingBottom: '3rem' }}>
         <AIEssayForm />
         
         {/* Benefits Section */}
