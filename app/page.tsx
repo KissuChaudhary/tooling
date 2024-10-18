@@ -335,14 +335,14 @@ const faqData = [
               
 
       {/* Features Section */}
-      <section id="features" className="py-20 bg-gradient-to-b from-gray-50 to-white">
+      <section id="features" className="py-20 bg-gray-50 bg-gradient-to-b dark:from-gray-900 dark:to-gray-800">
         <div className="container mx-auto px-4">
           <motion.h2
             variants={fadeIn}
             initial="initial"
             animate="animate"
             transition={{ duration: 0.6 }}
-            className="text-4xl sm:text-5xl font-bold text-center mb-16 text-gray-900"
+            className="text-4xl sm:text-5xl font-bold text-center mb-16"
           >
             Why Choose <span className="text-blue-600">Saze AI</span>?
           </motion.h2>
@@ -358,8 +358,8 @@ const faqData = [
               { title: "Enhance Quality", description: "Improve the clarity and impact of your content", icon: Sparkles, color: "bg-purple-400" },
             ].map((feature, index) => (
               <motion.div key={index} variants={fadeIn} className="relative">
-                <div className="absolute inset-0 bg-white rounded-3xl shadow-sm transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
-                <Card className="relative bg-white rounded-3xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl">
+                <div className="absolute inset-0 bg-card text-card-foreground shadow-sm transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
+                <Card className="relative rounded-3xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl">
                   <CardHeader className="pb-0">
                     <div className={`w-16 h-16 ${feature.color} rounded-full flex items-center justify-center mb-4`}>
                       <feature.icon className="h-8 w-8 text-white" />
@@ -367,7 +367,7 @@ const faqData = [
                     <CardTitle className="text-2xl font-bold mb-2">{feature.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-600">{feature.description}</p>
+                    <p className="text-gray-400">{feature.description}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -376,7 +376,7 @@ const faqData = [
         </div>
       </section>
 
-      <section className="py-20 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
+      <section className="py-20 bg-white bg-gradient-to-b dark:from-gray-900 dark:to-gray-800">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-12">
             How <span className="text-blue-600">Saze AI</span> Works ?
