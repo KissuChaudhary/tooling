@@ -187,7 +187,7 @@ export default function AIEssayForm() {
         <div className="w-full md:w-1/2">
           <div className="h-full p-6 border border-gray-200 rounded-xl shadow-sm">
             <div className="flex justify-between items-start mb-4">
-              <h2 className="text-2xl font-bold text-gray-800">Your Generated Essay:</h2>
+              <h2 className="text-2xl font-bold">Your Generated Essay:</h2>
               <button
                 onClick={handleCopy}
                 className="flex items-center text-sm text-indigo-600 hover:text-indigo-800 transition duration-150 ease-in-out"
