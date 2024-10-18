@@ -19,7 +19,7 @@ export default function Header() {
   }
 
   return (
-    <header className="bg-background">
+    <header className="bg-background border">
       <div className="container mx-auto px-4 py-6">
         <div className="flex justify-between items-center">
           <Link href="/" className="text-2xl font-bold text-foreground">
