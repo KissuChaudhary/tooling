@@ -90,13 +90,13 @@ export default function AIEssayForm() {
 
   return (
     <div className="max-w-7xl mx-auto mt-10">
-      <h1 className="text-4xl font-extrabold mb-8 text-center text-gray-800 tracking-tight">AI Essay Writer</h1>
-      <p className="text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">Generate well-structured essays with ease using our AI-powered tool.</p>
+      <h1 className="text-4xl font-extrabold mb-8 text-center tracking-tight">AI Essay Writer</h1>
+      <p className="text-xl text-center mb-12 max-w-3xl mx-auto">Generate well-structured essays with ease using our AI-powered tool.</p>
       <div className="flex flex-col md:flex-row gap-8">
         <div className="w-full md:w-1/2 h-full p-6 border border-gray-200 rounded-xl shadow-sm">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="relative">
-              <label htmlFor="topic" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="topic" className="block text-sm font-medium text-gray-500 mb-1">
                 Essay Topic
               </label>
               <input
@@ -120,7 +120,7 @@ export default function AIEssayForm() {
               )}
             </div>
             <div className="relative">
-              <label htmlFor="keyPoints" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="keyPoints" className="block text-sm font-medium text-gray-500 mb-1">
                 Key Points
               </label>
               <textarea
@@ -144,7 +144,7 @@ export default function AIEssayForm() {
               )}
             </div>
             <div className="relative">
-              <label htmlFor="wordCount" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="wordCount" className="block text-sm font-medium text-gray-500 mb-1">
                 Word Count
               </label>
               <input
