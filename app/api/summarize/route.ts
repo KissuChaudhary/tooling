@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
     ];
 
     let content = '';
-    let title = $('title').text() || $('h1').first().text() || '';
+    const title = $('title').text() || $('h1').first().text() || '';
 
     // Try each selector until we find content
     for (const selector of contentSelectors) {
