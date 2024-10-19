@@ -144,7 +144,7 @@ export async function POST(request: NextRequest) {
       }
 
       const genAI = new GoogleGenerativeAI(geminiApiKey);
-      const geminiModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash-8b" });
+      const geminiModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
       const prompt = messages[1].content; // Assuming the second message contains the user prompt
       const result = await geminiModel.generateContent(prompt);
