@@ -1,0 +1,82 @@
+// components/AISummarizer.tsx
+'use client';
+
+import { useState } from 'react';
+
+export default function AISummarizer() {
+  const [url, setUrl] = useState('');
+  const [content, setContent] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await fetch('/api/summarize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to fetch content');
+      }
+
+      setContent(data.content);
+      setUrl('');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="max-w-4xl w-full">
+      <form onSubmit={handleSubmit} className="mb-8">
+        <div className="flex gap-4">
+          <input
+            type="url"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            placeholder="Enter URL to analyze"
+            required
+            className="flex-1 p-2 border rounded"
+          />
+          <button
+            type="submit"
+            disabled={loading}
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
+          >
+            {loading ? 'Processing...' : 'Extract Content'}
+          </button>
+        </div>
+      </form>
+
+      {error && (
+        <div className="mb-4 p-4 bg-red-100 text-red-700 rounded">
+          {error}
+        </div>
+      )}
+
+      {loading && (
+        <div className="animate-pulse">
+          <div className="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
+          <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+        </div>
+      )}
+
+      {content && !loading && (
+        <div className="border rounded p-4">
+          <h2 className="text-xl font-semibold mb-4">Extracted Content:</h2>
+          <div className="whitespace-pre-wrap">{content}</div>
+        </div>
+      )}
+    </div>
+  );
+}
