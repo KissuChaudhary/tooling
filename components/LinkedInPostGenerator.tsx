@@ -240,28 +240,31 @@ export default function LinkedInPostGenerator() {
             </form>
           </CardContent>
         </Card>
-        
-         <Card className="w-full md:w-1/2">
+
+        <Card className="w-full md:w-1/2">
           <CardHeader>
-            <div className="flex justify-between items-center">
-              <CardTitle>Your Generated Post:</CardTitle>
-              <Button
-                onClick={handleCopy}
-                variant="ghost"
-                size="sm"
-                className="text-primary hover:text-primary/80"
-                disabled={!generatedPost}
-              >
-                <ClipboardCopy className="h-4 w-4 mr-2" />
-                Copy
-              </Button>
-            </div>
+            <CardTitle>Your Generated Post</CardTitle>
           </CardHeader>
           <CardContent>
             {generatedPost ? (
-              <div className="bg-gray-100 p-4 rounded-md mb-4 max-h-96 overflow-y-auto">
-                <p className="whitespace-pre-wrap">{generatedPost}</p>
-              </div>
+              <>
+                <div className="bg-gray-100 p-4 rounded-md mb-4 max-h-96 overflow-y-auto">
+                  <p className="whitespace-pre-wrap">{generatedPost}</p>
+                </div>
+                <Button onClick={handleCopy} variant="outline" className="w-full">
+                  {copied ? (
+                    <>
+                      <Check className="mr-2 h-4 w-4" />
+                      Copied!
+                    </>
+                  ) : (
+                    <>
+                      <Clipboard className="mr-2 h-4 w-4" />
+                      Copy to Clipboard
+                    </>
+                  )}
+                </Button>
+              </>
             ) : (
               <p className="text-gray-500 italic">Your generated LinkedIn post will appear here.</p>
             )}
