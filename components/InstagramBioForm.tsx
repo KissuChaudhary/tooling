@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react';
 import { Loader2, Clipboard, Check, AlertCircle } from 'lucide-react';
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
 
 interface FormData {
   name: string;
@@ -46,6 +48,7 @@ export default function InstagramBioForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
   const [errors, setErrors] = useState<Errors>({});
+  const [model, setModel] = useState<'gpt4o' | 'gemini'>('gpt4o');
 
   const countWords = (text: string): number => {
     return text.trim().split(/\s+/).filter(word => word !== '').length;
@@ -86,7 +89,7 @@ export default function InstagramBioForm() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ ...formData, tool: 'instagramBio' }),
+        body: JSON.stringify({ ...formData, tool: 'instagramBio', model }),
       });
       if (!response.ok) {
         throw new Error('Failed to generate bio');
@@ -111,6 +114,15 @@ export default function InstagramBioForm() {
     <div className="max-w-7xl mx-auto mt-10">
       <h1 className="text-4xl font-extrabold mb-8 text-center tracking-tight">Instagram Bio Generator</h1>
       <p className="text-xl text-center mb-12 max-w-3xl mx-auto">Create Engaging Instagram Bios with Unrealshot AI – Unique, Trendy, and Instantly Captivating.</p>
+      <div className="flex justify-center items-center space-x-2 mb-8">
+        <Label htmlFor="model-switch">Gemini 1.5 Flash-8B</Label>
+        <Switch
+          id="model-switch"
+          checked={model === 'gpt4o'}
+          onCheckedChange={(checked) => setModel(checked ? 'gpt4o' : 'gemini')}
+        />
+        <Label htmlFor="model-switch">GPT 4o mini</Label>
+      </div>
       <div className="flex flex-col md:flex-row gap-8">
         <div className="w-full md:w-1/2 h-full p-6 border border-gray-200 rounded-xl shadow-sm">
           <form onSubmit={handleSubmit} className="space-y-6">
