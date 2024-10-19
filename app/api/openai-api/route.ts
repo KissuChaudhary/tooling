@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 type BioRequest = {
   name: string;
@@ -69,8 +70,8 @@ type ThesisStatementRequest = {
 type Request = BioRequest | PostRequest | HeadlineRequest | InstagramBioRequest | InstagramCaptionRequest | EssayRequest | TextImproverRequest | StoryRequest | PickupLineRequest | ThesisStatementRequest;
 
 export async function POST(request: NextRequest) {
-  const body: Request & { tool: string } = await request.json();
-  const { tool, ...data } = body;
+  const body: Request & { tool: string; model: 'gpt4o' | 'gemini' } = await request.json();
+  const { tool, model, ...data } = body;
 
   let messages;
 
@@ -110,25 +111,42 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: messages,
-        max_tokens: 500
-      })
-    });
+    let content;
+    if (model === 'gpt4o') {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: messages,
+          max_tokens: 500
+        })
+      });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const responseData = await response.json();
+      content = responseData.choices[0].message.content.trim();
+    } else if (model === 'gemini') {
+      const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+      const geminiModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash-8b" });
+
+      const prompt = messages[1].content; // Assuming the second message contains the user prompt
+      const result = await geminiModel.generateContent(prompt);
+      const response = await result.response;
+      content = response.text().trim();
+
+      if (!content) {
+        throw new Error('Failed to generate content with Gemini');
+      }
+    } else {
+      throw new Error('Invalid model specified');
     }
-
-    const responseData = await response.json();
-    const content = responseData.choices[0].message.content.trim();
 
     switch (tool) {
       case 'linkedinBio':
@@ -158,67 +176,67 @@ export async function POST(request: NextRequest) {
 }
 
 function createLinkedInBioMessages(data: BioRequest) {
-    const { name, currentRole, experience, skills, goals } = data;
-    return [
-      { role: "system", content: "You are a professional LinkedIn bio writer." },
-      { role: "user", content: `Generate a professional LinkedIn bio for ${name}. 
-        Current role: ${currentRole}. 
-        Experience: ${experience}. 
-        Skills: ${skills}. 
-        Career goals: ${goals}.
-        The bio should be concise, engaging, and highlight the person's unique value proposition.` }
-    ];
-  }
-  
-  function createLinkedInPostMessages(data: PostRequest) {
-    const { topic, keyPoints, tone, callToAction } = data;
-    return [
-      { role: "system", content: "You are a professional LinkedIn content creator." },
-      { role: "user", content: `Generate a compelling LinkedIn post about ${topic}. 
-        Key points to include: ${keyPoints}. 
-        Desired tone: ${tone}. 
-        Call to action: ${callToAction}.
-        The post should be engaging, informative, and encourage interaction from the audience.` }
-    ];
-  }
-  
-  function createLinkedInHeadlineMessages(data: HeadlineRequest) {
-    const { currentRole, keySkills, industry, uniqueValue } = data;
-    return [
-      { role: "system", content: "You are a professional LinkedIn headline writer." },
-      { role: "user", content: `Generate a compelling LinkedIn headline. 
-        Current role: ${currentRole}. 
-        Key skills: ${keySkills}. 
-        Industry: ${industry}. 
-        Unique value proposition: ${uniqueValue}.
-        The headline should be concise, impactful, and highlight the person's professional identity and value.` }
-    ];
-  }
-  
-  function createInstagramBioMessages(data: InstagramBioRequest) {
-    const { name, occupation, interests, personality, callToAction } = data;
-    return [
-      { role: "system", content: "You are a creative Instagram bio writer." },
-      { role: "user", content: `Generate an engaging Instagram bio for ${name}. 
-        Occupation: ${occupation}. 
-        Interests: ${interests}. 
-        Personality: ${personality}. 
-        Call to action: ${callToAction}.
-        The bio should be concise, creative, and reflect the user's personality while adhering to Instagram's 150 character limit.` }
-    ];
-  }
-  
-  function createInstagramCaptionMessages(data: InstagramCaptionRequest) {
-    const { topic, mood, hashtags, callToAction } = data;
-    return [
-      { role: "system", content: "You are a creative Instagram caption writer." },
-      { role: "user", content: `Generate an engaging Instagram caption about ${topic}. 
-        Mood: ${mood}. 
-        Hashtags to include: ${hashtags}. 
-        Call to action: ${callToAction}.
-        The caption should be catchy, relevant to the topic, and encourage engagement. Include emojis where appropriate.` }
-    ];
-  }
+  const { name, currentRole, experience, skills, goals } = data;
+  return [
+    { role: "system", content: "You are a professional LinkedIn bio writer." },
+    { role: "user", content: `Generate a professional LinkedIn bio for ${name}. 
+      Current role: ${currentRole}. 
+      Experience: ${experience}. 
+      Skills: ${skills}. 
+      Career goals: ${goals}.
+      The bio should be concise, engaging, and highlight the person's unique value proposition.` }
+  ];
+}
+
+function createLinkedInPostMessages(data: PostRequest) {
+  const { topic, keyPoints, tone, callToAction } = data;
+  return [
+    { role: "system", content: "You are a professional LinkedIn content creator." },
+    { role: "user", content: `Generate a compelling LinkedIn post about ${topic}. 
+      Key points to include: ${keyPoints}. 
+      Desired tone: ${tone}. 
+      Call to action: ${callToAction}.
+      The post should be engaging, informative, and encourage interaction from the audience.` }
+  ];
+}
+
+function createLinkedInHeadlineMessages(data: HeadlineRequest) {
+  const { currentRole, keySkills, industry, uniqueValue } = data;
+  return [
+    { role: "system", content: "You are a professional LinkedIn headline writer." },
+    { role: "user", content: `Generate a compelling LinkedIn headline. 
+      Current role: ${currentRole}. 
+      Key skills: ${keySkills}. 
+      Industry: ${industry}. 
+      Unique value proposition: ${uniqueValue}.
+      The headline should be concise, impactful, and highlight the person's professional identity and value.` }
+  ];
+}
+
+function createInstagramBioMessages(data: InstagramBioRequest) {
+  const { name, occupation, interests, personality, callToAction } = data;
+  return [
+    { role: "system", content: "You are a creative Instagram bio writer." },
+    { role: "user", content: `Generate an engaging Instagram bio for ${name}. 
+      Occupation: ${occupation}. 
+      Interests: ${interests}. 
+      Personality: ${personality}. 
+      Call to action: ${callToAction}.
+      The bio should be concise, creative, and reflect the user's personality while adhering to Instagram's 150 character limit.` }
+  ];
+}
+
+function createInstagramCaptionMessages(data: InstagramCaptionRequest) {
+  const { topic, mood, hashtags, callToAction } = data;
+  return [
+    { role: "system", content: "You are a creative Instagram caption writer." },
+    { role: "user", content: `Generate an engaging Instagram caption about ${topic}. 
+      Mood: ${mood}. 
+      Hashtags to include: ${hashtags}. 
+      Call to action: ${callToAction}.
+      The caption should be catchy, relevant to the topic, and encourage engagement. Include emojis where appropriate.` }
+  ];
+}
 
 function createAIEssayMessages(data: EssayRequest) {
   const { topic, keyPoints, wordCount } = data;
