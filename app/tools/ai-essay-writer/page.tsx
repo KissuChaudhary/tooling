@@ -1,4 +1,4 @@
-import AIEssayForm from '@/components/EssayGenerator'
+import AIEssayForm from '@/components/AIEssayForm'
 import Head from 'next/head'
 import Script from 'next/script'
 import { Book, Lightbulb, Clock, Target, Sparkles } from 'lucide-react'
