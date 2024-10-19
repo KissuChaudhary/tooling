@@ -1,8 +1,12 @@
-
-
 // app/api/summarize/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import * as cheerio from 'cheerio';
+import OpenAI from 'openai';
+
+// Initialize OpenAI
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,6 +19,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Fetch and parse content
     const response = await fetch(url);
     const html = await response.text();
     const $ = cheerio.load(html);
@@ -36,6 +41,7 @@ export async function POST(request: NextRequest) {
     ];
 
     let content = '';
+    let title = $('title').text() || $('h1').first().text() || '';
 
     // Try each selector until we find content
     for (const selector of contentSelectors) {
@@ -58,7 +64,32 @@ export async function POST(request: NextRequest) {
       .replace(/[\t\r]/g, '')
       .trim();
 
-    return NextResponse.json({ content });
+    // Get AI summary and key points
+    const aiResponse = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content: "You are an expert content analyzer. Provide a concise summary and extract key points from the given text. Format the response as JSON with 'summary' and 'keyPoints' fields."
+        },
+        {
+          role: "user",
+          content: `Please analyze this text and provide a summary and key points: ${content.substring(0, 4000)}` // Limit content length
+        }
+      ],
+      response_format: { type: "json_object" }
+    });
+
+    const aiResult = JSON.parse(aiResponse.choices[0].message.content);
+
+    return NextResponse.json({
+      title,
+      fullText: content,
+      summary: aiResult.summary,
+      keyPoints: aiResult.keyPoints,
+      wordCount: content.split(/\s+/).length
+    });
+
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'An error occurred' },
