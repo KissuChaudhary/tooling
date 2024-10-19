@@ -40,8 +40,11 @@ type InstagramCaptionRequest = {
 
 type EssayRequest = {
   topic: string;
-  keyPoints: string;
-  wordCount: number;
+  tone: string;
+  essayType: string;
+  audience: string;
+  length: string;
+  purpose: string;
 };
 
 type TextImproverRequest = {
@@ -249,13 +252,16 @@ function createInstagramCaptionMessages(data: InstagramCaptionRequest) {
 }
 
 function createAIEssayMessages(data: EssayRequest) {
-  const { topic, keyPoints, wordCount } = data;
+  const { topic, tone, essayType, audience, length, purpose } = data;
   return [
     { role: "system", content: "You are an expert essay writer." },
     { role: "user", content: `Write an essay on the topic: ${topic}. 
-      Key points to include: ${keyPoints}. 
-      The essay should be approximately ${wordCount} words long.
-      Ensure the essay is well-structured, coherent, and follows academic writing standards.` }
+      Tone: ${tone}.
+      Essay Type: ${essayType}.
+      Target Audience: ${audience}.
+      Length: ${length}.
+      Purpose: ${purpose}.
+      Ensure the essay is well-structured, coherent, and tailored to the specified parameters.` }
   ];
 }
 
