@@ -243,15 +243,15 @@ export default function LinkedInPostGenerator() {
           </CardContent>
         </Card>
 
-        <Card className="w-full md:w-1/2">
+         <Card className="w-full md:w-1/2">
           <CardHeader>
             <div className="flex justify-between items-center">
-              <CardTitle>Your Generated LinkedIn Post:</CardTitle>
+              <CardTitle>Your Generated Post:</CardTitle>
               <Button
                 onClick={handleCopy}
                 variant="ghost"
                 size="sm"
-                className="text-primary  hover:text-primary/80"
+                className="text-primary hover:text-primary/80"
                 disabled={!generatedPost}
               >
                 <ClipboardCopy className="h-4 w-4 mr-2" />
