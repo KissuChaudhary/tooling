@@ -113,11 +113,16 @@ export async function POST(request: NextRequest) {
   try {
     let content;
     if (model === 'gpt4o') {
+      const openaiApiKey = process.env.OPENAI_API_KEY;
+      if (!openaiApiKey) {
+        throw new Error('OpenAI API key is not set');
+      }
+
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
+          'Authorization': `Bearer ${openaiApiKey}`
         },
         body: JSON.stringify({
           model: "gpt-4o-mini",
@@ -133,7 +138,12 @@ export async function POST(request: NextRequest) {
       const responseData = await response.json();
       content = responseData.choices[0].message.content.trim();
     } else if (model === 'gemini') {
-      const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+      const geminiApiKey = process.env.GEMINI_API_KEY;
+      if (!geminiApiKey) {
+        throw new Error('Gemini API key is not set');
+      }
+
+      const genAI = new GoogleGenerativeAI(geminiApiKey);
       const geminiModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash-8b" });
 
       const prompt = messages[1].content; // Assuming the second message contains the user prompt
