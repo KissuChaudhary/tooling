@@ -138,7 +138,7 @@ export default function InstagramBioForm() {
             </defs>
           </svg>
           <Label htmlFor="model-switch" className={model === 'gemini' ? 'font-bold' : ''}>
-            Gemini 1.5 Flash-8B
+            Gemini
           </Label>
         </div>
         <Switch
@@ -148,7 +148,7 @@ export default function InstagramBioForm() {
         />
         <div className="flex items-center space-x-2">
           <Label htmlFor="model-switch" className={model === 'gpt4o' ? 'font-bold' : ''}>
-            GPT-4o mini
+            GPT-4o
           </Label>
           <svg
             className="w-6 h-6"
