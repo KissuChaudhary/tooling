@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from 'react'
-import { Loader2, Clipboard, Check, AlertCircle, Copy } from 'lucide-react'
+import { Loader2, Clipboard, Check, AlertCircle } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -250,18 +250,7 @@ export default function EssayGenerator() {
 
         <Card className="w-full md:w-1/2">
           <CardHeader>
-            <div className="flex justify-between items-center">
-              <CardTitle>Generated Essay</CardTitle>
-              <Button
-                onClick={handleCopy}
-                variant="ghost"
-                size="sm"
-                className="text-gray-500 hover:text-gray-700"
-                disabled={!generatedEssay}
-              >
-                {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-              </Button>
-            </div>
+            <CardTitle>Generated Essay</CardTitle>
           </CardHeader>
           <CardContent>
             {generatedEssay ? (
