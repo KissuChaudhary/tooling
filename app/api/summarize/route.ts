@@ -64,31 +64,38 @@ export async function POST(request: NextRequest) {
       .replace(/[\t\r]/g, '')
       .trim();
 
-    // Get AI summary and key points
-    const aiResponse = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content: "You are an expert content analyzer. Provide a concise summary and extract key points from the given text. Format the response as JSON with 'summary' and 'keyPoints' fields."
-        },
-        {
-          role: "user",
-          content: `Please analyze this text and provide a summary and key points: ${content.substring(0, 4000)}` // Limit content length
-        }
-      ],
-      response_format: { type: "json_object" }
-    });
+   
+// Get AI summary and key points
+const aiResponse = await openai.chat.completions.create({
+  model: "gpt-4o-mini",
+  messages: [
+    {
+      role: "system",
+      content: "You are an expert content analyzer. Provide a concise summary and extract key points from the given text. Format the response as JSON with 'summary' and 'keyPoints' fields."
+    },
+    {
+      role: "user",
+      content: `Please analyze this text and provide a summary and key points: ${content.substring(0, 4000)}` // Limit content length
+    }
+  ],
+  response_format: { type: "json_object" }
+});
 
-    const aiResult = JSON.parse(aiResponse.choices[0].message.content);
+const aiContent = aiResponse.choices[0].message?.content;
 
-    return NextResponse.json({
-      title,
-      fullText: content,
-      summary: aiResult.summary,
-      keyPoints: aiResult.keyPoints,
-      wordCount: content.split(/\s+/).length
-    });
+if (!aiContent) {
+  throw new Error('AI response content is null or undefined.');
+}
+
+const aiResult = JSON.parse(aiContent);
+
+return NextResponse.json({
+  title,
+  fullText: content,
+  summary: aiResult.summary,
+  keyPoints: aiResult.keyPoints,
+  wordCount: content.split(/\s+/).length
+});
 
   } catch (error) {
     return NextResponse.json(
