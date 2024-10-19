@@ -1,7 +1,5 @@
-"use client"
-
 import React, { useState } from 'react'
-import { Loader2, ClipboardCopy, AlertCircle } from 'lucide-react'
+import { Loader2, Clipboard, Check, AlertCircle } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
@@ -242,7 +240,7 @@ export default function LinkedInPostGenerator() {
             </form>
           </CardContent>
         </Card>
-
+        
          <Card className="w-full md:w-1/2">
           <CardHeader>
             <div className="flex justify-between items-center">
