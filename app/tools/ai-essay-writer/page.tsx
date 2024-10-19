@@ -1,4 +1,4 @@
-import AIEssayForm from '@/components/AIEssayForm'
+import AIEssayForm from '@/components/EssayGenerator'
 import Head from 'next/head'
 import Script from 'next/script'
 import { Book, Lightbulb, Clock, Target, Sparkles } from 'lucide-react'
@@ -41,7 +41,7 @@ export default function AIEssayWriterPage() {
         })}
       </Script>
       <div className="min-h-screen" style={{ paddingBottom: '3rem' }}>
-        <AIEssayForm />
+        <EssayGenerator />
         
         {/* Benefits Section */}
         <section className="py-12 bg-white bg-gradient-to-b dark:from-gray-900 dark:to-gray-800">
