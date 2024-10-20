@@ -17,6 +17,7 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-switch": "^1.0.3",
     "class-variance-authority": "^0.7.0",
+    "cheerio": "^1.0.0-rc.12",
     "clsx": "^2.1.1",
     "lucide-react": "^0.453.0",
     "framer-motion": "^10.18.0",
