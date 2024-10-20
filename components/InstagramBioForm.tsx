@@ -77,7 +77,7 @@ export default function InstagramBioForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validateForm()) return;
-
+  
     setIsLoading(true);
     try {
       const response = await fetch('/api/openai-api', {
@@ -85,7 +85,11 @@ export default function InstagramBioForm() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ ...formData, tool: 'instagramBio', model }),
+        body: JSON.stringify({
+          tool: 'instagramBio',
+          model,
+          data: formData, // Nest the form data under 'data'
+        }),
       });
       if (!response.ok) {
         throw new Error('Failed to generate bio');
@@ -109,7 +113,7 @@ export default function InstagramBioForm() {
   return (
     <div className="max-w-7xl mx-auto mt-10">
       <h1 className="text-4xl font-extrabold mb-8 text-center tracking-tight">Instagram Bio Generator</h1>
-      <p className="text-xl text-center mb-12 max-w-3xl mx-auto">Create Engaging Instagram Bios with Unrealshot AI – Unique, Trendy, and Instantly Captivating.</p>
+      <p className="text-xl text-center mb-12 max-w-3xl mx-auto">Create Engaging Instagram Bios with Saze AI – Unique, Trendy, and Instantly Captivating.</p>
       <div className="flex justify-center items-center space-x-4 mb-8">
         <div className="flex items-center space-x-2">
           <svg

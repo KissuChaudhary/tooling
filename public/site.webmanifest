@@ -1,0 +1,21 @@
+{
+    "name": "Saze AI",
+    "short_name": "Saze AI",
+    "description": "Free AI tools to boost your productivity and enhance content quality",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#2563eb",
+    "icons": [
+      {
+        "src": "/images/favicon-192x192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "/images/favicon.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ]
+  }

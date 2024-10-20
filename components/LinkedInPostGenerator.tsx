@@ -79,7 +79,7 @@ export default function LinkedInPostGenerator() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validateForm()) return;
-
+  
     setIsLoading(true);
     try {
       const response = await fetch('/api/openai-api', {
@@ -87,7 +87,11 @@ export default function LinkedInPostGenerator() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ ...formData, tool: 'linkedinPost', model }),
+        body: JSON.stringify({
+          tool: 'linkedinPost',
+          model,
+          data: formData, // Nest the form data under 'data'
+        }),
       });
       if (!response.ok) {
         throw new Error('Failed to generate LinkedIn post');

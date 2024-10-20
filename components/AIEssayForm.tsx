@@ -90,7 +90,7 @@ export default function EssayGenerator() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validateForm()) return;
-
+  
     setIsLoading(true);
     try {
       const response = await fetch('/api/openai-api', {
@@ -98,7 +98,11 @@ export default function EssayGenerator() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ ...formData, tool: 'aiEssay', model }),
+        body: JSON.stringify({
+          tool: 'aiEssay',
+          model,
+          data: formData, // Nest the form data under 'data'
+        }),
       });
       if (!response.ok) {
         throw new Error('Failed to generate essay');
@@ -120,9 +124,9 @@ export default function EssayGenerator() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto mt-10">
+    <div className="max-w-7xl mx-auto p-4 mt-10">
       <h1 className="text-4xl font-extrabold mb-8 text-center tracking-tight">AI Essay Generator</h1>
-      <p className="text-xl text-center mb-12 max-w-3xl mx-auto">Create Engaging Essays with Unrealshot AI – Tailored, Insightful, and Instantly Compelling.</p>
+      <p className="text-xl text-center mb-12 max-w-3xl mx-auto">Create Engaging Essays with Saze AI – Tailored, Insightful, and Instantly Compelling.</p>
       <div className="flex justify-center items-center space-x-4 mb-8">
         <div className="flex items-center space-x-2">
           <svg

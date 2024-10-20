@@ -1,5 +1,6 @@
 'use client'
 
+import WebApplicationSchema from './WebApplicationSchema'
 import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Card, CardDescription, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -12,10 +13,8 @@ import {
   Heart,
   Brain,
   Lightbulb,
-  Feather,
   Check,
   MessageSquare,
-  User,
   BookOpen,
   Sunrise,
   Music,
@@ -32,6 +31,7 @@ import {
   Search,
   ChevronDown,
 } from "lucide-react"
+
 
 export default function Page() {
   const fadeIn: Variants = {
@@ -84,12 +84,6 @@ export default function Page() {
     badge: { text: "Popular", color: "bg-green-500" }
   },
   {
-    icon: <Sparkles className="h-8 w-8 text-purple-500" />,
-    title: "AI Text Improver",
-    description: "Enhance your writing with AI-powered suggestions and improvements.",
-    link: "/tools/ai-text-improver"
-  },
-  {
     icon: <Brain className="h-8 w-8 text-blue-500" />,
     title: "AI Story Generator",
     description: "Create engaging stories with advanced AI algorithms.",
@@ -100,39 +94,18 @@ export default function Page() {
     icon: <Lightbulb className="h-8 w-8 text-green-500" />,
     title: "AI Pickup Lines",
     description: "Get creative and fun pickup lines for any occasion.",
-    link: "/tools/ai-pickup-lines"
+    link: "/tools/ai-pickup-lines-generator"
   },
-  {
-    icon: <PenTool className="h-8 w-8 text-red-500" />,
-    title: "AI Thesis Statement",
-    description: "Generate compelling thesis statements for your essays.",
-    link: "/tools/ai-thesis-statement"
-  },
+
   {
     icon: <MessageSquare className="h-8 w-8 text-indigo-500" />,
     title: "AI Answer Generator",
     description: "Receive precise answers to your questions using AI.",
     link: "/tools/ai-answer-generator"
   },
-  {
-    icon: <Feather className="h-8 w-8 text-pink-500" />,
-    title: "AI Metaphor Generator",
-    description: "Generate creative metaphors to enhance your writing.",
-    link: "/tools/ai-metaphor-generator",
-    badge: { text: "Hot", color: "bg-red-500" }
-  },
-  {
-    icon: <Feather className="h-8 w-8 text-teal-500" />,
-    title: "AI Poem Generator",
-    description: "Craft beautiful poems with the help of AI.",
-    link: "/tools/ai-poem-generator"
-  },
-  {
-    icon: <User className="h-8 w-8 text-orange-500" />,
-    title: "AI Character Generator",
-    description: "Create unique characters for your stories or projects.",
-    link: "/tools/ai-character-generator"
-  },
+
+
+
   {
     icon: <BookOpen className="h-8 w-8 text-emerald-500" />,
     title: "AI Conclusion Generator",
@@ -151,12 +124,7 @@ export default function Page() {
     description: "Create engaging introductions for your content.",
     link: "/tools/ai-intro-writer"
   },
-  {
-    icon: <Music className="h-8 w-8 text-rose-500" />,
-    title: "AI Lyric Generator",
-    description: "Compose unique lyrics for your music projects.",
-    link: "/tools/ai-lyric-generator"
-  },
+
   {
     icon: <Puzzle className="h-8 w-8 text-violet-500" />,
     title: "AI Plot Generator",
@@ -239,6 +207,7 @@ const faqData = [
 
   return (
     <div className="bg-background text-foreground">
+      <WebApplicationSchema />
       {/* Hero Section */}
       <section className="relative h-[90vh] flex items-center justify-center overflow-hidden">
       <div 
@@ -315,14 +284,18 @@ const faqData = [
           <p className="text-xl text-muted-foreground">
             Sazeai.com is a free AI platform designed to make your work and learning easier with unlimited access to our free ai tools.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="w-full sm:w-auto group bg-indigo-600 hover:bg-indigo-800">
-              Explore Tools
-              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-            </Button>
-            <Button size="lg" variant="outline" className="w-full sm:w-auto group">
-              Generate Image
-              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-            </Button>
+          <Link href="/tools">
+      <Button size="lg" className="w-full sm:w-auto  group bg-indigo-600 hover:bg-indigo-800">
+        Explore Tools
+        <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+      </Button>
+    </Link>
+    <Link href="/tools/ai-image-generator">
+      <Button size="lg" variant="outline" className="w-full sm:w-auto group">
+        Generate Image
+        <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+      </Button>
+    </Link>
           </div>
           {/* Bottom logo */}
           <div className="flex justify-center pt-8">
@@ -489,6 +462,14 @@ const faqData = [
         </Link>
       ))}
     </div>
+    <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Link href="/tools">
+      <Button size="lg" className="w-full sm:w-auto group mt-12 bg-indigo-600 hover:bg-indigo-800">
+        ALL AI Tools
+        <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+      </Button>
+    </Link>
+          </div>
   </div>
 </section>
 

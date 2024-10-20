@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -32,6 +32,29 @@ export default function AIImageGenerator() {
   const [seed, setSeed] = useState<number>(0)
   const [generatedImage, setGeneratedImage] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [imageContainerSize, setImageContainerSize] = useState({ width: 0, height: 0 })
+
+  useEffect(() => {
+    const updateImageContainerSize = () => {
+      const containerWidth = window.innerWidth * (window.innerWidth >= 1024 ? 0.65 : 1)
+      const containerHeight = window.innerHeight - 200 // Subtracting some space for margins and other elements
+      const aspectRatioValue = aspectRatioOptions[aspectRatio].height / aspectRatioOptions[aspectRatio].width
+
+      let width = containerWidth
+      let height = containerWidth * aspectRatioValue
+
+      if (height > containerHeight) {
+        height = containerHeight
+        width = height / aspectRatioValue
+      }
+
+      setImageContainerSize({ width, height })
+    }
+
+    updateImageContainerSize()
+    window.addEventListener('resize', updateImageContainerSize)
+    return () => window.removeEventListener('resize', updateImageContainerSize)
+  }, [aspectRatio])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -59,10 +82,11 @@ export default function AIImageGenerator() {
 
   return (
     <div className="mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-2">FREE AI IMAGE GENERATOR</h1>
-      <p className="text-lg text-gray-600 mb-8">Convert your text into images for FREE.</p>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div>
+
+      <div className="flex flex-col lg:flex-row gap-8">
+        <div className="w-full lg:w-[35%]">
+        <h1 className="text-4xl font-bold mb-2">FREE AI IMAGE GENERATOR</h1>
+        <p className="text-lg text-muted-foreground mb-8">Convert your text into images for FREE.</p>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <Label htmlFor="prompt" className="text-lg font-semibold">Prompt</Label>
@@ -121,27 +145,25 @@ export default function AIImageGenerator() {
               />
             </div>
             <div>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-muted-foreground">
                 By generating AI images, you agree to the{' '}
-                <Link href="/terms" className="text-blue-600 hover:underline">
+                <Link href="/terms" className="text-primary hover:underline">
                   terms and conditions
                 </Link>{' '}
                 of Saze AI.
               </p>
             </div>
-            <Button type="submit" disabled={isLoading} className="w-full bg-emerald-500 hover:bg-emerald-600 text-white">
+            <Button type="submit" disabled={isLoading} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
               {isLoading ? 'GENERATING...' : 'CREATE AI IMAGE'}
             </Button>
           </form>
         </div>
-        <div className="relative">
+        <div className="w-full lg:w-[65%] flex items-center justify-center">
           <div 
             className="relative rounded-lg shadow-lg overflow-hidden"
             style={{
-              width: `${aspectRatioOptions[aspectRatio].width}px`,
-              height: `${aspectRatioOptions[aspectRatio].height}px`,
-              maxWidth: '100%',
-              margin: '0 auto'
+              width: `${imageContainerSize.width}px`,
+              height: `${imageContainerSize.height}px`,
             }}
           >
             {generatedImage ? (
@@ -150,19 +172,19 @@ export default function AIImageGenerator() {
                   src={generatedImage}
                   alt="Generated image"
                   layout="fill"
-                  objectFit="cover"
+                  objectFit="contain"
                 />
                 <a
                   href={generatedImage}
                   download="generated-image.png"
-                  className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 z-10"
+                  className="absolute top-2 right-2 p-2 bg-background/80 rounded-full shadow-md hover:bg-background/90 z-10"
                 >
-                  <Download className="w-6 h-6 text-gray-600" />
+                  <Download className="w-6 h-6 text-foreground" />
                 </a>
               </>
             ) : (
-              <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                <p className="text-gray-400 text-lg">Your Art Will Appear Here...</p>
+              <div className="absolute inset-0 flex items-center justify-center bg-muted">
+                <p className="text-muted-foreground text-lg">Your Art Will Appear Here...</p>
               </div>
             )}
           </div>

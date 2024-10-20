@@ -2,11 +2,12 @@ import Head from 'next/head';
 import InstagramBioForm from '@/components/InstagramBioForm';
 import Script from 'next/script';
 import React from 'react';
-import { Clock, Fingerprint, UserCheck, MessageCircle, Eye, RefreshCw } from 'lucide-react';
+import { User, Heart, Lightbulb, Smile, CheckCircle } from 'lucide-react';
 
 export const metadata = {
-  title: "Free Instagram Bio Generator | Create Engaging Instagram Bios - Unrealshot AI",
-  description: "Generate captivating Instagram bios easily with our Instagram bio generator tool. Perfect for boosting your Instagram profile's appeal.",
+  title: "AI Instagram Bio Generator 【No Login, Instant】",
+  description: "Create a captivating Instagram bio effortlessly with the AI Instagram Bio Generator. Input your name, occupation, interests, personality, and call to action to get a personalized bio.",
+  keywords: "AI Instagram bio generator free, Instagram bio creator, bio generator for Instagram, free Instagram bio generator, best Instagram bio generator, AI bio generator for social media",
 };
 
 interface BenefitCardProps {
@@ -16,8 +17,8 @@ interface BenefitCardProps {
 }
 
 const BenefitCard: React.FC<BenefitCardProps> = ({ icon, title, description }) => (
-  <div className="bg-gray-50 p-6 rounded-lg">
-    <div className="w-12 h-12 inline-flex items-center justify-center rounded-full bg-purple-100 text-purple-500 mb-4">
+  <div className="bg-card text-card-foreground p-6 rounded-lg">
+    <div className="w-12 h-12 inline-flex items-center justify-center rounded-full bg-primary/10 text-primary mb-4">
       {icon}
     </div>
     <h2 className="text-lg font-medium title-font mb-2">{title}</h2>
@@ -34,43 +35,43 @@ interface StepItemProps {
 const StepItem: React.FC<StepItemProps> = ({ number, title, description }) => (
   <div className="flex mb-8">
     <div className="flex-shrink-0 mr-4">
-      <div className="flex items-center justify-center w-8 h-8 rounded-full bg-purple-500 text-white">
+      <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground">
         {number}
       </div>
     </div>
     <div>
       <h3 className="text-xl font-bold mb-2">{title}</h3>
-      <p className="text-gray-600">{description}</p>
+      <p className="text-muted-foreground">{description}</p>
     </div>
   </div>
 );
 
-export default function InstagramBioPage() {
+export default function AIInstagramBioGeneratorPage() {
   return (
     <>
       <Head>
         <title>{metadata.title}</title>
         <meta name="description" content={metadata.description} />
+        <meta name="keywords" content={metadata.keywords} />
       </Head>
-      {/* Schema for Instagram Bio Generator */}
-      <Script id="schema-instagram-bio" type="application/ld+json">
+      <Script id="schema-ai-instagram-bio-generator" type="application/ld+json">
         {JSON.stringify({
           "@context": "https://schema.org",
           "@type": "WebPage",
-          "name": "Free Instagram Bio Generator - Unrealshot AI",
-          "description": "Generate captivating Instagram bios easily with our Instagram bio generator tool. Perfect for boosting your Instagram profile's appeal.",
-          "url": "https://www.unrealshot.com/instagram-bio-generator",
+          "name": "AI Instagram Bio Generator - Saze AI",
+          "description": "Effortlessly create captivating Instagram bios with the AI Instagram Bio Generator. Enter your name, occupation, interests, personality, and call to action for a personalized bio.",
+          "url": "https://sazeai.com/tools/ai-instagram-bio-generator",
         })}
       </Script>
-      <Script id="schema-instagram-bio-webapp" type="application/ld+json">
+      <Script id="schema-ai-instagram-bio-generator-webapp" type="application/ld+json">
         {JSON.stringify({
           "@context": "https://schema.org",
           "@type": "WebApplication",
-          "name": "Free Instagram Bio Generator",
-          "description": "An easy-to-use Free AI tool for generating engaging Instagram Bios in seconds.",
-          "applicationCategory": "BusinessApplication",
+          "name": "AI Instagram Bio Generator - Saze AI",
+          "description": "Instantly create a unique Instagram bio with the AI Instagram Bio Generator. No login required.",
+          "applicationCategory": "UtilityApplication",
           "operatingSystem": "All",
-          "url": "https://www.unrealshot.com/instagram-bio-generator",
+          "url": "https://sazeai.com/tools/ai-instagram-bio-generator",
           "offers": {
             "@type": "Offer",
             "price": "0.00",
@@ -78,91 +79,91 @@ export default function InstagramBioPage() {
           },
         })}
       </Script>
-      <div className="min-h-screen px-4 sm:px-6 lg:px-8" style={{ paddingBottom: '3rem' }}>
+
+      <div className="min-h-screen bg-background text-foreground" style={{ paddingBottom: '3rem' }}>
         <InstagramBioForm />
-        
-        {/* Benefits Section */}
-        <section className="py-12">
+
+        {/* What is AI Instagram Bio Generator Section */}
+        <section className="py-12 bg-muted">
+          <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-extrabold sm:text-4xl mb-8 text-center">What is AI Instagram Bio Generator?</h2>
+            <p className="leading-relaxed text-base text-muted-foreground">
+              The AI Instagram Bio Generator by Saze AI helps you craft personalized and engaging Instagram bios effortlessly. By entering your name, occupation, interests, personality, and a call to action, you can create a captivating bio that represents you or your brand.
+            </p>
+          </div>
+
+          {/* Benefits Section */}
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl mb-8 text-center">
-              Benefits of Using the Instagram Bio Generator
-            </h2>
+            <h2 className="text-3xl font-extrabold sm:text-4xl mb-8 text-center">Benefits of Using the AI Instagram Bio Generator</h2>
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
               <BenefitCard
-                icon={<Clock size={24} />}
+                icon={<User size={24} />}
+                title="Personalized Bios"
+                description="Generate unique bios that reflect your personality and interests, making your profile stand out."
+              />
+              <BenefitCard
+                icon={<Heart size={24} />}
+                title="Engaging Content"
+                description="Create captivating content that draws in followers and encourages engagement on your profile."
+              />
+              <BenefitCard
+                icon={<Lightbulb size={24} />}
                 title="Quick & Easy"
-                description="Create the perfect bio in seconds. No need to sit and think about what to say—we handle that for you."
+                description="Save time by instantly generating bios without the hassle of brainstorming."
               />
               <BenefitCard
-                icon={<Fingerprint size={24} />}
-                title="Unique and Personalized"
-                description="Get a bio tailored to your name, job, interests, and personality, making it truly your own."
+                icon={<CheckCircle size={24} />}
+                title="Free & Accessible"
+                description="Use the AI Instagram Bio Generator for free with no login required, making it easy for everyone."
               />
               <BenefitCard
-                icon={<UserCheck size={24} />}
-                title="Showcase Your Identity"
-                description="Highlight your profession, hobbies, or unique traits to put your best foot forward in a few words."
+                icon={<Smile size={24} />}
+                title="Perfect for Brands & Individuals"
+                description="Ideal for businesses, influencers, and anyone looking to enhance their Instagram presence."
               />
               <BenefitCard
-                icon={<MessageCircle size={24} />}
-                title="Engage Your Audience"
-                description="Draw in followers and encourage interaction with a well-crafted bio and the right call to action."
-              />
-              <BenefitCard
-                icon={<Eye size={24} />}
-                title="First Impressions Matter"
-                description="Make a great first impression that captures your essence in a few simple lines."
-              />
-              <BenefitCard
-                icon={<RefreshCw size={24} />}
-                title="Stay Relevant"
-                description="Easily update your bio to reflect changes in your career, hobbies, or projects."
+                icon={<Lightbulb size={24} />}
+                title="Multiple Options"
+                description="Receive various bio options to choose from, ensuring you find the perfect fit for your profile."
               />
             </div>
           </div>
         </section>
 
         {/* How to Use Section */}
-        <section className="py-12 bg-gray-50">
+        <section className="py-12 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-extrabold text-gray-900 mb-8 text-center">
-              How to Use the Instagram Bio Generator
-            </h2>
+            <h2 className="text-3xl font-extrabold mb-8 text-center">How to Use the AI Instagram Bio Generator</h2>
             <div className="space-y-8">
               <StepItem
                 number="1"
                 title="Enter Your Name"
-                description="Type in your name or the name you want featured in the bio. Make it personal or professional, depending on what suits your account."
+                description="Input your name (up to 30 characters) to personalize your bio."
               />
               <StepItem
                 number="2"
-                title="Occupation"
-                description="Fill in your job title, profession, or what you do. This helps show who you are and what you're passionate about."
+                title="Specify Your Occupation"
+                description="Describe your occupation (up to 50 characters) to give context to your bio."
               />
               <StepItem
                 number="3"
-                title="Add Your Interests"
-                description="Share the things that excite you. Hobbies, passions, or causes you care about—adding these gives people a quick insight into what drives you."
+                title="List Your Interests"
+                description="Share your interests (up to 100 characters) to showcase your personality."
               />
               <StepItem
                 number="4"
                 title="Describe Your Personality"
-                description="Capture your unique personality traits. Use this section to make your bio feel authentic and relatable."
+                description="Provide details about your personality (up to 50 characters) for a tailored bio."
               />
               <StepItem
                 number="5"
-                title="Include a Call to Action"
-                description="Enter a call to action that encourages interaction, such as checking out your website or DMing you for collaborations."
+                title="Add a Call to Action"
+                description="Include a call to action (up to 50 characters) to encourage engagement."
               />
               <StepItem
                 number="6"
                 title="Generate Your Bio"
-                description="Hit the 'Generate Bio' button to create a short and catchy bio that perfectly sums up who you are in just a few seconds."
-              />
-              <StepItem
-                number="7"
-                title="Copy and Use"
-                description="Review your bio, click the 'Copy' button, and then paste it right into your Instagram profile. You're all set with a polished bio that stands out!"
+                description="Click 'Generate Bio' to receive your personalized Instagram bio instantly."
               />
             </div>
           </div>
