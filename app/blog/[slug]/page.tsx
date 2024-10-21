@@ -1,13 +1,13 @@
 import { Metadata } from 'next'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
-import { MDXRemote } from 'next-mdx-remote/rsc'
 import { getBlogPost, getAllBlogPosts } from '@/lib/blog'
 import TableOfContents from '@/components/TableOfContents'
 import ShareButtons from '@/components/ShareButtons'
 import AuthorBio from '@/components/AuthorBio'
 import { formatDate } from '@/lib/utils'
 import AdUnit from 'components/AdUnit'
+import { MDXRemoteProps } from 'next-mdx-remote/rsc'
 
 
 interface BlogPostPageProps {
@@ -47,11 +47,10 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 }
 
 type MDXProps = {
-  children: React.ReactNode;
-  className?: string;
+  [key: string]: any;
 }
 
-const components = {
+const components: MDXRemoteProps['components'] = {
   h1: ({ children, ...props }: MDXProps) => <h1 {...props} className="text-4xl font-bold mt-8 mb-4">{children}</h1>,
   h2: ({ children, ...props }: MDXProps) => <h2 {...props} className="text-3xl font-semibold mt-6 mb-3">{children}</h2>,
   h3: ({ children, ...props }: MDXProps) => <h3 {...props} className="text-2xl font-medium mt-4 mb-2">{children}</h3>,
@@ -59,7 +58,7 @@ const components = {
   ul: ({ children, ...props }: MDXProps) => <ul {...props} className="list-disc pl-6 mb-4 text-foreground">{children}</ul>,
   ol: ({ children, ...props }: MDXProps) => <ol {...props} className="list-decimal pl-6 mb-4 text-foreground">{children}</ol>,
   li: ({ children, ...props }: MDXProps) => <li {...props} className="mb-2 text-foreground">{children}</li>,
-  a: ({ href, children, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
+  a: ({ href, children, ...props }: MDXProps & { href?: string }) => (
     <a href={href} {...props} className="text-primary hover:underline">{children}</a>
   ),
   blockquote: ({ children, ...props }: MDXProps) => (
