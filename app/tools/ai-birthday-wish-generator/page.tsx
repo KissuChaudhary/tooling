@@ -81,13 +81,14 @@ export default function BirthdayWishPage() {
             </Script>
             <div className="min-h-screen" >
                 <BirthdayWishGenerator />
-                <AdUnit 
+          
+                {/* What is AI Birthday Wish Generator Section */}
+                <section className="py-12">
+                          <AdUnit 
   client="ca-pub-7915372771416695"
   slot="8441706260"
   style={{ marginBottom: '20px' }}
 />
-                {/* What is AI Birthday Wish Generator Section */}
-                <section className="py-12">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl mb-8 text-center">
                             What is the AI Birthday Wish Generator?
@@ -176,12 +177,13 @@ export default function BirthdayWishPage() {
                             />
                         </div>
                     </div>
-                </section>
-                <AdUnit 
+                             <AdUnit 
   client="ca-pub-7915372771416695"
   slot="8441706260"
   style={{ marginBottom: '20px' }}
 />
+                </section>
+       
             </div>
         </>
     );
