@@ -46,22 +46,30 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   }
 }
 
+type MDXComponentProps = {
+  children: React.ReactNode;
+}
+
+type CodeProps = MDXComponentProps & {
+  className?: string;
+}
+
 const components = {
-  h1: (props: any) => <h1 {...props} className="text-4xl font-bold mt-8 mb-4" />,
-  h2: (props: any) => <h2 {...props} className="text-3xl font-semibold mt-6 mb-3" />,
-  h3: (props: any) => <h3 {...props} className="text-2xl font-medium mt-4 mb-2" />,
-  p: (props: any) => <p {...props} className="mb-4 text-foreground" />,
-  ul: (props: any) => <ul {...props} className="list-disc pl-6 mb-4 text-foreground" />,
-  ol: (props: any) => <ol {...props} className="list-decimal pl-6 mb-4 text-foreground" />,
-  li: (props: any) => <li {...props} className="mb-2 text-foreground" />,
-  a: (props: any) => <a {...props} className="text-primary hover:underline" />,
-  blockquote: (props: any) => (
+  h1: (props: MDXComponentProps) => <h1 {...props} className="text-4xl font-bold mt-8 mb-4" />,
+  h2: (props: MDXComponentProps) => <h2 {...props} className="text-3xl font-semibold mt-6 mb-3" />,
+  h3: (props: MDXComponentProps) => <h3 {...props} className="text-2xl font-medium mt-4 mb-2" />,
+  p: (props: MDXComponentProps) => <p {...props} className="mb-4 text-foreground" />,
+  ul: (props: MDXComponentProps) => <ul {...props} className="list-disc pl-6 mb-4 text-foreground" />,
+  ol: (props: MDXComponentProps) => <ol {...props} className="list-decimal pl-6 mb-4 text-foreground" />,
+  li: (props: MDXComponentProps) => <li {...props} className="mb-2 text-foreground" />,
+  a: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => <a {...props} className="text-primary hover:underline" />,
+  blockquote: (props: MDXComponentProps) => (
     <blockquote {...props} className="border-l-4 border-primary/30 pl-4 italic my-4 text-foreground" />
   ),
-  code: (props: any) => (
+  code: (props: CodeProps) => (
     <code {...props} className="bg-muted rounded px-1 py-0.5 font-mono text-sm text-foreground" />
   ),
-  pre: (props: any) => (
+  pre: (props: MDXComponentProps) => (
     <pre {...props} className="bg-muted rounded p-4 overflow-x-auto my-4 text-foreground" />
   ),
 }
