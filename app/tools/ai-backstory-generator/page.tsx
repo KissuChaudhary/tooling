@@ -80,7 +80,6 @@ export default function AIBackstoryGeneratorPage() {
     </Script>
       <div className="min-h-screen bg-background text-foreground" style={{ paddingBottom: '3rem' }}>
         <BackstoryGenerator />
-       import AdUnit from '@/components/AdUnit'
        <AdUnit 
   client="ca-pub-7915372771416695"
   slot="8441706260"
