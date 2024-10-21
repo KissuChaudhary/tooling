@@ -336,6 +336,7 @@ export async function POST(request: NextRequest) {
     body = await request.json();
     RequestSchema.parse(body);
   } catch (error) {
+    console.error('Validation error:', error);
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
 
@@ -440,7 +441,7 @@ export async function POST(request: NextRequest) {
     case 'aiSeoMetaDescriptionGenerator':
       messages = createSeoMetaDescriptionGeneratorMessages(data);
       break;
-    case  'aiSloganGenerator':
+    case    'aiSloganGenerator':
       messages = createSloganGeneratorMessages(data);
       break;
     case 'aiYoutubeTitleGenerator':
