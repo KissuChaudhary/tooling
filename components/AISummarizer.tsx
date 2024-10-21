@@ -1,6 +1,5 @@
 // components/AISummarizer.tsx
 'use client';
-import AdUnit from '../components/AdUnit'
 
 import { useState } from 'react';
 
