@@ -1,5 +1,4 @@
 import { Metadata } from 'next'
-import Link from 'next/link'
 import { getAllBlogPosts } from '@/lib/blog'
 import BlogCard from '@/components/BlogCard'
 import AdUnit from '../../components/AdUnit'
