@@ -65,7 +65,7 @@ export default function ToolsPage() {
     <div className="min-h-screen py-16">
       <main className="container mx-auto px-6">
         <h1 className="text-5xl md:text-6xl font-extrabold mb-6 text-center animate-fade-in-down">
-          Explore All Free AI Tools
+          Explore All Free AI Marketing Tools
         </h1>
         <p className="text-xl md:text-2xl mb-16 text-center max-w-3xl mx-auto animate-fade-in-up">
           Unleash your creativity and boost productivity with our cutting-edge AI-powered tools.
