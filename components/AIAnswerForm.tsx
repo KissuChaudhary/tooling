@@ -28,7 +28,7 @@ export default function AnswerGenerator() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
   const [errors, setErrors] = useState<Errors>({});
-  const [model, setModel] = useState<'gpt4o' | 'gemini'>('gpt4o');
+  const [model, setModel] = useState<'gpt4o' | 'gemini'>('gemini');
 
   const handleChange = (value: string) => {
     if (value.length <= characterLimit) {
@@ -126,7 +126,7 @@ export default function AnswerGenerator() {
         </div>
         <Switch
           id="model-switch"
-          checked={model === 'gemini'}
+          checked={model === 'gpt4o'}
           onCheckedChange={(checked) => setModel(checked ? 'gpt4o' : 'gemini')}
         />
         <div className="flex items-center space-x-2">
