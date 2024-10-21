@@ -1,5 +1,4 @@
 import { Fragment } from 'react'
-import Script from 'next/script'
 
 const WebApplicationSchema: React.FC = () => {
   const schema = {
