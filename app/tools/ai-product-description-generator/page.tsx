@@ -3,6 +3,7 @@ import ProductDescriptionGenerator from '@/components/AIProductDesc';
 import Script from 'next/script';
 import React from 'react';
 import { ShoppingCart, List, Gift, Users, Rocket, Globe } from 'lucide-react';
+import AdUnit from '@/components/AdUnit'
 
 export const metadata = {
   title: "AI Product Description Generator 【No Login, Super Fast】 | Free & Online",
@@ -82,7 +83,11 @@ export default function AIProductDescriptionGeneratorPage() {
 
       <div className="min-h-screen bg-background text-foreground" style={{ paddingBottom: '3rem' }}>
         <ProductDescriptionGenerator />
-
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
         {/* What is AI Product Description Generator Section */}
         <section className="py-12 bg-muted">
           <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
@@ -163,6 +168,11 @@ export default function AIProductDescriptionGeneratorPage() {
             </div>
           </div>
         </section>
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
       </div>
     </>
   );

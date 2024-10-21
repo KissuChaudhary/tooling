@@ -8,6 +8,8 @@ import ShareButtons from '@/components/ShareButtons'
 import AuthorBio from '@/components/AuthorBio'
 import { formatDate } from '@/lib/utils'
 import { BlogPost } from '@/types'
+import AdUnit from 'components/AdUnit'
+
 
 interface BlogPostPageProps {
   params: { slug: string }
@@ -46,9 +48,9 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 }
 
 const components = {
-  h1: (props: any) => <h1 {...props} className="text-4xl font-bold mt-8 mb-4 text-primary" />,
-  h2: (props: any) => <h2 {...props} className="text-3xl font-semibold mt-6 mb-3 text-primary" />,
-  h3: (props: any) => <h3 {...props} className="text-2xl font-medium mt-4 mb-2 text-primary" />,
+  h1: (props: any) => <h1 {...props} className="text-4xl font-bold mt-8 mb-4" />,
+  h2: (props: any) => <h2 {...props} className="text-3xl font-semibold mt-6 mb-3" />,
+  h3: (props: any) => <h3 {...props} className="text-2xl font-medium mt-4 mb-2" />,
   p: (props: any) => <p {...props} className="mb-4 text-foreground" />,
   ul: (props: any) => <ul {...props} className="list-disc pl-6 mb-4 text-foreground" />,
   ol: (props: any) => <ol {...props} className="list-decimal pl-6 mb-4 text-foreground" />,
@@ -73,10 +75,15 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   }
 
   return (
-    <article className="max-w-4xl mx-auto px-4 py-12 bg-background text-foreground">
+    <article className="max-w-4xl mx-auto px-4 py-12">
+      <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
       <header className="mb-8">
         <h1 className="text-4xl font-bold mb-2 text-primary">{post.title}</h1>
-        <div className="flex items-center text-muted-foreground text-sm mb-4">
+        <div className="flex items-center text-sm mb-4">
           <time dateTime={post.publishedDate}>
             {formatDate(post.publishedDate)}
           </time>
@@ -108,6 +115,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               <h3 className="text-lg font-semibold mb-4 text-primary">Share this article</h3>
               <ShareButtons url={`https://sazeai.com/blog/${params.slug}`} title={post.title} />
             </div>
+            <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
           </footer>
         </div>
       </div>

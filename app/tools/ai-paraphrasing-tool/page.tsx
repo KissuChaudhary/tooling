@@ -3,6 +3,7 @@ import ParaphrasingTool from '@/components/AIParaphraseForm';
 import Script from 'next/script';
 import React from 'react';
 import { Edit, Layers, Shield, BookOpen, Clipboard, ThumbsUp } from 'lucide-react';
+import AdUnit from '@/components/AdUnit'
 
 export const metadata = {
   title: "AI Paraphrasing Tool | Free & Best Paraphrasing Tool Online - Saze AI",
@@ -82,7 +83,11 @@ export default function AIParaphrasingToolPage() {
 
       <div className="min-h-screen bg-background text-foreground" style={{ paddingBottom: '3rem' }}>
         <ParaphrasingTool />
-
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
         {/* What is AI Paraphrasing Tool Section */}
         <section className="py-12 bg-muted">
           <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
@@ -153,6 +158,11 @@ export default function AIParaphrasingToolPage() {
             </div>
           </div>
         </section>
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
       </div>
     </>
   );

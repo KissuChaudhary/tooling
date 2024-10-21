@@ -3,6 +3,7 @@ import AIThesisStatementGenerator from '@/components/AIThesisForm';
 import Script from 'next/script';
 import React from 'react';
 import { Fingerprint, Lightbulb, CheckCircle, BookOpen, Smile } from 'lucide-react';
+import AdUnit from '@/components/AdUnit'
 
 export const metadata = {
   title: "AI Thesis Statement Generator 【No Login, Free & Fast】",
@@ -82,7 +83,11 @@ export default function AIThesisStatementGeneratorPage() {
 
       <div className="min-h-screen bg-background text-foreground" style={{ paddingBottom: '3rem' }}>
         <AIThesisStatementGenerator />
-
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
         {/* What is AI Thesis Statement Generator Section */}
         <section className="py-12 bg-muted">
           <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
@@ -158,6 +163,11 @@ export default function AIThesisStatementGeneratorPage() {
             </div>
           </div>
         </section>
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
       </div>
     </>
   );

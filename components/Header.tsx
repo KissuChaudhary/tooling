@@ -10,17 +10,33 @@ export default function Header() {
   const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isSticky, setIsSticky] = useState(false)
+  const [lastScrollY, setLastScrollY] = useState(0)
 
   useEffect(() => {
     setMounted(true)
-  }, [])
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      if (currentScrollY > lastScrollY) {
+        setIsSticky(false)
+      } else {
+        setIsSticky(true)
+      }
+      setLastScrollY(currentScrollY)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [lastScrollY])
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
   }
 
   return (
-    <header className="bg-background border">
+    <header className={`bg-background border transition-all duration-300 ${isSticky ? 'sticky top-0 z-50' : ''}`}>
       <div className="container mx-auto px-4 py-2">
         <div className="flex justify-between items-center">
           <Link href="/" className="flex items-center relative w-[150px] h-[50px]">
@@ -123,20 +139,38 @@ export default function Header() {
             </li>
             <li>
               <Link 
-                href="/about" 
+                href="/blog" 
                 className="text-3xl font-bold text-foreground hover:text-primary transition-colors duration-200" 
                 onClick={toggleMenu}
               >
-                About
+                Blog
               </Link>
             </li>
             <li>
               <Link 
-                href="/contact" 
+                href="/tools" 
                 className="text-3xl font-bold text-foreground hover:text-primary transition-colors duration-200" 
                 onClick={toggleMenu}
               >
-                Contact
+                AI Tools
+              </Link>
+            </li>
+            <li>
+              <Link 
+                href="/tools/ai-image-generator" 
+                className="text-3xl font-bold text-foreground hover:text-primary transition-colors duration-200" 
+                onClick={toggleMenu}
+              >
+                AI Image Generator
+              </Link>
+            </li>
+            <li>
+              <Link 
+                href="/tools/ai-text-to-speech" 
+                className="text-3xl font-bold text-foreground hover:text-primary transition-colors duration-200" 
+                onClick={toggleMenu}
+              >
+                AI Text-To-Speech
               </Link>
             </li>
           </ul>

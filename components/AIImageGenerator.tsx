@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Download } from 'lucide-react'
+import AdUnit from '../components/AdUnit'
 import Link from 'next/link'
 
 type AspectRatio = 'portrait' | 'square' | 'landscape'
@@ -87,6 +88,11 @@ export default function AIImageGenerator() {
         <div className="w-full lg:w-[35%]">
         <h1 className="text-4xl font-bold mb-2">FREE AI IMAGE GENERATOR</h1>
         <p className="text-lg text-muted-foreground mb-8">Convert your text into images for FREE.</p>
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <Label htmlFor="prompt" className="text-lg font-semibold">Prompt</Label>

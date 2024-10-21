@@ -3,6 +3,7 @@ import PlotGenerator from '@/components/AIPlotForm';
 import Script from 'next/script';
 import React from 'react';
 import { Film, Globe, Users, Sparkles, BookOpen, Rocket } from 'lucide-react';
+import AdUnit from '@/components/AdUnit'
 
 export const metadata = {
   title: "[FREE] AI Plot Generator | Create Story Ideas Online - No Login, Unlimited",
@@ -82,7 +83,11 @@ export default function AIPlotGeneratorPage() {
 
       <div className="min-h-screen bg-background text-foreground" style={{ paddingBottom: '3rem' }}>
         <PlotGenerator />
-
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
         {/* What is AI Plot Generator Section */}
         <section className="py-12 bg-muted">
           <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
@@ -158,6 +163,11 @@ export default function AIPlotGeneratorPage() {
             </div>
           </div>
         </section>
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
       </div>
     </>
   );

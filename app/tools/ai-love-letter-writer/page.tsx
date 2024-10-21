@@ -3,6 +3,7 @@ import LoveLetterWriter from '@/components/AILoveForm';
 import Script from 'next/script';
 import React from 'react';
 import { Clock, MessageCircle, Heart, PenTool, ThumbsUp, Smile } from 'lucide-react';
+import AdUnit from '@/components/AdUnit'
 
 export const metadata = {
   title: "AI Love Letter Writer | Personalized Romantic Letters with AI - Saze AI",
@@ -80,7 +81,11 @@ export default function AILoveLetterWriterPage() {
       </Script>
       <div className="min-h-screen px-4 sm:px-6 lg:px-8" style={{ paddingBottom: '3rem' }}>
         <LoveLetterWriter />
-        
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
         {/* Benefits Section */}
         <section className="py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -157,6 +162,11 @@ export default function AILoveLetterWriterPage() {
             </div>
           </div>
         </section>
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
       </div>
     </>
   );

@@ -47,6 +47,8 @@ export default function Page() {
     }
   }
 
+  
+
   const testimonials = [
     {
       quote: "Saze Al has revolutionized my writing process. I can now produce high-quality content in half the time!",
@@ -163,8 +165,8 @@ const [openQuestions, setOpenQuestions] = useState<{[key: number]: number | null
 
 const faqData = [
     {
-      question: "How does saze it generate responses?",
-      answer: "The Saze AI generates responses based on the input it receives, it is using Openai API to provide relevant answers to your questions."
+      question: "How does Saze AI generate responses?",
+      answer: "The Saze AI generates responses based on the input it receives, it is using Openai API and Gemini API to provide relevant answers to your questions."
     },
     {
       question: "Is Saze AI Free to use?",
@@ -279,13 +281,13 @@ const faqData = [
             </span>
           </div>
           <h1 className="text-4xl sm:text-5xl md:text-8xl font-bold">
-            Saze AI: Write Anything, <span className="text-indigo-600">100% Free</span> 
+            Saze AI: Write Anything, <span className="text-primary">100% Free</span> 
           </h1>
           <p className="text-xl text-muted-foreground">
             Sazeai.com is a free AI platform designed to make your work and learning easier with unlimited access to our free ai tools.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link href="/tools">
-      <Button size="lg" className="w-full sm:w-auto  group bg-indigo-600 hover:bg-indigo-800">
+      <Button size="lg" className="w-full sm:w-auto  group bg-primary">
         Explore Tools
         <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
       </Button>
@@ -367,7 +369,7 @@ const faqData = [
             transition={{ duration: 0.6 }}
             className="text-4xl sm:text-5xl font-bold text-center mb-16"
           >
-            Why Choose <span className="text-blue-600">Saze AI</span>?
+            Why Choose <span className="text-primary">Saze AI</span>?
           </motion.h2>
           <motion.div
             variants={stagger}
@@ -402,7 +404,7 @@ const faqData = [
       <section className="py-20 bg-white bg-gradient-to-b dark:from-gray-900 dark:to-gray-800">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-12">
-            How <span className="text-blue-600">Saze AI</span> Works ?
+            How <span className="text-primary">Saze AI</span> Works ?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {steps.map((step, index) => (
@@ -462,13 +464,14 @@ const faqData = [
         </Link>
       ))}
     </div>
-    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link href="/tools">
-      <Button size="lg" className="w-full sm:w-auto group mt-12 bg-indigo-600 hover:bg-indigo-800">
-        ALL AI Tools
-        <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-      </Button>
-    </Link>
+    <div className="flex flex-col mt-12 sm:flex-row gap-4 justify-center">
+    
+    <Button asChild size="lg">
+            <Link href="/tools" className="inline-flex items-center">
+            ALL AI Tools
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
           </div>
   </div>
 </section>
@@ -521,6 +524,34 @@ const faqData = [
         </div>
       </section>
 
+      <section className="py-20 px-4 bg-gradient-to-r from-primary/5 via-background to-secondary/5">
+      <div className="container mx-auto max-w-4xl">
+        <motion.div
+          variants={fadeIn}
+          initial="initial"
+          animate="animate"
+          transition={{ duration: 0.6 }}
+          className="text-center"
+        >
+          <h2 className="text-sm font-semibold text-primary mb-2">
+            SAZE AI TEXT TO SPEECH
+          </h2>
+          <h1 className="text-4xl font-bold text-foreground mb-4">
+            AI Text-to-speech Speech: Transform Text into Natural Sound
+          </h1>
+          <p className="text-lg text-muted-foreground mb-8">
+            Turn your text into natural, human-like speech with our AI tool. It's perfect for making your presentations, videos, and more sound professional. Choose from multiple languages and voices to get the right tone. Simple to use and customize, it brings your words to life just the way you want.
+          </p>
+          <Button asChild size="lg">
+            <Link href="/tools/ai-text-to-speech" className="inline-flex items-center">
+              Try Text-to-speech
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
+        </motion.div>
+      </div>
+    </section>
+
       {/* Testimonials Section */}
       <section  className="py-20 bg-gray-50 bg-gradient-to-b dark:from-gray-900 dark:to-gray-800">
         <div className="container mx-auto px-4">
@@ -530,11 +561,11 @@ const faqData = [
             transition={{ duration: 0.8 }}
             className="text-center mb-12"
           >
-            <p className="text-blue-600 font-semibold flex items-center justify-center">
+            <p className="text-primary font-semibold flex items-center justify-center">
           LOVE IS IN THE WORDS <Heart className="w-4 h-4 text-red-500 ml-1" />
         </p>
             <h2 className="text-4xl font-bold text-center mb-4 text-gray-900 dark:text-white">
-              Experience <span className="text-blue-600">The Difference</span> Through Our Users&apos; Eyes
+              Experience <span className="text-primary">The Difference</span> Through Our Users&apos; Eyes
             </h2>
           </motion.div>
         
@@ -544,7 +575,7 @@ const faqData = [
                 <CardContent className="p-6">
                   <div className="mb-4">
                     <svg width="32" height="27" viewBox="0 0 32 27" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M0 26.0054V25.5054H0.5H10.5312C11.5367 25.5054 12.3617 24.6804 12.3617 23.6749V13.6437C12.3617 12.6382 11.5367 11.8132 10.5312 11.8132H0.5H0V11.3132V1.28205C0 0.276584 0.825 -0.548416 1.83047 -0.548416H30.1695C31.175 -0.548416 32 0.276584 32 1.28205V24.7233C32 25.7287 31.175 26.5537 30.1695 26.5537H1.83047C0.825 26.5537 0 25.7287 0 24.7233V26.0054Z" fill="#2563EB"/>
+                      <path d="M0 26.0054V25.5054H0.5H10.5312C11.5367 25.5054 12.3617 24.6804 12.3617 23.6749V13.6437C12.3617 12.6382 11.5367 11.8132 10.5312 11.8132H0.5H0V11.3132V1.28205C0 0.276584 0.825 -0.548416 1.83047 -0.548416H30.1695C31.175 -0.548416 32 0.276584 32 1.28205V24.7233C32 25.7287 31.175 26.5537 30.1695 26.5537H1.83047C0.825 26.5537 0 25.7287 0 24.7233V26.0054Z" fill="#3362c9"/>
                     </svg>
                   </div>
                   <div>

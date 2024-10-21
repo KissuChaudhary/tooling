@@ -1,8 +1,9 @@
 import Head from 'next/head';
-import EmailResponseGenerator from '@/components/AIEmailForm';
+import EssayGenerator from '@/components/AIEssayForm';
 import Script from 'next/script';
 import React from 'react';
 import { Book, Feather, Target, Users, FileText } from 'lucide-react';
+import AdUnit from '@/components/AdUnit'
 
 export const metadata = {
   title: "AI Essay Writer | Generate Quality Essays in Minutes - Saze AI",
@@ -79,8 +80,12 @@ export default function AIEssayWriterPage() {
       </Script>
 
       <div className="min-h-screen bg-background text-foreground" style={{ paddingBottom: '3rem' }}>
-        <EmailResponseGenerator />
-
+        <EssayGenerator />
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
         {/* What is AI Essay Writer Section */}
         <section className="py-12 bg-muted">
           <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
@@ -166,6 +171,11 @@ export default function AIEssayWriterPage() {
             </div>
           </div>
         </section>
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
       </div>
     </>
   );

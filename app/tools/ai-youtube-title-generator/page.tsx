@@ -2,6 +2,7 @@ import Head from 'next/head';
 import YoutubeTitleGenerator from '@/components/AIYoutubeTitle';
 import Script from 'next/script';
 import React from 'react';
+import AdUnit from '@/components/AdUnit'
 import { Clock, Fingerprint, Search, MessageCircle, Star, RefreshCw } from 'lucide-react';
 
 
@@ -80,7 +81,11 @@ export default function AIYouTubeTitleGeneratorPage() {
 
       <div className="min-h-screen bg-background text-foreground" style={{ paddingBottom: '3rem' }}>
         <YoutubeTitleGenerator />
-
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
         {/* What is AI YouTube Title Generator Section */}
         <section className="py-12 bg-muted">
           <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
@@ -161,6 +166,11 @@ export default function AIYouTubeTitleGeneratorPage() {
             </div>
           </div>
         </section>
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
       </div>
     </>
   );

@@ -8,6 +8,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
+import AdUnit from '@/components/AdUnit'
+
 
 interface Voice {
   Name: string
@@ -111,10 +113,16 @@ const EnhancedAzureTextToSpeech = () => {
     <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl w-full space-y-8">
         <div>
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white flex items-center justify-center">
             <Mic className="w-8 h-8 mr-2 text-blue-500 dark:text-blue-400" />
             Saze AI Text-to-Speech Synthesizer
           </h2>
+          
         </div>
         <div className="mt-8 space-y-6">
           <div>
@@ -209,6 +217,7 @@ const EnhancedAzureTextToSpeech = () => {
           {error && <p className="mt-2 text-center text-sm text-red-600 dark:text-red-400">{error}</p>}
         </div>
       </div>
+
     </div>
   )
 }

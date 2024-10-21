@@ -3,6 +3,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Zap, Sparkles, Brain, Lightbulb, PenTool, Feather, MessageSquare, User, BookOpen, Sunrise, Music, Puzzle, Search, Repeat, Quote, Mail, Book, History, FileText, FileSignature, Linkedin, ShoppingBag, Edit, Image, Instagram, Heart, Cake, Star, Volume2, Youtube } from 'lucide-react'
 import { Metadata } from 'next'
+import AdUnit from '../../components/AdUnit'
+
 
 const tools = [
   {
@@ -33,7 +35,8 @@ const tools = [
     icon: <Image className="h-8 w-8 text-blue-500" />,
     title: "AI Caption Generator",
     description: "Create engaging captions for your images.",
-    link: "/tools/ai-caption-generator"
+    link: "/tools/ai-caption-generator",
+    badge: { text: "Popular", color: "bg-green-500" }
   },
   {
     icon: <User className="h-8 w-8 text-orange-500" />,
@@ -255,11 +258,11 @@ export function generateMetadata(): Metadata {
     openGraph: {
       title: pageTitle,
       description: pageDescription,
-      url: 'https://yoursite.com/tools',
+      url: 'https://sazeai.com/tools',
       siteName: 'Your Site Name',
       images: [
         {
-          url: 'https://yoursite.com/og-image.jpg',
+          url: 'https://sazeai.com/images/screenshot.png',
           width: 1200,
           height: 630,
         },
@@ -268,7 +271,7 @@ export function generateMetadata(): Metadata {
       type: 'website',
     },
     alternates: {
-      canonical: 'https://yoursite.com/tools',
+      canonical: 'https://sazeai.com/tools',
     },
   }
 }
@@ -277,6 +280,11 @@ export default function ToolsPage() {
   return (
     <div className="min-h-screen py-16">
       <main className="container mx-auto px-6">
+      <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
         <h1 className="text-5xl md:text-6xl font-extrabold mb-6 text-center animate-fade-in-down">
           Explore All Free AI Tools
         </h1>
@@ -308,6 +316,11 @@ export default function ToolsPage() {
             </Link>
           ))}
         </div>
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
       </main>
     </div>
   )
@@ -318,7 +331,7 @@ export const jsonLd = {
   '@type': 'WebPage',
   name: 'Explore All Free AI Tools | Your Site Name',
   description: 'Unleash your creativity and boost productivity with our cutting-edge AI-powered tools. Discover a wide range of free AI tools for various tasks.',
-  url: 'https://yoursite.com/tools',
+  url: 'https://sazeai.com/tools',
   mainEntity: {
     '@type': 'ItemList',
     itemListElement: tools.map((tool, index) => ({
@@ -326,7 +339,7 @@ export const jsonLd = {
       position: index + 1,
       name: tool.title,
       description: tool.description,
-      url: `https://yoursite.com${tool.link}`
+      url: `https://sazeai.com${tool.link}`
     }))
   }
 }

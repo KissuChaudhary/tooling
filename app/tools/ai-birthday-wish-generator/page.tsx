@@ -3,6 +3,7 @@ import BirthdayWishGenerator from '@/components/AIBirthdayForm';
 import Script from 'next/script';
 import React from 'react';
 import { Clock, Fingerprint, UserCheck, MessageCircle, Eye, RefreshCw } from 'lucide-react';
+import AdUnit from '@/components/AdUnit'
 
 export const metadata = {
     title: "AI Birthday Wish Generator | Personalized Birthday Messages - Saze AI",
@@ -80,7 +81,11 @@ export default function BirthdayWishPage() {
             </Script>
             <div className="min-h-screen" >
                 <BirthdayWishGenerator />
-                
+                <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
                 {/* What is AI Birthday Wish Generator Section */}
                 <section className="py-12">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -172,6 +177,11 @@ export default function BirthdayWishPage() {
                         </div>
                     </div>
                 </section>
+                <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
             </div>
         </>
     );

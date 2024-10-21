@@ -3,6 +3,7 @@ import CharacterGenerator from '@/components/AICharacterForm';
 import Script from 'next/script';
 import React from 'react';
 import { User, Star, Film, Tag, Lightbulb } from 'lucide-react';
+import AdUnit from '@/components/AdUnit'
 
 export const metadata = {
   title: "AI Character Generator | Create Unique Characters - Saze AI",
@@ -80,7 +81,11 @@ export default function AICharacterGeneratorPage() {
 
       <div className="min-h-screen bg-background text-foreground" style={{ paddingBottom: '3rem' }}>
         <CharacterGenerator />
-       
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
         {/* What is AI Character Generator Section */}
         <section className="py-12 bg-muted">
           <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
@@ -153,6 +158,11 @@ export default function AICharacterGeneratorPage() {
             </div>
           </div>
         </section>
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
       </div>
     </>
   );

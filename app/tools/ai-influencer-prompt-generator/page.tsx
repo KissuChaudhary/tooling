@@ -4,6 +4,7 @@ import InfluencerPromptGenerator from '@/components/AIInfluencerPrompt';
 import Image from 'next/image';
 import { Clock, Fingerprint, UserCheck, MessageCircle, Eye, RefreshCw, Copy, Check } from 'lucide-react';
 import { useState } from 'react';
+import AdUnit from '@/components/AdUnit'
 
 interface BenefitCardProps {
   icon: React.ReactElement;
@@ -120,7 +121,11 @@ export default function RealisticInfluencerImagePromptsPage() {
   return (
     <div className="min-h-screen pt-8">
       <InfluencerPromptGenerator />
-      
+      <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
       {/* Main SEO Content Section */}
       <section className="py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -240,6 +245,11 @@ export default function RealisticInfluencerImagePromptsPage() {
       <section className="py-8 bg-muted/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h3 className="text-2xl font-extrabold sm:text-3xl mb-6 text-center">Ready-to-Use Example Prompts</h3>
+          <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {examplePrompts.map((example, index) => (
               <div key={index} className="bg-card shadow-lg rounded-lg overflow-hidden flex flex-col">
@@ -281,6 +291,11 @@ export default function RealisticInfluencerImagePromptsPage() {
           </div>
         </div>
       </section>
+      <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
     </div>
   );
 }

@@ -3,6 +3,7 @@ import BookTitleGenerator from '@/components/AIBookTitle';
 import Script from 'next/script';
 import React from 'react';
 import { Book, Lightbulb, Clock, Target, Sparkles } from 'lucide-react';
+import AdUnit from '@/components/AdUnit'
 
 export const metadata = {
   title: "AI Book Title Generator | Create Unique Book Titles - Saze AI",
@@ -79,7 +80,11 @@ export default function AIBookTitleGeneratorPage() {
     </Script>
       <div className="min-h-screen bg-background text-foreground" style={{ paddingBottom: '3rem' }}>
         <BookTitleGenerator />
-       
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
         {/* What is AI Book Title Generator Section */}
         <section className="py-12 bg-muted">
           <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
@@ -156,6 +161,11 @@ export default function AIBookTitleGeneratorPage() {
             </div>
           </div>
         </section>
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
       </div>
     </>
   );

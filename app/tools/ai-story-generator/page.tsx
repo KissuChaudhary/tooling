@@ -3,6 +3,7 @@ import AIStoryGenerator from '@/components/AIStoryForm';
 import Script from 'next/script';
 import React from 'react';
 import { Book, Edit, Star, Settings, Clipboard, Eye } from 'lucide-react';
+import AdUnit from '@/components/AdUnit'
 
 export const metadata = {
   title: "[FREE] AI Story Generator | Create Unlimited Stories - Saze AI",
@@ -82,7 +83,11 @@ export default function AIStoryGeneratorPage() {
 
       <div className="min-h-screen bg-background text-foreground" style={{ paddingBottom: '3rem' }}>
         <AIStoryGenerator />
-
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
         {/* What is the AI Story Generator Section */}
         <section className="py-12 bg-muted">
           <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
@@ -163,6 +168,11 @@ export default function AIStoryGeneratorPage() {
             </div>
           </div>
         </section>
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
       </div>
     </>
   );

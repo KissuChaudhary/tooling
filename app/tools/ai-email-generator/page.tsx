@@ -3,6 +3,7 @@ import EmailResponseGenerator from '@/components/AIEmailForm';
 import Script from 'next/script';
 import React from 'react';
 import { Mail, MessageCircle, ThumbsUp, Zap, Clock } from 'lucide-react';
+import AdUnit from '@/components/AdUnit'
 
 export const metadata = {
   title: "AI Email Response Generator | Create Professional Email Replies - Saze AI",
@@ -80,7 +81,11 @@ export default function AIEmailResponseGeneratorPage() {
 
       <div className="min-h-screen bg-background text-foreground" style={{ paddingBottom: '3rem' }}>
         <EmailResponseGenerator />
-
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
         {/* What is AI Email Response Generator Section */}
         <section className="py-12 bg-muted">
           <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
@@ -151,6 +156,11 @@ export default function AIEmailResponseGeneratorPage() {
             </div>
           </div>
         </section>
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
       </div>
     </>
   );

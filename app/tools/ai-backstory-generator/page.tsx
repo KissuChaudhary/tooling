@@ -3,7 +3,8 @@ import BackstoryGenerator from '@/components/AIBackstoryForm';
 import Script from 'next/script';
 import React from 'react';
 import { Book, Lightbulb, Clock, Target, Sparkles } from 'lucide-react';
- 
+import AdUnit from '@/components/AdUnit'
+
 export const metadata = {
   title: "AI Backstory Generator | Create Unique Character Backstories - Saze AI", 
   description: "Create unique, compelling character backstories effortlessly with our AI Backstory Generator. Ideal for writers, game developers, and storytellers.",
@@ -79,7 +80,12 @@ export default function AIBackstoryGeneratorPage() {
     </Script>
       <div className="min-h-screen bg-background text-foreground" style={{ paddingBottom: '3rem' }}>
         <BackstoryGenerator />
-       
+       import AdUnit from '@/components/AdUnit'
+       <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
         {/* What is AI Backstory Generator Section */}
         <section className="py-12 bg-muted">
           <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
@@ -156,6 +162,11 @@ export default function AIBackstoryGeneratorPage() {
             </div>
           </div>
         </section>
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
       </div>
     </>
   );

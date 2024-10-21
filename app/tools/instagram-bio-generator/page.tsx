@@ -2,6 +2,8 @@ import Head from 'next/head';
 import InstagramBioForm from '@/components/InstagramBioForm';
 import Script from 'next/script';
 import React from 'react';
+import AdUnit from '@/components/AdUnit'
+
 import { User, Heart, Lightbulb, Smile, CheckCircle } from 'lucide-react';
 
 export const metadata = {
@@ -82,7 +84,11 @@ export default function AIInstagramBioGeneratorPage() {
 
       <div className="min-h-screen bg-background text-foreground" style={{ paddingBottom: '3rem' }}>
         <InstagramBioForm />
-
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
         {/* What is AI Instagram Bio Generator Section */}
         <section className="py-12 bg-muted">
           <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
@@ -168,6 +174,11 @@ export default function AIInstagramBioGeneratorPage() {
             </div>
           </div>
         </section>
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
       </div>
     </>
   );

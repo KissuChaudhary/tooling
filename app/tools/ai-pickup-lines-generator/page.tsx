@@ -2,6 +2,7 @@ import Head from 'next/head';
 import PickupLineGenerator from '@/components/AIPickupLineForm';
 import Script from 'next/script';
 import React from 'react';
+import AdUnit from '@/components/AdUnit'
 
 import { Heart, Smile, Clock, Fingerprint, MessageCircle, Star } from 'lucide-react';
 
@@ -83,7 +84,11 @@ export default function AIPickupLineGeneratorPage() {
 
       <div className="min-h-screen bg-background text-foreground" style={{ paddingBottom: '3rem' }}>
         <PickupLineGenerator />
-
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
         {/* What is AI Pickup Lines Generator Section */}
         <section className="py-12 bg-muted">
           <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
@@ -164,7 +169,11 @@ export default function AIPickupLineGeneratorPage() {
     </div>
   </div>
 </section>
-
+<AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
       </div>
     </>
   );

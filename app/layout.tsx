@@ -4,6 +4,8 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import WebSiteSchema from './WebSiteSchema'
 import { Metadata } from 'next'
+import ScrollToTopButton from '@/components/ScrollToTopButton'
+import Script from 'next/script'
 
 export const metadata: Metadata = {
   title: {
@@ -68,6 +70,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7915372771416695"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+      </head>
       <body>
         <Providers>
           <div className="flex flex-col min-h-screen">
@@ -76,6 +86,7 @@ export default function RootLayout({
             <main>
               {children}
             </main>
+            <ScrollToTopButton />
             <Footer />
           </div>
         </Providers>

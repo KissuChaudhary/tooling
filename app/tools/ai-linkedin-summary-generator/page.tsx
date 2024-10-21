@@ -3,6 +3,7 @@ import Script from 'next/script';
 import React from 'react';
 import LinkedInSummaryGenerator from '@/components/LinkedinSummary';
 import { Heart, Smile, Hash, MessageCircle, Target, Users } from 'lucide-react';
+import AdUnit from '@/components/AdUnit'
 
 export const metadata = {
   title: "AI LinkedIn Summary Generator | Free Tool for LinkedIn Summaries",
@@ -82,6 +83,11 @@ export default function AILinkedInSummaryGeneratorPage() {
 
       <div className="min-h-screen bg-background text-foreground" style={{ paddingBottom: '3rem' }}>
       <LinkedInSummaryGenerator />
+      <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
         {/* What is AI LinkedIn Summary Generator Section */}
         <section className="py-12 bg-muted">
           <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
@@ -168,6 +174,11 @@ export default function AILinkedInSummaryGeneratorPage() {
             </div>
           </div>
         </section>
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
       </div>
     </>
   );

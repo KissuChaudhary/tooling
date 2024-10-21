@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { formatDate } from '@/lib/utils'
 import { BlogPost } from '@/types'
 
+
 interface BlogCardProps {
   post: BlogPost
 }
@@ -10,7 +11,7 @@ interface BlogCardProps {
 export default function BlogCard({ post }: BlogCardProps) {
   return (
     <Link href={`/blog/${post.slug}`} className="block">
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="rounded-lg shadow-md overflow-hidden">
         <Image
           src={post.coverImage}
           alt={post.title}
@@ -20,7 +21,7 @@ export default function BlogCard({ post }: BlogCardProps) {
         />
         <div className="p-4">
           <h2 className="text-xl font-semibold mb-2">{post.title}</h2>
-          <p className="text-gray-600 text-sm mb-4">{post.excerpt}</p>
+          <p className="text-gray-500 text-sm mb-4">{post.excerpt}</p>
           <div className="flex items-center text-sm text-gray-500">
             <time dateTime={post.publishedDate}>{formatDate(post.publishedDate)}</time>
             <span className="mx-2">•</span>

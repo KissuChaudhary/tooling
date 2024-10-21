@@ -83,16 +83,16 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
 
   return (
     <div ref={tocRef} className="sticky top-24">
-      <nav className="bg-white rounded-lg shadow-md p-4 mb-4">
+      <nav className="rounded-lg shadow-md p-4 mb-4">
         <div className="flex justify-between items-center">
           <h2 className="text-lg font-semibold">Table of contents</h2>
-          <button onClick={toggleCollapse} className="text-gray-500 hover:text-gray-700">
+          <button onClick={toggleCollapse} className="text-gray-400 hover:text-primary">
             {isCollapsed ? <ChevronDown size={20} /> : <ChevronUp size={20} />}
           </button>
         </div>
         <div className={`space-y-2 ${isCollapsed ? 'h-0 overflow-hidden' : 'h-auto'}`}>
           <ul className="space-y-2 relative">
-            <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-purple-300"></div>
+            <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-primary"></div>
             {headings.map(({ id, text, level }) => (
               <li key={id} className={`${level === 3 ? 'ml-4' : ''} relative`}>
                 <a
@@ -100,12 +100,12 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
                   onClick={(e) => handleClick(e, id)}
                   className={`block py-1 pl-4 ${
                     activeId === id
-                      ? 'text-purple-600 font-medium'
-                      : 'text-gray-600 hover:text-gray-900'
+                      ? 'text-primary font-medium'
+                      : 'text-gray-400 hover:text-primary'
                   }`}
                 >
                   {activeId === id && (
-                    <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-purple-600"></div>
+                    <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-primary"></div>
                   )}
                   {text}
                 </a>
@@ -115,7 +115,7 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
         </div>
         {showCongrats && (
           <div className="mt-4 flex items-center text-sm text-gray-600">
-            <Lock size={16} className="text-purple-600 mr-2" />
+            <Lock size={16} className="text-primary mr-2" />
             <p>
               <span className="font-semibold">Congratulations!</span>
               <br />

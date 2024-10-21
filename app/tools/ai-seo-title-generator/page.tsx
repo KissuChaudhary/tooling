@@ -3,6 +3,7 @@ import SEOTitleGenerator from '@/components/AISeoTitleForm';
 import Script from 'next/script';
 import React from 'react';
 import { Edit, Tag, Star, CheckCircle, Fingerprint, UserCheck } from 'lucide-react';
+import AdUnit from '@/components/AdUnit'
 
 export const metadata = {
   title: "AI SEO Title Generator | Create Compelling Meta Titles - Saze AI",
@@ -82,7 +83,11 @@ export default function AISeoTitleGeneratorPage() {
 
       <div className="min-h-screen bg-background text-foreground" style={{ paddingBottom: '3rem' }}>
         <SEOTitleGenerator />
-
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
         {/* What is AI SEO Title Generator Section */}
         <section className="py-12 bg-muted">
           <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
@@ -158,6 +163,11 @@ export default function AISeoTitleGeneratorPage() {
             </div>
           </div>
         </section>
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
       </div>
     </>
   );

@@ -1,6 +1,7 @@
 import AnswerGenerator from '@/components/AIAnswerForm';
 import Head from 'next/head';
 import Script from 'next/script';
+import AdUnit from '@/components/AdUnit'
 import { Book, Lightbulb, Clock, Target, Sparkles } from 'lucide-react';
 
 export const metadata = {
@@ -62,7 +63,11 @@ export default function AIAnswerGeneratorPage() {
       </Script>
       <div className="min-h-screen" style={{ paddingBottom: '3rem' }}>
         <AnswerGenerator />
-       
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
         {/* Benefits Section */}
         <section className="py-12 bg-white bg-gradient-to-b dark:from-gray-900 dark:to-gray-800">
           <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
@@ -132,7 +137,11 @@ export default function AIAnswerGeneratorPage() {
     </div>
   </div>
 </section>
-
+<AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
       </div>
     </>
   );

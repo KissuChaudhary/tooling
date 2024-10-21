@@ -24,28 +24,60 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-4 text-foreground">Quick Links</h3>
             <ul className="space-y-2">
+            <li>
+                <Link href="/page/contact-us" className="hover:text-foreground transition-colors">
+                  Contact Us
+                </Link>
+              </li>
+            <li>
+                <Link href="/blog" className="hover:text-foreground transition-colors">
+                  Blog
+                </Link>
+              </li>
               <li>
-                <Link href="/privacy" className="hover:text-foreground transition-colors">
+                <Link href="/page/about-us" className="hover:text-foreground transition-colors">
+                  About Us
+                </Link>
+              </li>
+            
+              <li>
+                <Link href="/page/privacy-policy" className="hover:text-foreground transition-colors">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="hover:text-foreground transition-colors">
+                <Link href="/page/terms" className="hover:text-foreground transition-colors">
                   Terms of Service
                 </Link>
               </li>
-              <li>
-                <Link href="/faq" className="hover:text-foreground transition-colors">
-                  FAQ
-                </Link>
-              </li>
+             
             </ul>
           </div>
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-foreground">Contact Us</h3>
-            <p>
-              Email: support@sazeai.com<br />
-            </p>
+            <h3 className="text-lg font-semibold mb-4 text-foreground">Popular AI Tools</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/tools/ai-image-generator" className="hover:text-foreground transition-colors">
+                  AI Image Generator
+                </Link>
+              </li>
+              <li>
+                <Link href="/tools/ai-text-to-speech" className="hover:text-foreground transition-colors">
+                  Ai Text To Speech
+                </Link>
+              </li>
+              <li>
+                <Link href="/tools/ai-caption-generator" className="hover:text-foreground transition-colors">
+                  AI Caption Generator
+                </Link>
+              </li>
+              <li>
+                <Link href="h/tools/ai-pickup-lines-generator" className="hover:text-foreground transition-colors">
+                  AI Pickup Lines Generator
+                </Link>
+              </li>
+            </ul>
+           
           </div>
         </div>
         <div className="mt-8 pt-8 border-t border-border">
