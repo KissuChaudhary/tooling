@@ -30,6 +30,7 @@ const rateLimiter = (ip: string) => {
   rateLimit.set(ip, tokenCount + 1);
   return true;
 };
+
 // Zod schemas for request validation
 const BioRequestSchema = z.object({
   name: z.string(),
@@ -260,9 +261,8 @@ const LoveLetterWriterSchema = z.object({
   relationshipDuration: z.string(),
 });
 
-
 const RequestSchema = z.object({
-    tool: z.enum([
+  tool: z.enum([
     'aiReviewGenerator',
     'aiSeoMetaDescriptionGenerator',
     'aiSloganGenerator',
@@ -272,14 +272,14 @@ const RequestSchema = z.object({
     'aiBirthdayWishGenerator',
     'aiLoveLetterWriter', 
     'linkedinBio', 'linkedinPost', 'linkedinHeadline', 'instagramBio', 'instagramCaption', 
-      'aiEssay', 'aiTextImprover', 'aiStoryGenerator', 'aiPickupLines', 'aiThesisStatement',
-      'aiAnswerGenerator', 'aiMetaphorGenerator', 'aiPoemGenerator', 'aiCharacterGenerator',
-      'aiConclusionGenerator', 'aiHaikuGenerator', 'aiIntroWriter', 'aiLyricGenerator',
-      'aiPlotGenerator', 'aiQuotesGenerator', 'aiRhymeGenerator', 'aiSEOTitleGenerator',
-      'aiParaphrasingTool', 'aiEmailResponseGenerator', 'aiBookTitleGenerator',
-      'aiBackstoryGenerator', 'aiCoverLetterWriter', 'aiLinkedInSummaryGenerator',
-      'aiProductDescriptionGenerator', 'aiPunctuationChecker'
-    ]),
+    'aiEssay', 'aiTextImprover', 'aiStoryGenerator', 'aiPickupLines', 'aiThesisStatement',
+    'aiAnswerGenerator', 'aiMetaphorGenerator', 'aiPoemGenerator', 'aiCharacterGenerator',
+    'aiConclusionGenerator', 'aiHaikuGenerator', 'aiIntroWriter', 'aiLyricGenerator',
+    'aiPlotGenerator', 'aiQuotesGenerator', 'aiRhymeGenerator', 'aiSEOTitleGenerator',
+    'aiParaphrasingTool', 'aiEmailResponseGenerator', 'aiBookTitleGenerator',
+    'aiBackstoryGenerator', 'aiCoverLetterWriter', 'aiLinkedInSummaryGenerator',
+    'aiProductDescriptionGenerator', 'aiPunctuationChecker'
+  ]),
   model: z.enum(['gpt4o', 'gemini']),
   data: z.union([
     BioRequestSchema,
@@ -369,102 +369,100 @@ export async function POST(request: NextRequest) {
       messages = createAIStoryGeneratorMessages(data);
       break;
     case 'aiPickupLines':
-        messages = createAIPickupLinesMessages(data);
-        break;
+      messages = createAIPickupLinesMessages(data);
+      break;
     case 'aiThesisStatement':
       messages = createAIThesisStatementMessages(data);
       break;
-      case 'aiAnswerGenerator':
-        messages = createAIAnswerGeneratorMessages(data);
-        break;
-      case 'aiMetaphorGenerator':
-        messages = createAIMetaphorGeneratorMessages(data);
-        break;
-      case 'aiPoemGenerator':
-        messages = createAIPoemGeneratorMessages(data);
-        break;
-      case 'aiCharacterGenerator':
-        messages = createAICharacterGeneratorMessages(data);
-        break;
-      case 'aiConclusionGenerator':
-        messages = createAIConclusionGeneratorMessages(data);
-        break;
-      case 'aiHaikuGenerator':
-        messages = createAIHaikuGeneratorMessages(data);
-        break;
-      case 'aiIntroWriter':
-        messages = createAIIntroWriterMessages(data);
-        break;
-      case 'aiLyricGenerator':
-        messages = createAILyricGeneratorMessages(data);
-        break;
-      case 'aiPlotGenerator':
-        messages = createAIPlotGeneratorMessages(data);
-        break;
-      case 'aiQuotesGenerator':
-        messages = createAIQuotesGeneratorMessages(data);
-        break;
-      case 'aiRhymeGenerator':
-        messages = createAIRhymeGeneratorMessages(data);
-        break;
-      case 'aiSEOTitleGenerator':
-        messages = createAISEOTitleGeneratorMessages(data);
-        break;
-      case 'aiParaphrasingTool':
-        messages = createAIParaphrasingToolMessages(data);
-        break;
-      case 'aiEmailResponseGenerator':
-        messages = createAIEmailResponseGeneratorMessages(data);
-        break;
-      case 'aiBookTitleGenerator':
-        messages = createAIBookTitleGeneratorMessages(data);
-        break;
-      case 'aiBackstoryGenerator':
-        messages = createAIBackstoryGeneratorMessages(data);
-        break;
-      case 'aiCoverLetterWriter':
-        messages = createAICoverLetterWriterMessages(data);
-        break;
-      case 'aiLinkedInSummaryGenerator':
-        messages = createAILinkedInSummaryGeneratorMessages(data);
-        break;
-      case 'aiProductDescriptionGenerator':
-        messages = createAIProductDescriptionGeneratorMessages(data);
-        break;
-      case 'aiPunctuationChecker':
-        messages = createAIPunctuationCheckerMessages(data);
-        break;
-        case 'aiReviewGenerator':
-          messages = createReviewGeneratorMessages(data);
-          break;
-        case 'aiSeoMetaDescriptionGenerator':
-          messages = createSeoMetaDescriptionGeneratorMessages(data);
-          break;
-        case 'aiSloganGenerator':
-          messages = createSloganGeneratorMessages(data);
-          break;
-        case 'aiYoutubeTitleGenerator':
-          messages = createYoutubeTitleGeneratorMessages(data);
-          break;
-        case 'aiRealisticInfluencerImagePrompts':
-          messages = createRealisticInfluencerImagePromptsMessages(data);
-          break;
-        case 'aiCaptionGenerator':
-          messages = createCaptionGeneratorMessages(data);
-          break;
-        case 'aiBirthdayWishGenerator':
-          messages = createBirthdayWishGeneratorMessages(data);
-          break;
-        case 'aiLoveLetterWriter':
-          messages = createLoveLetterWriterMessages(data);
-          break;
-      default:
-        return NextResponse.json({ error: "Invalid tool specified" }, { status: 400 });
+    case 'aiAnswerGenerator':
+      messages = createAIAnswerGeneratorMessages(data);
+      break;
+    case 'aiMetaphorGenerator':
+      messages = createAIMetaphorGeneratorMessages(data);
+      break;
+    case 'aiPoemGenerator':
+      messages = createAIPoemGeneratorMessages(data);
+      break;
+    case 'aiCharacterGenerator':
+      messages = createAICharacterGeneratorMessages(data);
+      break;
+    case 'aiConclusionGenerator':
+      messages = createAIConclusionGeneratorMessages(data);
+      break;
+    case 'aiHaikuGenerator':
+      messages = createAIHaikuGeneratorMessages(data);
+      break;
+    case 'aiIntroWriter':
+      messages = createAIIntroWriterMessages(data);
+      break;
+    case 'aiLyricGenerator':
+      messages = createAILyricGeneratorMessages(data);
+      break;
+    case 'aiPlotGenerator':
+      messages = createAIPlotGeneratorMessages(data);
+      break;
+    case 'aiQuotesGenerator':
+      messages = createAIQuotesGeneratorMessages(data);
+      break;
+    case 'aiRhymeGenerator':
+      messages = createAIRhymeGeneratorMessages(data);
+      break;
+    case 'aiSEOTitleGenerator':
+      messages = createAISEOTitleGeneratorMessages(data);
+      break;
+    case 'aiParaphrasingTool':
+      messages = createAIParaphrasingToolMessages(data);
+      break;
+    case 'aiEmailResponseGenerator':
+      messages = createAIEmailResponseGeneratorMessages(data);
+      break;
+    case 'aiBookTitleGenerator':
+      messages = createAIBookTitleGeneratorMessages(data);
+      break;
+    case 'aiBackstoryGenerator':
+      messages = createAIBackstoryGeneratorMessages(data);
+      break;
+    case 'aiCoverLetterWriter':
+      messages = createAICoverLetterWriterMessages(data);
+      break;
+    case 'aiLinkedInSummaryGenerator':
+      messages = createAILinkedInSummaryGeneratorMessages(data);
+      break;
+    case 'aiProductDescriptionGenerator':
+      messages = createAIProductDescriptionGeneratorMessages(data);
+      break;
+    case 'aiPunctuationChecker':
+      messages = createAIPunctuationCheckerMessages(data);
+      break;
+    case 'aiReviewGenerator':
+      messages = createReviewGeneratorMessages(data);
+      break;
+    case 'aiSeoMetaDescriptionGenerator':
+      messages = createSeoMetaDescriptionGeneratorMessages(data);
+      break;
+    case  'aiSloganGenerator':
+      messages = createSloganGeneratorMessages(data);
+      break;
+    case 'aiYoutubeTitleGenerator':
+      messages = createYoutubeTitleGeneratorMessages(data);
+      break;
+    case 'aiRealisticInfluencerImagePrompts':
+      messages = createRealisticInfluencerImagePromptsMessages(data);
+      break;
+    case 'aiCaptionGenerator':
+      messages = createCaptionGeneratorMessages(data);
+      break;
+    case 'aiBirthdayWishGenerator':
+      messages = createBirthdayWishGeneratorMessages(data);
+      break;
+    case 'aiLoveLetterWriter':
+      messages = createLoveLetterWriterMessages(data);
+      break;
+    default:
+      return NextResponse.json({ error: "Invalid tool specified" }, { status: 400 });
   }
 
-// In your existing route.ts, replace the try-catch block in the API handling section with this:
-
- try {
+  try {
     let content;
     if (model === 'gpt4o') {
       content = await handleOpenAIRequest(messages);
@@ -474,8 +472,103 @@ export async function POST(request: NextRequest) {
       throw new Error('Invalid model specified');
     }
 
+    // Return appropriate response based on tool type
+    switch (tool) {
+      case 'linkedinBio':
+      case 'instagramBio':
+        return NextResponse.json({ bio: content });
+      case 'linkedinPost':
+        return NextResponse.json({ post: content });
+      case 'linkedinHeadline':
+        return NextResponse.json({ headline: content });
+      case 'instagramCaption':
+        return NextResponse.json({ caption: content });
+      case 'aiEssay':
+        return NextResponse.json({ essay: content });
+      case 'aiTextImprover':
+        return NextResponse.json({ improvedText: content });
+      case 'aiStoryGenerator':
+        return NextResponse.json({ story: content });
+      case 'aiPickupLines':
+        return NextResponse.json({ pickupLine: content.trim() });
+      case 'aiThesisStatement':
+        return NextResponse.json({ thesisStatement: content });
+      case 'aiAnswerGenerator':
+        return NextResponse.json({ answer: content });
+      case 'aiMetaphorGenerator':
+        return NextResponse.json({ metaphor: content });
+      case 'aiPoemGenerator':
+        return NextResponse.json({ poem: content });
+      case 'aiCharacterGenerator':
+        return NextResponse.json({ character: content });
+      case 'aiConclusionGenerator':
+        return NextResponse.json({ conclusion: content });
+      case 'aiHaikuGenerator':
+        return NextResponse.json({ haiku: content });
+      case 'aiIntroWriter':
+        return NextResponse.json({ introduction: content });
+      case 'aiLyricGenerator':
+        return NextResponse.json({ lyrics: content });
+      case 'aiPlotGenerator':
+        return NextResponse.json({ plot: content });
+      case 'aiQuotesGenerator':
+        return NextResponse.json({ quotes: content });
+      case 'aiRhymeGenerator':
+        return NextResponse.json({ rhymes: content });
+      case 'aiSEOTitleGenerator':
+        return NextResponse.json({ seoTitle: content });
+      case 'aiParaphrasingTool':
+        return NextResponse.json({ paraphrasedText: content });
+      case 'aiEmailResponseGenerator':
+        return NextResponse.json({ emailResponse: content });
+      case 'aiBookTitleGenerator':
+        return NextResponse.json({ bookTitle: content });
+      case 'aiBackstoryGenerator':
+        return NextResponse.json({ backstory: content });
+      case 'aiCoverLetterWriter':
+        return NextResponse.json({ coverLetter: content });
+      case 'aiLinkedInSummaryGenerator':
+        return NextResponse.json({ linkedInSummary: content });
+      case 'aiProductDescriptionGenerator':
+        return NextResponse.json({ productDescription: content });
+      case 'aiPunctuationChecker':
+        return NextResponse.json({ correctedText: content });
+      case 'aiReviewGenerator':
+        return NextResponse.json({ review: content });
+      case 'aiSeoMetaDescriptionGenerator':
+        return NextResponse.json({ metaDescription: content });
+      case 'aiSloganGenerator':
+        return NextResponse.json({ slogan: content });
+      case 'aiYoutubeTitleGenerator':
+        return NextResponse.json({ youtubeTitle: content });
+      case 'aiRealisticInfluencerImagePrompts':
+        return NextResponse.json({ imagePrompt: content });
+      case 'aiCaptionGenerator':
+        return NextResponse.json({ caption: content });
+      case 'aiBirthdayWishGenerator':
+        return NextResponse.json({ birthdayWish: content });
+      case 'aiLoveLetterWriter':
+        return NextResponse.json({ loveLetter: content });
+      default:
+        throw new Error(`Unsupported tool: ${tool}`);
+    }
+  } catch (error) {
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      tool,
+      model
+    });
+    
+    return NextResponse.json({ 
+      error: `An error occurred while generating the ${tool}. ${error instanceof Error ? error.message : ''}` 
+    }, { 
+      status: 500 
+    });
+  }
+}
 
-   async function handleOpenAIRequest(messages: any[]) {
+async function handleOpenAIRequest(messages: any[]) {
   const openaiApiKey = process.env.OPENAI_API_KEY;
   if (!openaiApiKey) {
     throw new Error('OpenAI API key is not set');
@@ -532,101 +625,6 @@ async function handleGeminiRequest(messages: any[]) {
   return content;
 }
 
-  // Return appropriate response based on tool type
-  switch (tool) {
-    case 'linkedinBio':
-    case 'instagramBio':
-      return NextResponse.json({ bio: content });
-    case 'linkedinPost':
-      return NextResponse.json({ post: content });
-    case 'linkedinHeadline':
-      return NextResponse.json({ headline: content });
-    case 'instagramCaption':
-      return NextResponse.json({ caption: content });
-    case 'aiEssay':
-      return NextResponse.json({ essay: content });
-    case 'aiTextImprover':
-      return NextResponse.json({ improvedText: content });
-    case 'aiStoryGenerator':
-      return NextResponse.json({ story: content });
-      case 'aiPickupLines':
-        return NextResponse.json({ pickupLine: content.trim() });
-    case 'aiThesisStatement':
-      return NextResponse.json({ thesisStatement: content });
-      case 'aiAnswerGenerator':
-        return NextResponse.json({ answer: content });
-      case 'aiMetaphorGenerator':
-        return NextResponse.json({ metaphor: content });
-      case 'aiPoemGenerator':
-        return NextResponse.json({ poem: content });
-      case 'aiCharacterGenerator':
-        return NextResponse.json({ character: content });
-      case 'aiConclusionGenerator':
-        return NextResponse.json({ conclusion: content });
-      case 'aiHaikuGenerator':
-        return NextResponse.json({ haiku: content });
-      case 'aiIntroWriter':
-        return NextResponse.json({ introduction: content });
-      case 'aiLyricGenerator':
-        return NextResponse.json({ lyrics: content });
-      case 'aiPlotGenerator':
-        return NextResponse.json({ plot: content });
-      case 'aiQuotesGenerator':
-        return NextResponse.json({ quotes: content });
-      case 'aiRhymeGenerator':
-        return NextResponse.json({ rhymes: content });
-      case 'aiSEOTitleGenerator':
-        return NextResponse.json({ seoTitle: content });
-      case 'aiParaphrasingTool':
-        return NextResponse.json({ paraphrasedText: content });
-      case 'aiEmailResponseGenerator':
-        return NextResponse.json({ emailResponse: content });
-      case 'aiBookTitleGenerator':
-        return NextResponse.json({ bookTitle: content });
-      case 'aiBackstoryGenerator':
-        return NextResponse.json({ backstory: content });
-      case 'aiCoverLetterWriter':
-        return NextResponse.json({ coverLetter: content });
-      case 'aiLinkedInSummaryGenerator':
-        return NextResponse.json({ linkedInSummary: content });
-      case 'aiProductDescriptionGenerator':
-        return NextResponse.json({ productDescription: content });
-      case 'aiPunctuationChecker':
-        return NextResponse.json({ correctedText: content });
-        case 'aiReviewGenerator':
-          return NextResponse.json({ review: content });
-        case 'aiSeoMetaDescriptionGenerator':
-          return NextResponse.json({ metaDescription: content });
-        case 'aiSloganGenerator':
-          return NextResponse.json({ slogan: content });
-        case 'aiYoutubeTitleGenerator':
-          return NextResponse.json({ youtubeTitle: content });
-        case 'aiRealisticInfluencerImagePrompts':
-          return NextResponse.json({ imagePrompt: content });
-        case 'aiCaptionGenerator':
-          return NextResponse.json({ caption: content });
-        case 'aiBirthdayWishGenerator':
-          return NextResponse.json({ birthdayWish: content });
-        case 'aiLoveLetterWriter':
-          return NextResponse.json({ loveLetter: content });
-    default:
-      throw new Error(`Unsupported tool: ${tool}`);
-  }
-  } catch (error) {
-    console.error('Error details:', {
-      message: error instanceof Error ? error.message : 'Unknown error',
-      stack: error instanceof Error ? error.stack : undefined,
-      tool,
-      model
-    });
-    
-    return NextResponse.json({ 
-      error: `An error occurred while generating the ${tool}. ${error instanceof Error ? error.message : ''}` 
-    }, { 
-      status: 500 
-    });
-  }
-}
 function createLinkedInBioMessages(data: z.infer<typeof BioRequestSchema>) {
   const { name, currentRole, experience, skills, goals } = data;
   return [
@@ -749,6 +747,7 @@ function createAIThesisStatementMessages(data: z.infer<typeof ThesisStatementReq
       The thesis statement should be clear, concise, and effectively communicate the main argument of the paper.` }
   ];
 }
+
 function createAIAnswerGeneratorMessages(data: z.infer<typeof AIAnswerSchema>) {
   const { question } = data;
   return [
@@ -792,8 +791,8 @@ function createAIConclusionGeneratorMessages(data: z.infer<typeof ConclusionGene
 function createAIHaikuGeneratorMessages(data: z.infer<typeof HaikuGeneratorSchema>) {
   const { theme } = data;
   return [
-    { role: "system", content: "You are a skilled poet specializing in creating beautiful and meaningful haikus." },
-    { role: "user", content: `Compose a haiku about "${theme}". Remember to follow the 5-7-5 syllable structure and capture the essence of the theme in a concise and evocative manner.` }
+    { role: "system", content: "You are a skilled poet specializing in creating beautiful and meaningful haiku." },
+    { role: "user", content: `Create a haiku about "${theme}". Remember, a haiku consists of three lines with 5, 7, and 5 syllables respectively. The haiku should capture the essence of the theme in a concise and evocative manner.` }
   ];
 }
 
@@ -801,47 +800,47 @@ function createAIIntroWriterMessages(data: z.infer<typeof IntroWriterSchema>) {
   const { topic, audience, tone } = data;
   return [
     { role: "system", content: "You are an expert writer specializing in crafting engaging introductions for various types of content." },
-    { role: "user", content: `Write an introduction for a piece about "${topic}". The target audience is ${audience}, and the tone should be ${tone}. The introduction should grab the reader's attention and provide a clear overview of what the content will cover.` }
+    { role: "user", content: `Write an introduction for a piece about "${topic}". The target audience is ${audience}, and the tone should be ${tone}. The introduction should grab the reader's attention, provide context, and set the stage for the main content.` }
   ];
 }
 
 function createAILyricGeneratorMessages(data: z.infer<typeof LyricGeneratorSchema>) {
   const { genre, theme, mood } = data;
   return [
-    { role: "system", content: "You are a talented lyricist capable of writing unique and emotive song lyrics in various genres." },
-    { role: "user", content: `Compose lyrics for a ${genre} song about "${theme}". The mood of the song should be ${mood}. Write a verse and a chorus that capture the essence of the theme and fit the genre's style.` }
+    { role: "system", content: "You are a talented songwriter capable of creating meaningful and catchy lyrics in various genres." },
+    { role: "user", content: `Write lyrics for a ${genre} song about "${theme}". The mood of the song should be ${mood}. The lyrics should be emotive, fit the genre, and effectively convey the theme and mood.` }
   ];
 }
 
 function createAIPlotGeneratorMessages(data: z.infer<typeof PlotGeneratorSchema>) {
   const { genre, setting, characters } = data;
   return [
-    { role: "system", content: "You are a creative storyteller specializing in generating intriguing plot ideas for various genres." },
-    { role: "user", content: `Generate a plot outline for a ${genre} story. The setting is ${setting}, and the main characters are ${characters}. Provide a brief summary of the key plot points, including the inciting incident, major conflicts, and potential resolution.` }
+    { role: "system", content: "You are a creative story plotter capable of generating engaging and original plot outlines." },
+    { role: "user", content: `Generate a plot outline for a ${genre} story. The setting is ${setting}, and the main characters are ${characters}. The plot should include an intriguing conflict, rising action, climax, and resolution.` }
   ];
 }
 
 function createAIQuotesGeneratorMessages(data: z.infer<typeof QuotesGeneratorSchema>) {
   const { topic, style } = data;
   return [
-    { role: "system", content: "You are an insightful quote generator capable of creating thought-provoking and inspiring quotes on various topics." },
-    { role: "user", content: `Generate 3 unique quotes about  "${topic}" in a ${style} style. The quotes should be concise, memorable, and capture the essence of the topic.` }
+    { role: "system", content: "You are an insightful quote generator capable of creating meaningful and impactful statements." },
+    { role: "user", content: `Generate 3 quotes about "${topic}" in the style of ${style}. The quotes should be thought-provoking and capture the essence of the topic.` }
   ];
 }
 
 function createAIRhymeGeneratorMessages(data: z.infer<typeof RhymeGeneratorSchema>) {
   const { word, count } = data;
   return [
-    { role: "system", content: "You are a linguistic expert specializing in finding perfect rhymes for words." },
-    { role: "user", content: `Generate ${count} words that rhyme with "${word}". Provide a mix of single-syllable and multi-syllable rhymes if possible.` }
+    { role: "system", content: "You are a skilled linguist specializing in finding rhyming words." },
+    { role: "user", content: `Generate ${count} words that rhyme with "${word}". Provide a mix of perfect rhymes and near rhymes if possible.` }
   ];
 }
 
 function createAISEOTitleGeneratorMessages(data: z.infer<typeof SEOTitleGeneratorSchema>) {
   const { topic, keywords } = data;
   return [
-    { role: "system", content: "You are an SEO expert specializing in creating effective titles to boost content visibility." },
-    { role: "user", content: `Generate 3 SEO-optimized titles for content about "${topic}". Include the following keywords where appropriate: ${keywords}. The titles should be attention-grabbing, concise, and optimized for search engines.` }
+    { role: "system", content: "You are an SEO expert specializing in creating optimized titles for web content." },
+    { role: "user", content: `Generate an SEO-friendly title for a piece about "${topic}". The title should include one or more of these keywords: ${keywords}. The title should be catchy, informative, and optimized for search engines while remaining natural and appealing to readers.` }
   ];
 }
 
@@ -849,119 +848,158 @@ function createAIParaphrasingToolMessages(data: z.infer<typeof ParaphrasingToolS
   const { text, style } = data;
   return [
     { role: "system", content: "You are an expert in rephrasing and paraphrasing text while maintaining its original meaning." },
-    { role: "user", content: `Paraphrase the following text in a ${style} style: "${text}". Ensure that the meaning is preserved while altering the wording and sentence structure.` }
+    { role: "user", content: `Paraphrase the following text in a ${style} style: "${text}". The paraphrased version should convey the same meaning but use different words and sentence structures.` }
   ];
 }
 
 function createAIEmailResponseGeneratorMessages(data: z.infer<typeof EmailResponseGeneratorSchema>) {
   const { originalEmail, tone, response } = data;
   return [
-    { role: "system", content: "You are a professional email writer capable of crafting appropriate and effective email responses." },
-    { role: "user", content: `Generate a professional email reply to the following email: "${originalEmail}". The tone should be ${tone}, and the response to the email is ${response}. Ensure the response is courteous, clear, and addresses all relevant points from the original email.` }
+    { role: "system", content: "You are a professional email communication expert." },
+    { role: "user", content: `Generate an email response to the following email:
+      "${originalEmail}"
+      The tone of the response should be ${tone}.
+      Key points to address in the response: ${response}
+      The email should be professional, clear, and effectively address the points in the original email.` }
   ];
 }
 
 function createAIBookTitleGeneratorMessages(data: z.infer<typeof BookTitleGeneratorSchema>) {
   const { genre, theme, audience } = data;
   return [
-    { role: "system", content: "You are a creative book title generator specializing in crafting compelling titles for various genres." },
-    { role: "user", content: `Generate 3 potential titles for a ${genre} book with the theme "${theme}". The target audience is ${audience}. The titles should be catchy, relevant to the genre and theme, and appeal to the intended audience.` }
+    { role: "system", content: "You are a creative book title generator." },
+    { role: "user", content: `Generate 5 potential titles for a ${genre} book.
+      The main theme of the book is: ${theme}
+      The target audience is: ${audience}
+      The titles should be catchy, relevant to the genre and theme, and appeal to the target audience.` }
   ];
 }
 
 function createAIBackstoryGeneratorMessages(data: z.infer<typeof BackstoryGeneratorSchema>) {
   const { characterName, setting, keyEvents } = data;
   return [
-    { role: "system", content: "You are a creative writer specializing in developing engaging backstories for fictional characters." },
-    { role: "user", content: `Create a backstory for a character named ${characterName}. The character exists in the following setting: ${setting}. Include the following key events in their past: ${keyEvents}. The backstory should provide depth to the character and explain their motivations and personality.` }
+    { role: "system", content: "You are a creative character backstory writer." },
+    { role: "user", content: `Generate a compelling backstory for a character named ${characterName}.
+      The character exists in the following setting: ${setting}
+      Key events or elements to include in the backstory: ${keyEvents}
+      The backstory should be engaging, provide depth to the character, and fit well within the given setting.` }
   ];
 }
 
 function createAICoverLetterWriterMessages(data: z.infer<typeof CoverLetterWriterSchema>) {
   const { jobTitle, company, skills, experience } = data;
   return [
-    { role: "system", content: "You are an expert in writing persuasive and professional cover letters." },
-    { role: "user", content: `Write a cover letter for a ${jobTitle} position at ${company}. Highlight the following skills: ${skills}. Relevant experience includes: ${experience}. The cover letter should be concise, engaging, and tailored to the specific job and company.` }
+    { role: "system", content: "You are a professional cover letter writer." },
+    { role: "user", content: `Write a compelling cover letter for a ${jobTitle} position at ${company}.
+      Key skills to highlight: ${skills}
+      Relevant experience: ${experience}
+      The cover letter should be professional, highlight the applicant's qualifications, and express enthusiasm for the position and company.` }
   ];
 }
 
 function createAILinkedInSummaryGeneratorMessages(data: z.infer<typeof LinkedInSummaryGeneratorSchema>) {
   const { profession, experience, skills, achievements } = data;
   return [
-    { role: "system", content: "You are a professional LinkedIn profile writer specializing in creating effective summaries." },
-    { role: "user", content: `Generate a LinkedIn summary for a ${profession}. Include the following experience: ${experience}. Key skills to highlight: ${skills}. Notable achievements: ${achievements}. The summary should be concise, professional, and showcase the individual's unique value proposition.` }
+    { role: "system", content: "You are a professional LinkedIn profile writer." },
+    { role: "user", content: `Generate a compelling LinkedIn summary for a ${profession}.
+      Key experience: ${experience}
+      Skills to highlight: ${skills}
+      Notable achievements: ${achievements}
+      The summary should be professional, highlight the person's unique value proposition, and encourage profile visitors to connect or learn more.` }
   ];
 }
 
 function createAIProductDescriptionGeneratorMessages(data: z.infer<typeof ProductDescriptionGeneratorSchema>) {
   const { productName, features, benefits, targetAudience } = data;
   return [
-    { role: "system", content: "You are an expert copywriter specializing in creating compelling product descriptions for e-commerce." },
-    { role: "user", content: `Write a product description for ${productName}. Key features: ${features}. Main benefits: ${benefits}. Target audience: ${targetAudience}. The description should be engaging, highlight the product's unique selling points, and appeal to the target audience.` }
+    { role: "system", content: "You are an expert product description writer." },
+    { role: "user", content: `Write an engaging product description for ${productName}.
+      Key features: ${features}
+      Main benefits: ${benefits}
+      Target audience: ${targetAudience}
+      The description should be persuasive, highlight the product's unique selling points, and appeal to the target audience.` }
   ];
 }
 
 function createAIPunctuationCheckerMessages(data: z.infer<typeof PunctuationCheckerSchema>) {
   const { text } = data;
   return [
-    { role: "system", content: "You are a meticulous editor specializing in correcting punctuation errors in text." },
-    { role: "user", content: `Check and correct the punctuation in the following text: "${text}". Provide the corrected version of the text, ensuring proper use of commas, periods, semicolons, and other punctuation marks.` }
+    { role: "system", content: "You are an expert in English grammar and punctuation." },
+    { role: "user", content: `Check and correct the punctuation in the following text. Provide the corrected version:
+      "${text}"
+      Explain any corrections made.` }
   ];
 }
 
 function createReviewGeneratorMessages(data: z.infer<typeof ReviewGeneratorSchema>) {
   const { product, rating, aspects } = data;
   return [
-    { role: "system", content: "You are an expert product reviewer." },
-    { role: "user", content: `Generate an insightful review for ${product}. Rating: ${rating}/5. Cover these aspects: ${aspects.join(', ')}. The review should be balanced, detailed, and helpful for potential buyers.` }
+    { role: "system", content: "You are an experienced product reviewer." },
+    { role: "user", content: `Generate a detailed review for ${product}. 
+      Overall rating: ${rating}/5
+      Aspects to cover: ${aspects.join(', ')}
+      The review should be balanced, highlighting both positives and negatives, and provide specific examples or experiences.` }
   ];
 }
 
 function createSeoMetaDescriptionGeneratorMessages(data: z.infer<typeof SeoMetaDescriptionGeneratorSchema>) {
   const { title, keywords } = data;
   return [
-    { role: "system", content: "You are an SEO expert specializing in meta descriptions." },
-    { role: "user", content: `Create an effective meta description for: "${title}". Include these keywords where appropriate: ${keywords.join(', ')}. The description should be compelling and under 160 characters.` }
+    { role: "system", content: "You are an SEO expert specializing in creating effective meta descriptions." },
+    { role: "user", content: `Generate an SEO-friendly meta description for a page titled "${title}".
+      Keywords to include: ${keywords.join(', ')}
+      The meta description should be compelling, accurately summarize the page content, and be optimized for search engines while remaining natural and appealing to users. Keep it under 160 characters.` }
   ];
 }
 
 function createSloganGeneratorMessages(data: z.infer<typeof SloganGeneratorSchema>) {
   const { brand, product, targetAudience } = data;
   return [
-    { role: "system", content: "You are a creative advertising copywriter." },
-    { role: "user", content: `Generate a catchy slogan for ${brand}'s ${product}. Target audience: ${targetAudience}. The slogan should be memorable, impactful, and appeal to the target audience.` }
+    { role: "system", content: "You are a creative slogan writer for advertising campaigns." },
+    { role: "user", content: `Create a catchy slogan for ${brand}'s ${product}.
+      Target audience: ${targetAudience}
+      The slogan should be memorable, reflect the brand's identity, highlight the product's key benefit, and appeal to the target audience. Keep it short and impactful.` }
   ];
 }
 
 function createYoutubeTitleGeneratorMessages(data: z.infer<typeof YoutubeTitleGeneratorSchema>) {
   const { topic, keywords } = data;
   return [
-    { role: "system", content: "You are a YouTube content strategist." },
-    { role: "user", content: `Create a compelling YouTube video title about: ${topic}. Include these keywords if possible: ${keywords.join(', ')}. The title should be attention-grabbing and encourage clicks while avoiding clickbait.` }
+    { role: "system", content: "You are a YouTube content creator specializing in creating engaging video titles." },
+    { role: "user", content: `Generate 5 catchy YouTube video titles about "${topic}".
+      Keywords to include: ${keywords.join(', ')}
+      The titles should be attention-grabbing, accurately represent the video content, and be optimized for search while remaining natural and appealing to viewers. Keep each title under 60 characters.` }
   ];
 }
 
 function createRealisticInfluencerImagePromptsMessages(data: z.infer<typeof RealisticInfluencerImagePromptsSchema>) {
   const { influencerType, setting, mood } = data;
   return [
-    { role: "system", content: "You are an expert in creating realistic image prompts for AI-generated influencer content." },
-    { role: "user", content: `Generate a detailed image prompt for a ${influencerType} influencer. Setting: ${setting}. Mood: ${mood}. The prompt should be vivid and result in a realistic, Instagram-worthy image.` }
+    { role: "system", content: "You are an expert in creating detailed image prompts for AI image generators, specializing in realistic influencer content." },
+    { role: "user", content: `Create a detailed image prompt for a realistic photo of a ${influencerType} influencer.
+      Setting: ${setting}
+      Mood: ${mood}
+      The prompt should describe the influencer's appearance, pose, outfit, and surroundings in detail. Include lighting, camera angle, and any props or background elements that would make the image look authentic and engaging for social media.` }
   ];
 }
 
 function createCaptionGeneratorMessages(data: z.infer<typeof CaptionGeneratorSchema>) {
   const { image, platform, tone } = data;
   return [
-    { role: "system", content: "You are a social media content creator." },
-    { role: "user", content: `Generate an engaging caption for a ${platform} post. Image description: ${image}. Desired tone: ${tone}. The caption should be platform-appropriate and encourage engagement.` }
+    { role: "system", content: "You are a social media expert specializing in creating engaging captions for various platforms." },
+    { role: "user", content: `Generate a caption for an image of ${image} to be posted on ${platform}.
+      Desired tone: ${tone}
+      The caption should be engaging, relevant to the image, and optimized for the specific platform. Include appropriate hashtags and any call-to-action if relevant.` }
   ];
 }
 
 function createBirthdayWishGeneratorMessages(data: z.infer<typeof BirthdayWishGeneratorSchema>) {
   const { name, age, relationship } = data;
   return [
-    { role: "system", content: "You are a thoughtful writer specializing in personalized messages." },
-    { role: "user", content: `Write a heartfelt birthday wish for ${name} who is turning ${age}. Your relationship: ${relationship}. The message should be warm, personal, and appropriate for the relationship and age.` }
+    { role: "system", content: "You are a creative writer specializing in personalized birthday messages." },
+    { role: "user", content: `Write a heartfelt birthday wish for ${name} who is turning ${age}.
+      Relationship to the recipient: ${relationship}
+      The message should be warm, personal, and reflect the nature of the relationship. Include a specific memory or inside joke if possible, and express hopes for the coming year.` }
   ];
 }
 
@@ -971,5 +1009,4 @@ function createLoveLetterWriterMessages(data: z.infer<typeof LoveLetterWriterSch
     { role: "system", content: "You are a romantic writer skilled in expressing deep emotions." },
     { role: "user", content: `Write a love letter to ${partnerName} for the occasion: ${occasion}. Relationship duration: ${relationshipDuration}. The letter should be heartfelt, personal, and express genuine feelings.` }
   ];
-}
 }
