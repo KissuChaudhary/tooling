@@ -46,31 +46,30 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   }
 }
 
-type MDXComponentProps = {
+type MDXProps = {
   children: React.ReactNode;
-}
-
-type CodeProps = MDXComponentProps & {
   className?: string;
 }
 
 const components = {
-  h1: (props: MDXComponentProps) => <h1 {...props} className="text-4xl font-bold mt-8 mb-4" />,
-  h2: (props: MDXComponentProps) => <h2 {...props} className="text-3xl font-semibold mt-6 mb-3" />,
-  h3: (props: MDXComponentProps) => <h3 {...props} className="text-2xl font-medium mt-4 mb-2" />,
-  p: (props: MDXComponentProps) => <p {...props} className="mb-4 text-foreground" />,
-  ul: (props: MDXComponentProps) => <ul {...props} className="list-disc pl-6 mb-4 text-foreground" />,
-  ol: (props: MDXComponentProps) => <ol {...props} className="list-decimal pl-6 mb-4 text-foreground" />,
-  li: (props: MDXComponentProps) => <li {...props} className="mb-2 text-foreground" />,
-  a: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => <a {...props} className="text-primary hover:underline" />,
-  blockquote: (props: MDXComponentProps) => (
-    <blockquote {...props} className="border-l-4 border-primary/30 pl-4 italic my-4 text-foreground" />
+  h1: ({ children, ...props }: MDXProps) => <h1 {...props} className="text-4xl font-bold mt-8 mb-4">{children}</h1>,
+  h2: ({ children, ...props }: MDXProps) => <h2 {...props} className="text-3xl font-semibold mt-6 mb-3">{children}</h2>,
+  h3: ({ children, ...props }: MDXProps) => <h3 {...props} className="text-2xl font-medium mt-4 mb-2">{children}</h3>,
+  p: ({ children, ...props }: MDXProps) => <p {...props} className="mb-4 text-foreground">{children}</p>,
+  ul: ({ children, ...props }: MDXProps) => <ul {...props} className="list-disc pl-6 mb-4 text-foreground">{children}</ul>,
+  ol: ({ children, ...props }: MDXProps) => <ol {...props} className="list-decimal pl-6 mb-4 text-foreground">{children}</ol>,
+  li: ({ children, ...props }: MDXProps) => <li {...props} className="mb-2 text-foreground">{children}</li>,
+  a: ({ href, children, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
+    <a href={href} {...props} className="text-primary hover:underline">{children}</a>
   ),
-  code: (props: CodeProps) => (
-    <code {...props} className="bg-muted rounded px-1 py-0.5 font-mono text-sm text-foreground" />
+  blockquote: ({ children, ...props }: MDXProps) => (
+    <blockquote {...props} className="border-l-4 border-primary/30 pl-4 italic my-4 text-foreground">{children}</blockquote>
   ),
-  pre: (props: MDXComponentProps) => (
-    <pre {...props} className="bg-muted rounded p-4 overflow-x-auto my-4 text-foreground" />
+  code: ({ children, className, ...props }: MDXProps) => (
+    <code {...props} className={`bg-muted rounded px-1 py-0.5 font-mono text-sm text-foreground ${className || ''}`}>{children}</code>
+  ),
+  pre: ({ children, ...props }: MDXProps) => (
+    <pre {...props} className="bg-muted rounded p-4 overflow-x-auto my-4 text-foreground">{children}</pre>
   ),
 }
 
