@@ -615,18 +615,19 @@ try {
       throw new Error(`Unsupported tool: ${tool}`);
   }
 } catch (error) {
-  console.error('Error details:', {
-    message: error instanceof Error ? error.message : 'Unknown error',
-    stack: error instanceof Error ? error.stack : undefined,
-    tool,
-    model
-  });
-  
-  return NextResponse.json({ 
-    error: `An error occurred while generating the ${tool}. ${error instanceof Error ? error.message : ''}` 
-  }, { 
-    status: 500 
-  });
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      tool,
+      model
+    });
+    
+    return NextResponse.json({ 
+      error: `An error occurred while generating the ${tool}. ${error instanceof Error ? error.message : ''}` 
+    }, { 
+      status: 500 
+    });
+  }
 }
 
 function createLinkedInBioMessages(data: z.infer<typeof BioRequestSchema>) {
