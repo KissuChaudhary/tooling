@@ -615,6 +615,7 @@ try {
     default:
       throw new Error(`Unsupported tool: ${tool}`);
   }
+}
 catch (error) {
   console.error('Error details:', {
     error,
