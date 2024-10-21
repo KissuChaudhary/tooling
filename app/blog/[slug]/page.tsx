@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
+import { MDXRemote } from 'next-mdx-remote/rsc'
 import { getBlogPost, getAllBlogPosts } from '@/lib/blog'
 import TableOfContents from '@/components/TableOfContents'
 import ShareButtons from '@/components/ShareButtons'
