@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Zap, Sparkles, Brain, Lightbulb, PenTool, Feather, MessageSquare, User, BookOpen, Sunrise, Music, Puzzle, Search, Repeat, Quote, Mail, Book, History, FileText, FileSignature, Linkedin, ShoppingBag, Edit, Image, Instagram, Heart, Cake, Star, Volume2, Youtube } from 'lucide-react'
+import { Zap, Sparkles, Brain, Lightbulb, PenTool, Feather, MessageSquare, User, BookOpen, Sunrise, Music, Puzzle, Search, Repeat, Quote, Mail, Book, History, FileText, Linkedin, ShoppingBag, Edit, Image, Instagram, Heart, Cake, Star, Volume2, Youtube } from 'lucide-react'
 import { Metadata } from 'next'
 import AdUnit from '../../components/AdUnit'
 
