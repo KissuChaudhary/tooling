@@ -615,8 +615,8 @@ try {
     default:
       throw new Error(`Unsupported tool: ${tool}`);
   }
-} catch (error) {  // This line is likely line 345
-  console.error('Error details:', {
+catch (error) {
+  console.error('Error details:', error);
     message: error instanceof Error ? error.message : 'Unknown error',
     stack: error instanceof Error ? error.stack : undefined,
     tool,
