@@ -1,4 +1,3 @@
-import { jsonLd } from './page'
 
 export default function ToolsLayout({
   children,
