@@ -147,7 +147,7 @@ export default function BirthdayWishGenerator() {
         </div>
         <Switch
           id="model-switch"
-          checked={model === 'gemini'}
+          checked={model === 'gpt4o'}
           onCheckedChange={(checked) => setModel(checked ? 'gpt4o' : 'gemini')}
         />
         <div className="flex items-center space-x-2">
