@@ -617,7 +617,7 @@ try {
   }
 }
 catch (error) {
-  console.error('Error details:', {
+  console.error('Error details:', error);
     error,
     message: error instanceof Error ? error.message : 'Unknown error',
     stack: error instanceof Error ? error.stack : undefined,
