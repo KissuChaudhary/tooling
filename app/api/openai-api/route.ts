@@ -10,18 +10,14 @@ const rateLimit = new LRUCache<string, number>({
 });
 
 const getIP = (request: NextRequest) => {
-
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0]
     || request.headers.get('x-real-ip')
-    || request.headers.get('cf-connecting-ip')  // If using Cloudflare
-    || request.ip  // Next.js IP
-    || '0.0.0.0';  // Better fallback than localhost
-    
-  // Validate IP format
+    || request.headers.get('cf-connecting-ip')
+    || request.ip
+    || '0.0.0.0';
   return isValidIP(ip) ? ip : '0.0.0.0';
 };
 
-// Simple IP validation
 const isValidIP = (ip: string): boolean => {
   const ipv4Regex = /^(\d{1,3}\.){3}\d{1,3}$/;
   const ipv6Regex = /^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$/;
@@ -30,13 +26,10 @@ const isValidIP = (ip: string): boolean => {
 
 const rateLimiter = (ip: string) => {
   const tokenCount = rateLimit.get(ip) || 0;
-  if (tokenCount > 5) {
-    return false;
-  }
+  if (tokenCount > 5) return false;
   rateLimit.set(ip, tokenCount + 1);
   return true;
 };
-
 // Zod schemas for request validation
 const BioRequestSchema = z.object({
   name: z.string(),
@@ -471,68 +464,73 @@ export async function POST(request: NextRequest) {
 
 // In your existing route.ts, replace the try-catch block in the API handling section with this:
 
-try {
-  let content;
-  if (model === 'gpt4o') {
-    const openaiApiKey = process.env.OPENAI_API_KEY;
-    if (!openaiApiKey) {
-      throw new Error('OpenAI API key is not set');
+ try {
+    let content;
+    if (model === 'gpt4o') {
+      content = await handleOpenAIRequest(messages);
+    } else if (model === 'gemini') {
+      content = await handleGeminiRequest(messages);
+    } else {
+      throw new Error('Invalid model specified');
     }
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${openaiApiKey}`
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini", // Keeping your original model name
-        messages: messages,
-        max_tokens: 500
-      })
-    });
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({ error: 'Failed to parse error response' }));
-      console.error('OpenAI API error:', errorData);
-      throw new Error(`OpenAI API error: ${JSON.stringify(errorData)}`);
-    }
-
-    const responseData = await response.json();
-    content = responseData.choices[0].message.content.trim();
-  } else if (model === 'gemini') {
-    const geminiApiKey = process.env.GEMINI_API_KEY; // Keeping your original API key name
-    if (!geminiApiKey) {
-      throw new Error('Gemini API key is not set');
-    }
-
-    const genAI = new GoogleGenerativeAI(geminiApiKey);
-    const geminiModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash" }); // Keeping your original model name
-
-    try {
-      const prompt = messages[1].content;
-      console.log('Sending prompt to Gemini:', prompt); // Debug log
-      
-      const result = await geminiModel.generateContent(prompt);
-      if (!result) {
-        throw new Error('No response from Gemini');
-      }
-      
-      const response = await result.response;
-      content = response.text().trim();
-
-      if (!content) {
-        throw new Error('Empty response from Gemini');
-      }
-      
-      console.log('Received response from Gemini:', content); // Debug log
-    } catch (geminiError) {
-      console.error('Gemini API error:', geminiError);
-      throw new Error(`Gemini API error: ${geminiError instanceof Error ? geminiError.message : 'Unknown error'}`);
-    }
-  } else {
-    throw new Error('Invalid model specified');
+   async function handleOpenAIRequest(messages: any[]) {
+  const openaiApiKey = process.env.OPENAI_API_KEY;
+  if (!openaiApiKey) {
+    throw new Error('OpenAI API key is not set');
   }
+
+  const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${openaiApiKey}`
+    },
+    body: JSON.stringify({
+      model: "gpt-4o-mini",
+      messages: messages,
+      max_tokens: 500
+    })
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ error: 'Failed to parse error response' }));
+    console.error('OpenAI API error:', errorData);
+    throw new Error(`OpenAI API error: ${JSON.stringify(errorData)}`);
+  }
+
+  const responseData = await response.json();
+  return responseData.choices[0].message.content.trim();
+}
+
+async function handleGeminiRequest(messages: any[]) {
+  const geminiApiKey = process.env.GEMINI_API_KEY;
+  if (!geminiApiKey) {
+    throw new Error('Gemini API key is not set');
+  }
+
+  const genAI = new GoogleGenerativeAI(geminiApiKey);
+  const geminiModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+  const prompt = messages[1].content;
+  console.log('Sending prompt to Gemini:', prompt);
+  
+  const result = await geminiModel.generateContent(prompt);
+  if (!result) {
+    throw new Error('No response from Gemini');
+  }
+  
+  const response = await result.response;
+  const content = response.text().trim();
+
+  if (!content) {
+    throw new Error('Empty response from Gemini');
+  }
+  
+  console.log('Received response from Gemini:', content);
+  return content;
+}
 
   // Return appropriate response based on tool type
   switch (tool) {
@@ -614,7 +612,7 @@ try {
     default:
       throw new Error(`Unsupported tool: ${tool}`);
   }
-} catch (error) {
+  } catch (error) {
     console.error('Error details:', {
       message: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,
@@ -629,7 +627,6 @@ try {
     });
   }
 }
-
 function createLinkedInBioMessages(data: z.infer<typeof BioRequestSchema>) {
   const { name, currentRole, experience, skills, goals } = data;
   return [
@@ -975,6 +972,4 @@ function createLoveLetterWriterMessages(data: z.infer<typeof LoveLetterWriterSch
     { role: "user", content: `Write a love letter to ${partnerName} for the occasion: ${occasion}. Relationship duration: ${relationshipDuration}. The letter should be heartfelt, personal, and express genuine feelings.` }
   ];
 }
-}
-
 }
