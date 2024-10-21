@@ -7,7 +7,6 @@ import TableOfContents from '@/components/TableOfContents'
 import ShareButtons from '@/components/ShareButtons'
 import AuthorBio from '@/components/AuthorBio'
 import { formatDate } from '@/lib/utils'
-import { BlogPost } from '@/types'
 import AdUnit from 'components/AdUnit'
 
 
