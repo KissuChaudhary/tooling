@@ -38,7 +38,7 @@ export default function BirthdayWishGenerator() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
   const [errors, setErrors] = useState<Errors>({});
-  const [model, setModel] = useState<'gpt4o' | 'gemini'>('gpt4o');
+  const [model, setModel] = useState<'gpt4o' | 'gemini'>('gemini');
 
   const handleInputChange = (name: keyof FormData, value: string | number) => {
     if (typeof value === 'string' && name in characterLimits) {
