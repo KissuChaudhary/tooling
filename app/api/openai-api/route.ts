@@ -465,10 +465,10 @@ export async function POST(request: NextRequest) {
 
   try {
     let content;
-    if (model === 'gpt4o') {
-      content = await handleOpenAIRequest(messages);
-    } else if (model === 'gemini') {
+    if (model === 'gemini') {
       content = await handleGeminiRequest(messages);
+    } else if (model === 'gpt4o') {
+      content = await handleOpenAIRequest(messages);
     } else {
       throw new Error('Invalid model specified');
     }
