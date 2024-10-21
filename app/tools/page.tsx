@@ -255,24 +255,6 @@ export function generateMetadata(): Metadata {
   return {
     title: pageTitle,
     description: pageDescription,
-    openGraph: {
-      title: pageTitle,
-      description: pageDescription,
-      url: 'https://sazeai.com/tools',
-      siteName: 'Your Site Name',
-      images: [
-        {
-          url: 'https://sazeai.com/images/screenshot.png',
-          width: 1200,
-          height: 630,
-        },
-      ],
-      locale: 'en_US',
-      type: 'website',
-    },
-    alternates: {
-      canonical: 'https://sazeai.com/tools',
-    },
   }
 }
 
@@ -280,11 +262,11 @@ export default function ToolsPage() {
   return (
     <div className="min-h-screen py-16">
       <main className="container mx-auto px-6">
-      <AdUnit 
-  client="ca-pub-7915372771416695"
-  slot="8441706260"
-  style={{ marginBottom: '20px' }}
-/>
+        <AdUnit 
+          client="ca-pub-7915372771416695"
+          slot="8441706260"
+          style={{ marginBottom: '20px' }}
+        />
         <h1 className="text-5xl md:text-6xl font-extrabold mb-6 text-center animate-fade-in-down">
           Explore All Free AI Tools
         </h1>
@@ -317,29 +299,11 @@ export default function ToolsPage() {
           ))}
         </div>
         <AdUnit 
-  client="ca-pub-7915372771416695"
-  slot="8441706260"
-  style={{ marginBottom: '20px' }}
-/>
+          client="ca-pub-7915372771416695"
+          slot="8441706260"
+          style={{ marginBottom: '20px' }}
+        />
       </main>
     </div>
   )
-}
-
-export const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'WebPage',
-  name: 'Explore All Free AI Tools | Your Site Name',
-  description: 'Unleash your creativity and boost productivity with our cutting-edge AI-powered tools. Discover a wide range of free AI tools for various tasks.',
-  url: 'https://sazeai.com/tools',
-  mainEntity: {
-    '@type': 'ItemList',
-    itemListElement: tools.map((tool, index) => ({
-      '@type': 'ListItem',
-      position: index + 1,
-      name: tool.title,
-      description: tool.description,
-      url: `https://sazeai.com${tool.link}`
-    }))
-  }
 }

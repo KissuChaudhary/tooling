@@ -5,7 +5,6 @@ import { Zap, Sparkles, Brain,  PenTool, Feather, MessageSquare, User, BookOpen,
 import { Metadata } from 'next'
 import AdUnit from '../../components/AdUnit'
 
-
 const tools = [
   {
     icon: <MessageSquare className="h-8 w-8 text-indigo-500" />,
@@ -31,7 +30,6 @@ const tools = [
     description: "Generate compelling titles for your books.",
     link: "/tools/ai-book-title-generator"
   },
-
   {
     icon: <User className="h-8 w-8 text-orange-500" />,
     title: "AI Character Generator",
@@ -69,14 +67,12 @@ const tools = [
     description: "Generate traditional haikus with AI assistance.",
     link: "/tools/ai-haiku-generator"
   },
-
   {
     icon: <PenTool className="h-8 w-8 text-cyan-500" />,
     title: "AI Intro Writer",
     description: "Create engaging introductions for your content.",
     link: "/tools/ai-intro-writer"
   },
-
   {
     icon: <Heart className="h-8 w-8 text-red-500" />,
     title: "AI Love Letter Writer",
@@ -102,7 +98,6 @@ const tools = [
     description: "Rephrase your text in different writing styles.",
     link: "/tools/ai-paraphrasing-tool"
   },
-
   {
     icon: <Puzzle className="h-8 w-8 text-violet-500" />,
     title: "AI Plot Generator",
@@ -115,7 +110,6 @@ const tools = [
     description: "Craft beautiful poems with the help of AI.",
     link: "/tools/ai-poem-generator"
   },
-
   {
     icon: <Edit className="h-8 w-8 text-orange-600" />,
     title: "AI Punctuation Checker",
@@ -128,14 +122,12 @@ const tools = [
     description: "Get inspiring and thought-provoking quotes.",
     link: "/tools/ai-quotes-generator"
   },
-
   {
     icon: <Music className="h-8 w-8 text-fuchsia-500" />,
     title: "AI Rhyme Generator",
     description: "Find perfect rhymes for your poems and lyrics.",
     link: "/tools/ai-rhyme-generator"
   },
-
   {
     icon: <Brain className="h-8 w-8 text-blue-500" />,
     title: "AI Story Generator",
@@ -149,41 +141,21 @@ const tools = [
     description: "Enhance your writing with AI-powered suggestions and improvements.",
     link: "/tools/ai-text-improver"
   },
-
   {
     icon: <PenTool className="h-8 w-8 text-red-500" />,
     title: "AI Thesis Statement Generator",
     description: "Generate compelling thesis statements for your essays.",
     link: "/tools/ai-thesis-statement-generator"
   },
- 
 ]
 
 export function generateMetadata(): Metadata {
-  const pageTitle = 'Explore All Free AI Tools | Your Site Name'
-  const pageDescription = 'Unleash your creativity and boost productivity with our cutting-edge AI-powered tools. Discover a wide range of free AI tools for various tasks.'
+  const pageTitle = "Free AI Writing Tools - SazeAI"
+  const pageDescription = "Generate text effortlessly with SazeAI's free AI writing tools. No sign-up, unlimited features for all your writing needs."
 
   return {
     title: pageTitle,
     description: pageDescription,
-    openGraph: {
-      title: pageTitle,
-      description: pageDescription,
-      url: 'https://sazeai.com/writing-tools',
-      siteName: 'Your Site Name',
-      images: [
-        {
-          url: 'https://sazeai.com/images/screenshot.png',
-          width: 1200,
-          height: 630,
-        },
-      ],
-      locale: 'en_US',
-      type: 'website',
-    },
-    alternates: {
-      canonical: 'https://sazeai.com/tools',
-    },
   }
 }
 
@@ -191,16 +163,16 @@ export default function ToolsPage() {
   return (
     <div className="min-h-screen py-16">
       <main className="container mx-auto px-6">
-      <AdUnit 
-  client="ca-pub-7915372771416695"
-  slot="8441706260"
-  style={{ marginBottom: '20px' }}
-/>
+        <AdUnit 
+          client="ca-pub-7915372771416695"
+          slot="8441706260"
+          style={{ marginBottom: '20px' }}
+        />
         <h1 className="text-5xl md:text-6xl font-extrabold mb-6 text-center animate-fade-in-down">
           Explore All AI Writing Tools
         </h1>
         <p className="text-xl md:text-2xl mb-16 text-center max-w-3xl mx-auto animate-fade-in-up">
-        Generate text effortlessly with SazeAI’s free AI writing tools. No sign-up, unlimited features for all your writing needs.
+          Generate text effortlessly with SazeAI's free AI writing tools. No sign-up, unlimited features for all your writing needs.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {tools.map((tool, index) => (
@@ -228,29 +200,11 @@ export default function ToolsPage() {
           ))}
         </div>
         <AdUnit 
-  client="ca-pub-7915372771416695"
-  slot="8441706260"
-  style={{ marginBottom: '20px' }}
-/>
+          client="ca-pub-7915372771416695"
+          slot="8441706260"
+          style={{ marginBottom: '20px' }}
+        />
       </main>
     </div>
   )
-}
-
-export const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'WebPage',
-  name: 'Free AI Writing Tools - SazeAI',
-  description: 'Generate text effortlessly with SazeAI’s free AI writing tools. No sign-up, unlimited features for all your writing needs.',
-  url: 'https://sazeai.com/writing-tools',
-  mainEntity: {
-    '@type': 'ItemList',
-    itemListElement: tools.map((tool, index) => ({
-      '@type': 'ListItem',
-      position: index + 1,
-      name: tool.title,
-      description: tool.description,
-      url: `https://sazeai.com${tool.link}`
-    }))
-  }
 }

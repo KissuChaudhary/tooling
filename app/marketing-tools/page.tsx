@@ -3,18 +3,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { MessageSquare, Search, ShoppingBag, Image, Star, Volume2 } from 'lucide-react'
 import { Metadata } from 'next'
-import AdUnit from '../../components/AdUnit'
-
 
 const tools = [
-
   {
     icon: <Image className="h-8 w-8 text-purple-500" />,
     title: "AI Image Generator",
     description: "Create unique images using AI technology.",
     link: "/tools/ai-image-generator"
   },
- 
   {
     icon: <ShoppingBag className="h-8 w-8 text-red-600" />,
     title: "AI Product Description Generator",
@@ -33,7 +29,6 @@ const tools = [
     description: "Generate authentic-looking product reviews.",
     link: "/tools/ai-review-generator"
   },
-
   {
     icon: <Search className="h-8 w-8 text-green-600" />,
     title: "AI SEO Meta Description Generator",
@@ -47,14 +42,12 @@ const tools = [
     link: "/tools/ai-seo-title-generator",
     badge: { text: "Popular", color: "bg-green-500" }
   },
-
   {
     icon: <Volume2 className="h-8 w-8 text-green-500" />,
     title: "AI Text to Speech",
     description: "Convert your text into natural-sounding speech.",
     link: "/tools/ai-text-to-speech"
   },
-
 ]
 
 export function generateMetadata(): Metadata {
@@ -64,24 +57,6 @@ export function generateMetadata(): Metadata {
   return {
     title: pageTitle,
     description: pageDescription,
-    openGraph: {
-      title: pageTitle,
-      description: pageDescription,
-      url: 'https://sazeai.com/marketing-tools',
-      siteName: 'Your Site Name',
-      images: [
-        {
-          url: 'https://sazeai.com/images/screenshot.png',
-          width: 1200,
-          height: 630,
-        },
-      ],
-      locale: 'en_US',
-      type: 'website',
-    },
-    alternates: {
-      canonical: 'https://sazeai.com/tools',
-    },
   }
 }
 
@@ -89,11 +64,6 @@ export default function ToolsPage() {
   return (
     <div className="min-h-screen py-16">
       <main className="container mx-auto px-6">
-      <AdUnit 
-  client="ca-pub-7915372771416695"
-  slot="8441706260"
-  style={{ marginBottom: '20px' }}
-/>
         <h1 className="text-5xl md:text-6xl font-extrabold mb-6 text-center animate-fade-in-down">
           Explore All Free AI Tools
         </h1>
@@ -125,30 +95,7 @@ export default function ToolsPage() {
             </Link>
           ))}
         </div>
-        <AdUnit 
-  client="ca-pub-7915372771416695"
-  slot="8441706260"
-  style={{ marginBottom: '20px' }}
-/>
       </main>
     </div>
   )
-}
-
-export const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'WebPage',
-  name: 'Free AI Marketing Tools - SazeAI',
-  description: 'Boost your marketing with SazeAI’s free AI tools—instant access and unlimited features for optimizing your strategies.',
-  url: 'https://sazeai.com/marketing-tools',
-  mainEntity: {
-    '@type': 'ItemList',
-    itemListElement: tools.map((tool, index) => ({
-      '@type': 'ListItem',
-      position: index + 1,
-      name: tool.title,
-      description: tool.description,
-      url: `https://sazeai.com/${tool.link}`
-    }))
-  }
 }
