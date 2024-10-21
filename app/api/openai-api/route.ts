@@ -975,6 +975,6 @@ function createLoveLetterWriterMessages(data: z.infer<typeof LoveLetterWriterSch
     { role: "user", content: `Write a love letter to ${partnerName} for the occasion: ${occasion}. Relationship duration: ${relationshipDuration}. The letter should be heartfelt, personal, and express genuine feelings.` }
   ];
 }
-
+}
 
 }
