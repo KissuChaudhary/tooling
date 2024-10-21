@@ -492,6 +492,7 @@ try {
       })
     });
 
+
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({ error: 'Failed to parse error response' }));
       console.error('OpenAI API error:', errorData);
@@ -614,7 +615,7 @@ try {
     default:
       throw new Error(`Unsupported tool: ${tool}`);
   }
-} catch (error) {
+} catch (error) {  // This line is likely line 345
   console.error('Error details:', {
     message: error instanceof Error ? error.message : 'Unknown error',
     stack: error instanceof Error ? error.stack : undefined,
