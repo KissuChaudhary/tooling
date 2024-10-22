@@ -78,8 +78,9 @@ ${content.substring(0, 4000)}`; // Limit content length
     let aiResult;
     try {
       aiResult = JSON.parse(aiContent);
-    } catch (parseError) {
+    } catch (error) {
       console.error('Failed to parse AI response as JSON:', aiContent);
+      console.error('Parse error:', error);
       // Fallback to a simple object if JSON parsing fails
       aiResult = {
         summary: "Failed to generate summary due to an unexpected response format.",
