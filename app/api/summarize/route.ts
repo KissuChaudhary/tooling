@@ -8,7 +8,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 // Helper to chunk text
 function chunkText(content: string, maxTokens: number): string[] {
   const tokens = content.split(/\s+/); // Basic tokenization by splitting on spaces
-  let chunks: string[] = [];
+  const chunks: string[] = [];
   let currentChunk: string[] = [];
 
   tokens.forEach(token => {
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
     ];
 
     let content = '';
-    let title = $('title').text() || $('h1').first().text() || '';
+    const title = $('title').text() || $('h1').first().text() || '';
 
     for (const selector of contentSelectors) {
       const element = $(selector);
@@ -72,8 +72,8 @@ export async function POST(request: NextRequest) {
     // Split content into chunks (limit of 1024 tokens per chunk)
     const chunks = chunkText(content, 1000);
 
-    let summaries = [];
-    let keyPointsList = [];
+    const summaries: string[] = [];
+    const keyPointsList: string[] = [];
 
     // Initialize the Gemini 1.5 Flash model
     const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
@@ -114,4 +114,4 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
-      }
+}
