@@ -1,12 +1,13 @@
+// components/AISummarizer.tsx
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 interface SummaryContent {
   fullText: string;
   summary: string;
   keyPoints: string[];
-  title: string;
+  title?: string;
   wordCount: number;
 }
 
@@ -15,7 +16,7 @@ export default function AISummarizer() {
   const [content, setContent] = useState<SummaryContent | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [activeTab, setActiveTab] = useState<'summary' | 'key' | 'full'>('summary');
+  const [activeTab, setActiveTab] = useState<'summary' | 'full' | 'key'>('summary');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,11 +30,12 @@ export default function AISummarizer() {
         body: JSON.stringify({ url }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error('Failed to fetch content');
+        throw new Error(data.error || 'Failed to fetch content');
       }
 
-      const data = await response.json();
       setContent(data);
       setUrl('');
     } catch (err) {
@@ -43,16 +45,8 @@ export default function AISummarizer() {
     }
   };
 
-  const formatContent = (text: string) => {
-    // Remove duplicate headings and clean up formatting
-    return text
-      .replace(/(\*\*\d+\.\s*(?:Summary|Concise Summary|Analysis):[^*]+\*\*)/g, '')
-      .replace(/#+\s*Analysis[^#]+/g, '')
-      .trim();
-  };
-
   return (
-    <div className="max-w-4xl w-full mx-auto p-4">
+    <div className="max-w-4xl w-full">
       <form onSubmit={handleSubmit} className="mb-8">
         <div className="flex gap-4">
           <input
@@ -89,25 +83,44 @@ export default function AISummarizer() {
 
       {content && !loading && (
         <div className="border rounded-lg overflow-hidden">
-          <h2 className="text-xl font-semibold p-4 bg-gray-50 border-b">
-            {content.title}
-          </h2>
+          {content.title && (
+            <h2 className="text-xl font-semibold p-4 bg-gray-50 border-b">
+              {content.title}
+            </h2>
+          )}
           
           <div className="border-b">
             <div className="flex">
-              {['summary', 'key', 'full'].map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab as 'summary' | 'key' | 'full')}
-                  className={`flex-1 px-4 py-2 text-center ${
-                    activeTab === tab 
-                      ? 'border-b-2 border-blue-500 text-blue-600 font-medium' 
-                      : 'text-gray-600 hover:bg-gray-50'
-                  }`}
-                >
-                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                </button>
-              ))}
+              <button
+                onClick={() => setActiveTab('summary')}
+                className={`flex-1 px-4 py-2 text-center ${
+                  activeTab === 'summary' 
+                    ? 'border-b-2 border-blue-500 text-blue-600 font-medium' 
+                    : 'text-gray-600 hover:bg-gray-50'
+                }`}
+              >
+                Summary
+              </button>
+              <button
+                onClick={() => setActiveTab('key')}
+                className={`flex-1 px-4 py-2 text-center ${
+                  activeTab === 'key' 
+                    ? 'border-b-2 border-blue-500 text-blue-600 font-medium' 
+                    : 'text-gray-600 hover:bg-gray-50'
+                }`}
+              >
+                Key Points
+              </button>
+              <button
+                onClick={() => setActiveTab('full')}
+                className={`flex-1 px-4 py-2 text-center ${
+                  activeTab === 'full' 
+                    ? 'border-b-2 border-blue-500 text-blue-600 font-medium' 
+                    : 'text-gray-600 hover:bg-gray-50'
+                }`}
+              >
+                Full Text
+              </button>
             </div>
           </div>
 
@@ -118,7 +131,7 @@ export default function AISummarizer() {
 
             {activeTab === 'summary' && (
               <div className="prose max-w-none">
-                {formatContent(content.summary)}
+                {content.summary}
               </div>
             )}
 
@@ -127,7 +140,7 @@ export default function AISummarizer() {
                 {content.keyPoints.map((point, index) => (
                   <div key={index} className="flex items-start gap-2">
                     <span className="text-blue-500 font-bold">•</span>
-                    <span>{formatContent(point)}</span>
+                    <span>{point}</span>
                   </div>
                 ))}
               </div>
@@ -135,7 +148,7 @@ export default function AISummarizer() {
 
             {activeTab === 'full' && (
               <div className="prose max-w-none whitespace-pre-wrap">
-                {formatContent(content.fullText)}
+                {content.fullText}
               </div>
             )}
           </div>
@@ -144,3 +157,4 @@ export default function AISummarizer() {
     </div>
   );
 }
+
