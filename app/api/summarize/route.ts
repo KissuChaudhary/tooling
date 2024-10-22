@@ -62,21 +62,20 @@ export async function POST(request: NextRequest) {
       .trim();
 
     // Get AI summary and key points using Gemini 1.5 Flash
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-    const result = await model.generateContent(`
-      Analyze the following text and provide:
-      1. A concise summary (150 words max)
-      2. 5 key points (bullet points)
+    const prompt = `Analyze the following text and provide a concise summary and extract key points. Format the response as JSON with 'summary' and 'keyPoints' fields:
 
-      Format the response as JSON with 'summary' and 'keyPoints' fields.
+${content.substring(0, 4000)}`; // Limit content length
 
-      Text to analyze:
-      ${content.substring(0, 4000)} // Limit content length
-    `);
+    const result = await model.generateContent(prompt);
+    const aiContent = result.response.text();
 
-    const generatedText = result.response.text();
-    const aiResult = JSON.parse(generatedText);
+    if (!aiContent) {
+      throw new Error('AI response content is null or undefined.');
+    }
+
+    const aiResult = JSON.parse(aiContent);
 
     return NextResponse.json({
       title,
@@ -87,7 +86,6 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error in summarize API:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'An error occurred' },
       { status: 500 }
