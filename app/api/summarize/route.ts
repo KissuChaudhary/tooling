@@ -1,122 +1,91 @@
-import { NextRequest, NextResponse } from 'next/server';
-import * as cheerio from 'cheerio';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { NextRequest, NextResponse } from 'next/server'; import * as cheerio from 'cheerio'; import OpenAI from 'openai';
 
-// Initialize Google Generative AI
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+// Initialize OpenAI const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-// Helper to chunk text
-function chunkText(content: string, maxTokens: number): string[] {
-  const tokens = content.split(/\s+/);
-  const chunks: string[] = [];
-  let currentChunk: string[] = [];
+// Helper to chunk text function chunkText(content: string, maxTokens: number): string[] { const tokens = content.split(/\s+/); // Basic tokenization by splitting on spaces let chunks: string[] = []; let currentChunk: string[] = [];
 
-  tokens.forEach(token => {
-    currentChunk.push(token);
-    if (currentChunk.join(' ').length > maxTokens) {
-      chunks.push(currentChunk.join(' '));
-      currentChunk = [];
-    }
+tokens.forEach(token => { currentChunk.push(token); if (currentChunk.join(' ').length > maxTokens) { chunks.push(currentChunk.join(' ')); currentChunk = []; } });
+
+if (currentChunk.length) { chunks.push(currentChunk.join(' ')); }
+
+return chunks; }
+
+export async function POST(request: NextRequest) { try { const { url } = await request.json();
+
+if (!url) {
+  return NextResponse.json({ error: 'URL is required' }, { status: 400 });
+}
+
+// Fetch and parse content
+const response = await fetch(url);
+const html = await response.text();
+const $ = cheerio.load(html);
+
+// Remove unwanted elements
+$('script, style, nav, footer, header, aside').remove();
+$('.advertisement, #comments').remove();
+
+const contentSelectors = [
+  'article', '[role="main"]', 'main', '.main-content', '#main-content',
+  '.post-content', '.article-content', '.content'
+];
+
+let content = '';
+let title = $('title').text() || $('h1').first().text() || '';
+
+for (const selector of contentSelectors) {
+  const element = $(selector);
+  if (element.length > 0) {
+    content = element.first().text().trim();
+    break;
+  }
+}
+
+if (!content) {
+  content = $('body').text().trim();
+}
+
+content = content
+  .replace(/\s+/g, ' ')
+  .replace(/\n\s*\n/g, '\n')
+  .replace(/[\t\r]/g, '')
+  .trim();
+
+// Split content into chunks (limit of 1024 tokens per chunk)
+const chunks = chunkText(content, 1000);
+
+let summaries = [];
+let keyPointsList = [];
+
+// Process each chunk with AI
+for (const chunk of chunks) {
+  const aiResponse = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [
+      {
+        role: "system",
+        content: "You are an expert content analyzer. Provide a concise summary and extract key points from the given text."
+      },
+      {
+        role: "user",
+        content: `Please analyze this text and provide a summary and key points: ${chunk}`
+      }
+    ]
   });
 
-  if (currentChunk.length) {
-    chunks.push(currentChunk.join(' '));
-  }
-
-  return chunks;
+  const aiResult = JSON.parse(aiResponse.choices[0].message.content);
+  summaries.push(aiResult.summary);
+  keyPointsList.push(...aiResult.keyPoints);
 }
 
-export async function POST(request: NextRequest) {
-  try {
-    const { url } = await request.json();
+// Combine summaries
+const fullSummary = summaries.join(" ");
 
-    if (!url) {
-      return NextResponse.json({ error: 'URL is required' }, { status: 400 });
-    }
-
-    // Fetch and parse content
-    const response = await fetch(url);
-    const html = await response.text();
-    const $ = cheerio.load(html);
-
-    // Remove unwanted elements
-    $('script, style, nav, footer, header, aside').remove();
-    $('.advertisement, #comments').remove();
-
-    const contentSelectors = [
-      'article', '[role="main"]', 'main', '.main-content', '#main-content',
-      '.post-content', '.article-content', '.content'
-    ];
-
-    let content = '';
-    const title = $('title').text() || $('h1').first().text() || '';
-
-    for (const selector of contentSelectors) {
-      const element = $(selector);
-      if (element.length > 0) {
-        content = element.first().text().trim();
-        break;
-      }
-    }
-
-    if (!content) {
-      content = $('body').text().trim();
-    }
-
-    content = content
-      .replace(/\s+/g, ' ')
-      .replace(/\n\s*\n/g, '\n')
-      .replace(/[\t\r]/g, '')
-      .trim();
-
-    // Split content into chunks (limit of 1024 tokens per chunk)
-    const chunks = chunkText(content, 1000);
-
-    const summaries: string[] = [];
-    const keyPointsList: string[] = [];
-
-    // Initialize the Gemini 1.5 Flash model
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-
-    // Process each chunk with AI
-    for (const chunk of chunks) {
-      try {
-        const result = await model.generateContent(`
-          Analyze the following text and provide:
-          1. A concise summary (50 words max)
-          2. 3 key points (bullet points)
-
-          Text to analyze:
-          ${chunk}
-        `);
-
-        const generatedText = result.response.text();
-        const [summary, keyPointsRaw] = generatedText.split('\n\n');
-
-        summaries.push(summary.replace('Summary: ', ''));
-        keyPointsList.push(...keyPointsRaw.split('\n').map(point => point.replace(/^- /, '')));
-      } catch (chunkError) {
-        console.error('Error processing chunk:', chunkError);
-        // Continue with the next chunk if there's an error
-      }
-    }
-
-    // Combine summaries
-    const fullSummary = summaries.join(" ");
-    
-    return NextResponse.json({
-      title,
-      fullText: content,
-      summary: fullSummary,
-      keyPoints: keyPointsList,
-      wordCount: content.split(/\s+/).length
-    });
-
-  } catch (error) {
-    console.error('Error in summarize API:', error);
-    return NextResponse.json(
-      { error: 'Failed to summarize content. Please try again later.' },
-      { status: 500 }
-    );
-  }
-}
+return NextResponse.json({
+  title,
+  fullText: content,
+  summary: fullSummary,
+  keyPoints: keyPointsList,
+  wordCount: content.split(/\s+/).length
+});
+} catch (error) { return NextResponse.json( { error: error instanceof Error ? error.message : 'An error occurred' }, { status: 500 } ); } }
