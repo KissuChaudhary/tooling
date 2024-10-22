@@ -1,22 +1,37 @@
-// app/api/summarize/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import * as cheerio from 'cheerio';
-import OpenAI from 'openai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
-// Initialize OpenAI
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
-});
+// Initialize Google Generative AI
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+
+// Helper to chunk text
+function chunkText(content: string, maxTokens: number): string[] {
+  const tokens = content.split(/\s+/);
+  const chunks: string[] = [];
+  let currentChunk: string[] = [];
+
+  tokens.forEach(token => {
+    currentChunk.push(token);
+    if (currentChunk.join(' ').length > maxTokens) {
+      chunks.push(currentChunk.join(' '));
+      currentChunk = [];
+    }
+  });
+
+  if (currentChunk.length) {
+    chunks.push(currentChunk.join(' '));
+  }
+
+  return chunks;
+}
 
 export async function POST(request: NextRequest) {
   try {
     const { url } = await request.json();
 
     if (!url) {
-      return NextResponse.json(
-        { error: 'URL is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'URL is required' }, { status: 400 });
     }
 
     // Fetch and parse content
@@ -28,22 +43,14 @@ export async function POST(request: NextRequest) {
     $('script, style, nav, footer, header, aside').remove();
     $('.advertisement, #comments').remove();
 
-    // Try to find main content
     const contentSelectors = [
-      'article',
-      '[role="main"]',
-      'main',
-      '.main-content',
-      '#main-content',
-      '.post-content',
-      '.article-content',
-      '.content'
+      'article', '[role="main"]', 'main', '.main-content', '#main-content',
+      '.post-content', '.article-content', '.content'
     ];
 
     let content = '';
     const title = $('title').text() || $('h1').first().text() || '';
 
-    // Try each selector until we find content
     for (const selector of contentSelectors) {
       const element = $(selector);
       if (element.length > 0) {
@@ -52,54 +59,63 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Fallback to body content if no main content found
     if (!content) {
       content = $('body').text().trim();
     }
 
-    // Clean up the content
     content = content
       .replace(/\s+/g, ' ')
       .replace(/\n\s*\n/g, '\n')
       .replace(/[\t\r]/g, '')
       .trim();
 
-   
-// Get AI summary and key points
-const aiResponse = await openai.chat.completions.create({
-  model: "gpt-4o-mini",
-  messages: [
-    {
-      role: "system",
-      content: "You are an expert content analyzer. Provide a concise summary and extract key points from the given text. Format the response as JSON with 'summary' and 'keyPoints' fields."
-    },
-    {
-      role: "user",
-      content: `Please analyze this text and provide a summary and key points: ${content.substring(0, 4000)}` // Limit content length
+    // Split content into chunks (limit of 1024 tokens per chunk)
+    const chunks = chunkText(content, 1000);
+
+    const summaries: string[] = [];
+    const keyPointsList: string[] = [];
+
+    // Initialize the Gemini 1.5 Flash model
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+
+    // Process each chunk with AI
+    for (const chunk of chunks) {
+      try {
+        const result = await model.generateContent(`
+          Analyze the following text and provide:
+          1. A concise summary (50 words max)
+          2. 3 key points (bullet points)
+
+          Text to analyze:
+          ${chunk}
+        `);
+
+        const generatedText = result.response.text();
+        const [summary, keyPointsRaw] = generatedText.split('\n\n');
+
+        summaries.push(summary.replace('Summary: ', ''));
+        keyPointsList.push(...keyPointsRaw.split('\n').map(point => point.replace(/^- /, '')));
+      } catch (chunkError) {
+        console.error('Error processing chunk:', chunkError);
+        // Continue with the next chunk if there's an error
+      }
     }
-  ],
-  response_format: { type: "json_object" }
-});
 
-const aiContent = aiResponse.choices[0].message?.content;
-
-if (!aiContent) {
-  throw new Error('AI response content is null or undefined.');
-}
-
-const aiResult = JSON.parse(aiContent);
-
-return NextResponse.json({
-  title,
-  fullText: content,
-  summary: aiResult.summary,
-  keyPoints: aiResult.keyPoints,
-  wordCount: content.split(/\s+/).length
-});
+    // Combine summaries
+    const fullSummary = summaries.join(" ");
+    
+    return NextResponse.json({
+      title,
+      fullText: content,
+      summary: fullSummary,
+      keyPoints: keyPointsList,
+      wordCount: content.split(/\s+/).length
+    });
 
   } catch (error) {
+    console.error('Error in summarize API:', error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'An error occurred' },
+      { error: 'Failed to summarize content. Please try again later.' },
       { status: 500 }
     );
   }
