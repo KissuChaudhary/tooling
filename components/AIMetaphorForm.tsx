@@ -37,7 +37,7 @@ export default function MetaphorGenerator() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
   const [errors, setErrors] = useState<Errors>({});
-  const [model, setModel] = useState<'gpt4o' | 'gemini'>('gpt4o');
+  const [model, setModel] = useState<'gpt4o' | 'gemini'>('gemini');
 
   const handleChange = (name: keyof FormData, value: string) => {
     if (value.length <= characterLimits[name]) {
@@ -139,7 +139,7 @@ export default function MetaphorGenerator() {
         </div>
         <Switch
           id="model-switch"
-          checked={model === 'gemini'}
+          checked={model === 'gpt4o'}
           onCheckedChange={(checked) => setModel(checked ? 'gpt4o' : 'gemini')}
         />
         <div className="flex items-center space-x-2">
