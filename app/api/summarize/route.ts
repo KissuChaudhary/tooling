@@ -7,7 +7,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
 // Helper to chunk text
 function chunkText(content: string, maxTokens: number): string[] {
-  const tokens = content.split(/\s+/); // Basic tokenization by splitting on spaces
+  const tokens = content.split(/\s+/);
   const chunks: string[] = [];
   let currentChunk: string[] = [];
 
@@ -80,20 +80,25 @@ export async function POST(request: NextRequest) {
 
     // Process each chunk with AI
     for (const chunk of chunks) {
-      const result = await model.generateContent(`
-        Analyze the following text and provide:
-        1. A concise summary (60-70 words max)
-        2. 5-6 key points (bullet points)
+      try {
+        const result = await model.generateContent(`
+          Analyze the following text and provide:
+          1. A concise summary (60-70 words max)
+          2. 5-6 key points (bullet points)
 
-        Text to analyze:
-        ${chunk}
-      `);
+          Text to analyze:
+          ${chunk}
+        `);
 
-      const generatedText = result.response.text();
-      const [summary, keyPointsRaw] = generatedText.split('\n\n');
+        const generatedText = result.response.text();
+        const [summary, keyPointsRaw] = generatedText.split('\n\n');
 
-      summaries.push(summary.replace('Summary: ', ''));
-      keyPointsList.push(...keyPointsRaw.split('\n').map(point => point.replace(/^- /, '')));
+        summaries.push(summary.replace('Summary: ', ''));
+        keyPointsList.push(...keyPointsRaw.split('\n').map(point => point.replace(/^- /, '')));
+      } catch (chunkError) {
+        console.error('Error processing chunk:', chunkError);
+        // Continue with the next chunk if there's an error
+      }
     }
 
     // Combine summaries
@@ -110,7 +115,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error in summarize API:', error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'An error occurred' },
+      { error: 'Failed to summarize content. Please try again later.' },
       { status: 500 }
     );
   }
