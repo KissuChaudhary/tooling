@@ -83,8 +83,8 @@ export async function POST(request: NextRequest) {
       try {
         const result = await model.generateContent(`
           Analyze the following text and provide:
-          1. A concise summary (60-70 words max)
-          2. 5-6 key points (bullet points)
+          1. A concise summary (50 words max)
+          2. 3 key points (bullet points)
 
           Text to analyze:
           ${chunk}
