@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
     // Get AI summary and key points using Gemini 1.5 Flash
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-    const prompt = `Analyze the following text and provide a concise summary and extract key points. Format the response as JSON with 'summary' and 'keyPoints' fields:
+    const prompt = `Analyze the following text and provide a concise summary and extract key points. Format the response as JSON with 'summary' and 'keyPoints' fields. The 'keyPoints' should be an array of strings:
 
 ${content.substring(0, 4000)}`; // Limit content length
 
@@ -75,7 +75,25 @@ ${content.substring(0, 4000)}`; // Limit content length
       throw new Error('AI response content is null or undefined.');
     }
 
-    const aiResult = JSON.parse(aiContent);
+    let aiResult;
+    try {
+      aiResult = JSON.parse(aiContent);
+    } catch (parseError) {
+      console.error('Failed to parse AI response as JSON:', aiContent);
+      // Fallback to a simple object if JSON parsing fails
+      aiResult = {
+        summary: "Failed to generate summary due to an unexpected response format.",
+        keyPoints: ["Unable to extract key points due to an error in the AI response."]
+      };
+    }
+
+    // Ensure aiResult has the expected structure
+    if (typeof aiResult.summary !== 'string' || !Array.isArray(aiResult.keyPoints)) {
+      aiResult = {
+        summary: aiResult.summary || "Summary not available.",
+        keyPoints: Array.isArray(aiResult.keyPoints) ? aiResult.keyPoints : ["Key points not available."]
+      };
+    }
 
     return NextResponse.json({
       title,
@@ -86,6 +104,7 @@ ${content.substring(0, 4000)}`; // Limit content length
     });
 
   } catch (error) {
+    console.error('Error in API route:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'An error occurred' },
       { status: 500 }
