@@ -29,19 +29,19 @@ export async function POST(request: NextRequest) {
     $('.advertisement, #comments').remove();
 
     // Try to find main content
-const contentSelectors = [
-  'article',
-  '[role="main"]',
-  'main',
-  '.main-content',
-  '#main-content',
-  '.post-content',
-  '.article-content',
-  '.content'
-];
+    const contentSelectors = [
+      'article',
+      '[role="main"]',
+      'main',
+      '.main-content',
+      '#main-content',
+      '.post-content',
+      '.article-content',
+      '.content'
+    ];
 
-const title = $('title').text() || $('h1').first().text() || '';
-
+    let content = '';
+    const title = $('title').text() || $('h1').first().text() || '';
 
     // Try each selector until we find content
     for (const selector of contentSelectors) {
@@ -64,6 +64,7 @@ const title = $('title').text() || $('h1').first().text() || '';
       .replace(/[\t\r]/g, '')
       .trim();
 
+   
 // Get AI summary and key points
 const aiResponse = await openai.chat.completions.create({
   model: "gpt-4o-mini",
@@ -95,7 +96,6 @@ return NextResponse.json({
   keyPoints: aiResult.keyPoints,
   wordCount: content.split(/\s+/).length
 });
-
 
   } catch (error) {
     return NextResponse.json(
