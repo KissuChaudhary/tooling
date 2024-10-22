@@ -1,0 +1,18 @@
+User-agent: *
+Disallow: /api/
+Disallow: /_next/
+Disallow: /static/
+Disallow: /server-sitemap.xml
+
+# Block access to certain pages
+Disallow: /login/
+Disallow: /register/
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /thank-you/
+
+# Allow all search engines access to the rest of the site
+Allow: /
+
+# Sitemap location
+Sitemap: https://sazeai.com/sitemap.xml
