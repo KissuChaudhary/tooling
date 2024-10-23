@@ -2,6 +2,12 @@
 
 import React, { useEffect, useRef } from 'react'
 
+declare global {
+  interface Window {
+    adsbygoogle: any[];
+  }
+}
+
 interface AdUnitProps {
   client: string
   slot: string
@@ -21,7 +27,7 @@ export default function AdUnit({
   const adPushed = useRef(false)
 
   useEffect(() => {
-    if (adRef.current && !adPushed.current) {
+    if (typeof window !== 'undefined' && adRef.current && !adPushed.current) {
       const observer = new IntersectionObserver(
         (entries) => {
           if (entries[0].isIntersecting) {
