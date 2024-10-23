@@ -156,30 +156,31 @@ export default function AISummarizer() {
                       {content.summary}
                     </div>
                     <div className="flex justify-end gap-2 mt-4">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleCopy(content.summary)}
-                      >
-                        {copied ? <CheckCircle2 className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleDownload(content.summary, 'summary.txt')}
-                      >
-                        <Download className="w-4 h-4" />
-                      </Button>
-                      {typeof window !== 'undefined' && navigator.share && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={handleShare}
-                        >
-                          <Share2 className="w-4 h-4" />
-                        </Button>
-                      )}
-                    </div>
+  <Button
+    variant="outline"
+    size="sm"
+    onClick={() => handleCopy(content.summary)}
+  >
+    {copied ? <CheckCircle2 className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+  </Button>
+  <Button
+    variant="outline"
+    size="sm"
+    onClick={() => handleDownload(content.summary, 'summary.txt')}
+  >
+    <Download className="w-4 h-4" />
+  </Button>
+  {typeof window !== 'undefined' && typeof navigator.share === 'function' && (
+    <Button
+      variant="outline"
+      size="sm"
+      onClick={handleShare}
+    >
+      <Share2 className="w-4 h-4" />
+    </Button>
+  )}
+</div>
+
                   </CardContent>
                 </Card>
               </TabsContent>
