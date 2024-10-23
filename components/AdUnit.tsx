@@ -76,25 +76,22 @@ export default function AdUnit({
     <div ref={adRef} className="ad-container flex justify-center items-center w-full my-4">
       <div className="relative max-w-full w-full">
         <p className="text-xs text-gray-500 text-center mb-1">- Advertisement -</p>
-        {error ? (
-          <p className="text-red-500 text-center">{error}</p>
-        ) : (
-          <ins
-            className="adsbygoogle"
-            style={{
-              display: 'block',
-              minWidth: '250px',
-              minHeight: '100px',
-              width: '100%',
-              ...style
-            }}
-            data-ad-client={client}
-            data-ad-slot={slot}
-            data-ad-format={format}
-            data-full-width-responsive={responsive ? 'true' : 'false'}
-          />
-        )}
+        {/* Do not display the error message */}
+        <ins
+          className="adsbygoogle"
+          style={{
+            display: 'block',
+            minWidth: '250px',
+            minHeight: '100px',
+            width: '100%',
+            ...style
+          }}
+          data-ad-client={client}
+          data-ad-slot={slot}
+          data-ad-format={format}
+          data-full-width-responsive={responsive ? 'true' : 'false'}
+        />
       </div>
     </div>
   )
-        }
+}
