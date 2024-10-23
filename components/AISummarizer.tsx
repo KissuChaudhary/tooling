@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -170,7 +170,7 @@ export default function AISummarizer() {
                       >
                         <Download className="w-4 h-4" />
                       </Button>
-                      {navigator.share && (
+                      {typeof window !== 'undefined' && navigator.share && (
                         <Button
                           variant="outline"
                           size="sm"
@@ -216,4 +216,4 @@ export default function AISummarizer() {
       </CardContent>
     </Card>
   );
-            }
+    }
