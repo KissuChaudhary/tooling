@@ -2,12 +2,6 @@
 
 import React, { useEffect, useRef } from 'react'
 
-declare global {
-  interface Window {
-    adsbygoogle: any[]
-  }
-}
-
 interface AdUnitProps {
   client: string
   slot: string
@@ -16,41 +10,35 @@ interface AdUnitProps {
   style?: React.CSSProperties
 }
 
-export default function AdUnit({ 
-  client, 
-  slot, 
-  format = 'auto', 
-  responsive = true, 
-  style = {} 
+export default function AdUnit({
+  client,
+  slot,
+  format = 'auto',
+  responsive = true,
+  style = {}
 }: AdUnitProps) {
   const adRef = useRef<HTMLDivElement>(null)
   const adPushed = useRef(false)
 
   useEffect(() => {
     if (adRef.current && !adPushed.current) {
-      const pushAd = () => {
-        try {
-          if (!adPushed.current) {
-            (window.adsbygoogle = window.adsbygoogle || []).push({})
-            adPushed.current = true
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            try {
+              (window.adsbygoogle = window.adsbygoogle || []).push({})
+              adPushed.current = true
+              observer.unobserve(adRef.current!)
+            } catch (err) {
+              console.error('AdSense error:', err)
+            }
           }
-        } catch (err) {
-          console.error('AdSense error:', err)
-        }
-      }
+        },
+        { threshold: 0.1 }
+      )
 
-      if (adRef.current.offsetWidth > 0) {
-        pushAd()
-      } else {
-        const resizeObserver = new ResizeObserver((entries) => {
-          if (entries[0].contentRect.width > 0) {
-            pushAd()
-            resizeObserver.disconnect()
-          }
-        })
-        resizeObserver.observe(adRef.current)
-        return () => resizeObserver.disconnect()
-      }
+      observer.observe(adRef.current)
+      return () => observer.disconnect()
     }
   }, [])
 
@@ -60,12 +48,12 @@ export default function AdUnit({
         <p className="text-xs text-gray-500 text-center mb-1">- Advertisement -</p>
         <ins
           className="adsbygoogle"
-          style={{ 
-            display: 'block', 
+          style={{
+            display: 'block',
             minWidth: '250px',
             minHeight: '100px',
             width: '100%',
-            ...style 
+            ...style
           }}
           data-ad-client={client}
           data-ad-slot={slot}
