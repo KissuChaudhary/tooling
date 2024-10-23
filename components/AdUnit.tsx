@@ -25,7 +25,6 @@ export default function AdUnit({
 }: AdUnitProps) {
   const adRef = useRef<HTMLDivElement>(null)
   const [adLoaded, setAdLoaded] = useState(false)
-  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const loadAd = () => {
@@ -33,12 +32,9 @@ export default function AdUnit({
         if (typeof window !== 'undefined' && window.adsbygoogle) {
           (window.adsbygoogle = window.adsbygoogle || []).push({})
           setAdLoaded(true)
-        } else {
-          setError('AdSense not available')
         }
       } catch (err) {
         console.error('AdSense error:', err)
-        setError('Failed to load ad')
       }
     }
 
@@ -76,7 +72,6 @@ export default function AdUnit({
     <div ref={adRef} className="ad-container flex justify-center items-center w-full my-4">
       <div className="relative max-w-full w-full">
         <p className="text-xs text-gray-500 text-center mb-1">- Advertisement -</p>
-        {/* Do not display the error message */}
         <ins
           className="adsbygoogle"
           style={{
