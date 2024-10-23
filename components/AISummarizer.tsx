@@ -1,7 +1,11 @@
-// components/AISummarizer.tsx
-'use client';
-
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Share2, Download, Copy, CheckCircle2, Timer, FileText } from 'lucide-react';
 
 interface SummaryContent {
   fullText: string;
@@ -9,6 +13,7 @@ interface SummaryContent {
   keyPoints: string[];
   title?: string;
   wordCount: number;
+  readingTime?: number;
 }
 
 export default function AISummarizer() {
@@ -16,7 +21,7 @@ export default function AISummarizer() {
   const [content, setContent] = useState<SummaryContent | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [activeTab, setActiveTab] = useState<'summary' | 'full' | 'key'>('summary');
+  const [copied, setCopied] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,6 +41,10 @@ export default function AISummarizer() {
         throw new Error(data.error || 'Failed to fetch content');
       }
 
+      // Calculate estimated reading time (words per minute)
+      const wordsPerMinute = 200;
+      data.readingTime = Math.ceil(data.wordCount / wordsPerMinute);
+
       setContent(data);
       setUrl('');
     } catch (err) {
@@ -45,115 +54,164 @@ export default function AISummarizer() {
     }
   };
 
+  const handleCopy = async (text: string) => {
+    await navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleDownload = (text: string, filename: string) => {
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleShare = async () => {
+    if (navigator.share && content) {
+      try {
+        await navigator.share({
+          title: content.title || 'Article Summary',
+          text: content.summary,
+          url: url
+        });
+      } catch (err) {
+        console.error('Error sharing:', err);
+      }
+    }
+  };
+
   return (
-    <div className="max-w-4xl w-full">
-      <form onSubmit={handleSubmit} className="mb-8">
-        <div className="flex gap-4">
-          <input
-            type="url"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            placeholder="Enter URL to analyze"
-            required
-            className="flex-1 p-2 border rounded"
-          />
-          <button
-            type="submit"
-            disabled={loading}
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
-          >
-            {loading ? 'Processing...' : 'Analyze Content'}
-          </button>
-        </div>
-      </form>
-
-      {error && (
-        <div className="mb-4 p-4 bg-red-100 text-red-700 rounded">
-          {error}
-        </div>
-      )}
-
-      {loading && (
-        <div className="animate-pulse space-y-4">
-          <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-          <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-          <div className="h-4 bg-gray-200 rounded w-5/6"></div>
-        </div>
-      )}
-
-      {content && !loading && (
-        <div className="border rounded-lg overflow-hidden">
-          {content.title && (
-            <h2 className="text-xl font-semibold p-4 bg-gray-50 border-b">
-              {content.title}
-            </h2>
-          )}
-          
-          <div className="border-b">
-            <div className="flex">
-              <button
-                onClick={() => setActiveTab('summary')}
-                className={`flex-1 px-4 py-2 text-center ${
-                  activeTab === 'summary' 
-                    ? 'border-b-2 border-blue-500 text-blue-600 font-medium' 
-                    : 'text-gray-600 hover:bg-gray-50'
-                }`}
-              >
-                Summary
-              </button>
-              <button
-                onClick={() => setActiveTab('key')}
-                className={`flex-1 px-4 py-2 text-center ${
-                  activeTab === 'key' 
-                    ? 'border-b-2 border-blue-500 text-blue-600 font-medium' 
-                    : 'text-gray-600 hover:bg-gray-50'
-                }`}
-              >
-                Key Points
-              </button>
-              <button
-                onClick={() => setActiveTab('full')}
-                className={`flex-1 px-4 py-2 text-center ${
-                  activeTab === 'full' 
-                    ? 'border-b-2 border-blue-500 text-blue-600 font-medium' 
-                    : 'text-gray-600 hover:bg-gray-50'
-                }`}
-              >
-                Full Text
-              </button>
-            </div>
+    <Card className="w-full max-w-4xl mx-auto">
+      <CardHeader>
+        <CardTitle className="text-2xl font-bold text-center">AI Content Summarizer</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="flex gap-2">
+            <Input
+              type="url"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              placeholder="Enter URL to analyze"
+              required
+              className="flex-1"
+            />
+            <Button type="submit" disabled={loading}>
+              {loading ? 'Processing...' : 'Analyze'}
+            </Button>
           </div>
+        </form>
 
-          <div className="p-4">
-            <div className="text-sm text-gray-500 mb-4">
-              Word count: {content.wordCount}
-            </div>
+        {error && (
+          <Alert variant="destructive" className="mt-4">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
 
-            {activeTab === 'summary' && (
-              <div className="prose max-w-none">
-                {content.summary}
-              </div>
-            )}
-
-            {activeTab === 'key' && (
-              <div className="space-y-2">
-                {content.keyPoints.map((point, index) => (
-                  <div key={index} className="flex items-start gap-2">
-                    <span className="text-blue-500 font-bold">•</span>
-                    <span>{point}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {activeTab === 'full' && (
-              <div className="prose max-w-none whitespace-pre-wrap">
-                {content.fullText}
-              </div>
-            )}
+        {loading && (
+          <div className="mt-8 space-y-4">
+            <div className="h-4 bg-gray-100 rounded animate-pulse" />
+            <div className="h-4 bg-gray-100 rounded animate-pulse w-5/6" />
+            <div className="h-4 bg-gray-100 rounded animate-pulse w-4/6" />
           </div>
-        </div>
-      )}
-    </div>
+        )}
+
+        {content && !loading && (
+          <div className="mt-8">
+            {content.title && (
+              <div className="mb-4">
+                <h2 className="text-xl font-semibold">{content.title}</h2>
+                <div className="flex gap-2 mt-2">
+                  <Badge variant="secondary" className="flex items-center gap-1">
+                    <FileText className="w-3 h-3" />
+                    {content.wordCount} words
+                  </Badge>
+                  <Badge variant="secondary" className="flex items-center gap-1">
+                    <Timer className="w-3 h-3" />
+                    {content.readingTime} min read
+                  </Badge>
+                </div>
+              </div>
+            )}
+
+            <Tabs defaultValue="summary" className="w-full">
+              <TabsList className="w-full">
+                <TabsTrigger value="summary" className="flex-1">Summary</TabsTrigger>
+                <TabsTrigger value="key" className="flex-1">Key Points</TabsTrigger>
+                <TabsTrigger value="full" className="flex-1">Full Text</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="summary" className="mt-4">
+                <Card>
+                  <CardContent className="pt-6">
+                    <div className="prose max-w-none">
+                      {content.summary}
+                    </div>
+                    <div className="flex justify-end gap-2 mt-4">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleCopy(content.summary)}
+                      >
+                        {copied ? <CheckCircle2 className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDownload(content.summary, 'summary.txt')}
+                      >
+                        <Download className="w-4 h-4" />
+                      </Button>
+                      {navigator.share && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={handleShare}
+                        >
+                          <Share2 className="w-4 h-4" />
+                        </Button>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="key" className="mt-4">
+                <Card>
+                  <CardContent className="pt-6">
+                    <div className="space-y-2">
+                      {content.keyPoints.map((point, index) => (
+                        <div key={index} className="flex items-start gap-2">
+                          <Badge variant="secondary" className="mt-1">
+                            {index + 1}
+                          </Badge>
+                          <span>{point}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="full" className="mt-4">
+                <Card>
+                  <CardContent className="pt-6">
+                    <div className="prose max-w-none whitespace-pre-wrap">
+                      {content.fullText}
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
-}
+            }
