@@ -25,36 +25,43 @@ export default function AISummarizer() {
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setLoading(true);
+  setError('');
 
-    try {
-      const response = await fetch('/api/summarize', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url }),
-      });
+  try {
+    const response = await fetch('/api/summarize', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url }),
+    });
 
-      const data = await response.json();
+    // Check if the response content type is JSON before parsing
+    const contentType = response.headers.get('content-type');
+    let data;
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to fetch content');
-      }
-
-      // Calculate estimated reading time (words per minute)
-      const wordsPerMinute = 200;
-      data.readingTime = Math.ceil(data.wordCount / wordsPerMinute);
-
-      setContent(data);
-      setUrl('');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
-    } finally {
-      setLoading(false);
+    if (contentType && contentType.includes('application/json')) {
+      data = await response.json();
+    } else {
+      // Handle non-JSON response (e.g., plain text or HTML)
+      const text = await response.text();
+      throw new Error(text || 'Unknown error occurred');
     }
-  };
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to fetch content');
+    }
+
+    setContent(data);
+    setUrl('');
+  } catch (err) {
+    setError(err instanceof Error ? err.message : 'An error occurred');
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const handleCopy = async (text: string) => {
     await navigator.clipboard.writeText(text);
