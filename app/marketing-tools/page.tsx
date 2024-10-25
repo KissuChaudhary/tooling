@@ -53,8 +53,8 @@ const tools = [
 ]
 
 export function generateMetadata(): Metadata {
-  const pageTitle = 'Explore All Free AI Tools | Saze AI'
-  const pageDescription = 'Unleash your creativity and boost productivity with our cutting-edge AI-powered tools. Discover a wide range of free AI tools for marketing tasks.'
+  const pageTitle = 'Explore All Free AI Marketing Tools | Saze AI'
+  const pageDescription = 'Explore a wide range of free AI marketing tools designed to boost your campaigns, streamline content creation, and maximize ROI. '
 
   return {
     title: pageTitle,
@@ -77,7 +77,7 @@ export default function ToolsPage() {
           Explore All Free AI Marketing Tools
         </h1>
         <p className="text-xl md:text-2xl mb-16 text-center max-w-3xl mx-auto animate-fade-in-up">
-          Unleash your creativity and boost productivity with our cutting-edge AI-powered tools.
+          Explore a wide range of free AI marketing tools designed to boost your campaigns, streamline content creation, and maximize ROI. 
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {tools.map((tool, index) => (
