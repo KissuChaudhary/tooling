@@ -70,7 +70,7 @@ export default function AdUnit({
 
   return (
     <div ref={adRef} className="ad-container flex justify-center items-center w-full my-4">
-      <div className="relative max-w-full w-full">
+      <div className="relative max-w-full text-center w-full">
         <p className="text-xs text-gray-500 text-center mb-1">- Advertisement -</p>
         <ins
           className="adsbygoogle"
