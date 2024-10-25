@@ -64,7 +64,7 @@ export function generateMetadata(): Metadata {
 export default function ToolsPage() {
   const adFrequency = 4 
   
-export default function ToolsPage() {
+
   return (
     <div className="min-h-screen py-16">
       <main className="container mx-auto px-6">
