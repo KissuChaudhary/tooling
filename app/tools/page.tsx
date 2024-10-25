@@ -249,7 +249,7 @@ const tools = [
 ]
 
 export function generateMetadata(): Metadata {
-  const pageTitle = 'Explore All Free AI Tools | Your Site Name'
+  const pageTitle = 'Explore All Free AI Tools | Saze AI'
   const pageDescription = 'Unleash your creativity and boost productivity with our cutting-edge AI-powered tools. Discover a wide range of free AI tools for various tasks.'
 
   return {
@@ -259,6 +259,8 @@ export function generateMetadata(): Metadata {
 }
 
 export default function ToolsPage() {
+  const adFrequency = 4 // Show an ad after every 4 tools
+
   return (
     <div className="min-h-screen py-16">
       <main className="container mx-auto px-6">
@@ -275,33 +277,44 @@ export default function ToolsPage() {
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {tools.map((tool, index) => (
-            <Link key={index} href={tool.link} passHref>
-              <Card className="group transition-all duration-300 hover:shadow-xl hover:scale-105">
-                <CardHeader className="relative pb-0">
-                  <div className="absolute top-4 left-4 bg-gray-100 rounded-full p-3 transition-all duration-300 group-hover:scale-110">
-                    {tool.icon}
-                  </div>
-                  {tool.badge && (
-                    <Badge 
-                      variant="secondary" 
-                      className={`absolute top-4 right-4 text-xs font-semibold ${tool.badge.color} px-2 py-1 rounded-md`}
-                    >
-                      {tool.badge.text}
-                    </Badge>
-                  )}
-                </CardHeader>
-                <CardContent className="pt-16">
-                  <CardTitle className="text-xl font-bold mb-2">{tool.title}</CardTitle>
-                  <CardDescription className="text-sm">{tool.description}</CardDescription>
-                </CardContent>
-              </Card>
-            </Link>
+            <>
+              <Link key={tool.title} href={tool.link} passHref>
+                <Card className="group transition-all duration-300 hover:shadow-xl hover:scale-105">
+                  <CardHeader className="relative pb-0">
+                    <div className="absolute top-4 left-4 bg-gray-100 rounded-full p-3 transition-all duration-300 group-hover:scale-110">
+                      {tool.icon}
+                    </div>
+                    {tool.badge && (
+                      <Badge 
+                        variant="secondary" 
+                        className={`absolute top-4 right-4 text-xs font-semibold ${tool.badge.color} px-2 py-1 rounded-md`}
+                      >
+                        {tool.badge.text}
+                      </Badge>
+                    )}
+                  </CardHeader>
+                  <CardContent className="pt-16">
+                    <CardTitle className="text-xl font-bold mb-2">{tool.title}</CardTitle>
+                    <CardDescription className="text-sm">{tool.description}</CardDescription>
+                  </CardContent>
+                </Card>
+              </Link>
+              {(index + 1) % adFrequency === 0 && index !== tools.length - 1 && (
+                <div key={`ad-${index}`} className="col-span-full">
+                  <AdUnit 
+                    client="ca-pub-7915372771416695"
+                    slot="8441706260"
+                    style={{ margin: '20px 0' }}
+                  />
+                </div>
+              )}
+            </>
           ))}
         </div>
         <AdUnit 
           client="ca-pub-7915372771416695"
           slot="8441706260"
-          style={{ marginBottom: '20px' }}
+          style={{ marginTop: '20px' }}
         />
       </main>
     </div>
