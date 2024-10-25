@@ -6,6 +6,8 @@ import WebSiteSchema from './WebSiteSchema'
 import { Metadata } from 'next'
 import ScrollToTopButton from '@/components/ScrollToTopButton'
 import Script from 'next/script'
+import AdBlockerDetector from '@/components/ad-blocker-detector'
+
 
 export const metadata: Metadata = {
   title: {
@@ -99,6 +101,7 @@ export default function RootLayout({
             <Header />
             <main>
               {children}
+              <AdBlockerDetector />
             </main>
             <ScrollToTopButton />
             <Footer />
