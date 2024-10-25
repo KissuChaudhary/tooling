@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { ShieldAlert } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -8,89 +9,100 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
 } from "@/components/ui/dialog"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 export default function AdBlockerDetector() {
   const [isAdBlockerDetected, setIsAdBlockerDetected] = useState(false)
   const [showModal, setShowModal] = useState(false)
 
-  useEffect(() => {
-    const detectAdBlocker = async () => {
-      let adBlockDetected = false
+  const detectAdBlocker = async () => {
+    let adBlockDetected = false
 
-      // Method 1: Adbox detection
-      const testAd = document.createElement('div')
-      testAd.innerHTML = '&nbsp;'
-      testAd.className = 'adsbox'
-      document.body.appendChild(testAd)
+    // Method 1: Adbox detection
+    const testAd = document.createElement('div')
+    testAd.innerHTML = '&nbsp;'
+    testAd.className = 'adsbox'
+    document.body.appendChild(testAd)
 
-      window.setTimeout(() => {
-        if (testAd.offsetHeight === 0) {
-          adBlockDetected = true
-        }
-        testAd.remove()
+    await new Promise(resolve => setTimeout(resolve, 100))
 
-        // If adblock is already detected, no need to check the second method
-        if (adBlockDetected) {
-          setIsAdBlockerDetected(true)
-          return
-        }
+    if (testAd.offsetHeight === 0) {
+      adBlockDetected = true
+    }
+    testAd.remove()
 
-        // Method 2: Google AdSense fetch
-        fetch('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js', {
+    // Method 2: Google AdSense fetch
+    if (!adBlockDetected) {
+      try {
+        await fetch('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js', {
           method: 'HEAD',
           mode: 'no-cors',
           cache: 'no-store',
         })
-        .then(() => {
-          // AdSense loaded successfully, likely no ad blocker
-        })
-        .catch(() => {
-          // Failed to load AdSense, likely due to an ad blocker
-          setIsAdBlockerDetected(true)
-        })
-      }, 100)
+      } catch {
+        adBlockDetected = true
+      }
     }
 
-    const hasBeenPrompted = localStorage.getItem('adBlockerPrompted')
-    if (!hasBeenPrompted) {
-      detectAdBlocker()
-    }
-  }, [])
+    return adBlockDetected
+  }
 
   useEffect(() => {
-    if (isAdBlockerDetected) {
-      setShowModal(true)
-      localStorage.setItem('adBlockerPrompted', 'true')
+    const checkAdBlocker = async () => {
+      const detected = await detectAdBlocker()
+      setIsAdBlockerDetected(detected)
+      setShowModal(detected)
     }
-  }, [isAdBlockerDetected])
 
-  const handleClose = () => {
-    setShowModal(false)
+    checkAdBlocker()
+    const interval = setInterval(checkAdBlocker, 5000) // Check every 5 seconds
+
+    return () => clearInterval(interval)
+  }, [])
+
+  const handleClose = async () => {
+    const stillDetected = await detectAdBlocker()
+    if (stillDetected) {
+      alert("It seems your ad blocker is still active. Please disable it and try again.")
+    } else {
+      setShowModal(false)
+      setIsAdBlockerDetected(false)
+    }
   }
 
   if (!showModal) return null
 
   return (
     <Dialog open={showModal} onOpenChange={setShowModal}>
-      <DialogContent>
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Ad Blocker Detected</DialogTitle>
+          <DialogTitle className="flex items-center gap-2">
+            <ShieldAlert className="h-6 w-6 text-red-500" />
+            Ad Blocker Detected
+          </DialogTitle>
           <DialogDescription>
-            We've detected that you're using an ad blocker. Our website relies on ad revenue to keep running and provide you with free content. Please disable your ad blocker to continue using our site.
+            We've detected that you're using an ad blocker. Our website relies on ad revenue to keep running and provide you with free content.
           </DialogDescription>
         </DialogHeader>
-        <div className="mt-4">
-          <h3 className="font-semibold mb-2">How to disable your ad blocker:</h3>
-          <ol className="list-decimal list-inside space-y-1">
-            <li>Look for the ad blocker icon in your browser's toolbar</li>
-            <li>Click on the icon and select "Pause" or "Disable" for this site</li>
-            <li>Refresh the page to see the changes</li>
-          </ol>
+        <div className="my-6">
+          <Alert>
+            <AlertTitle>How to disable your ad blocker:</AlertTitle>
+            <AlertDescription>
+              <ol className="list-decimal list-inside space-y-1 mt-2">
+                <li>Look for the ad blocker icon in your browser's toolbar</li>
+                <li>Click on the icon and select "Pause" or "Disable" for this site</li>
+                <li>Refresh the page to see the changes</li>
+              </ol>
+            </AlertDescription>
+          </Alert>
         </div>
-        <Button onClick={handleClose} className="mt-4">
-          I've disabled my ad blocker
-        </Button>
+        <DialogFooter>
+          <Button onClick={handleClose} className="w-full">
+            I've disabled my ad blocker
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   )
