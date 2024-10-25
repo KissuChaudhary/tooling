@@ -65,11 +65,11 @@ export function generateMetadata(): Metadata {
 export default function ToolsPage() {
   return (
     <div className="min-h-screen py-16">
-      <main className="container mx-auto px-6
-         <AdUnit 
+      <main className="container mx-auto px-6">
+        <AdUnit 
           client="ca-pub-7915372771416695"
           slot="8441706260"
-          style={{ marginTop: '20px' }}
+          style={{ marginBottom: '20px' }}
         />
         <h1 className="text-5xl md:text-6xl font-extrabold mb-6 text-center animate-fade-in-down">
           Explore All Free AI Tools
