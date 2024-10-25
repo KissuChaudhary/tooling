@@ -3,6 +3,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { MessageSquare, Search, ShoppingBag, Image, Star, Volume2 } from 'lucide-react'
 import { Metadata } from 'next'
+import AdUnit from '../../components/AdUnit'
+
 
 const tools = [
   {
@@ -51,19 +53,26 @@ const tools = [
 ]
 
 export function generateMetadata(): Metadata {
-  const pageTitle = 'Explore All Free AI Tools | Your Site Name'
-  const pageDescription = 'Unleash your creativity and boost productivity with our cutting-edge AI-powered tools. Discover a wide range of free AI tools for various tasks.'
+  const pageTitle = 'Explore All Free AI Tools | Saze AI'
+  const pageDescription = 'Unleash your creativity and boost productivity with our cutting-edge AI-powered tools. Discover a wide range of free AI tools for marketing tasks.'
 
   return {
     title: pageTitle,
     description: pageDescription,
   }
 }
-
+export default function ToolsPage() {
+  const adFrequency = 4 
+  
 export default function ToolsPage() {
   return (
     <div className="min-h-screen py-16">
       <main className="container mx-auto px-6">
+           <AdUnit 
+          client="ca-pub-7915372771416695"
+          slot="8441706260"
+          style={{ marginBottom: '20px' }}
+        />
         <h1 className="text-5xl md:text-6xl font-extrabold mb-6 text-center animate-fade-in-down">
           Explore All Free AI Marketing Tools
         </h1>
@@ -72,6 +81,7 @@ export default function ToolsPage() {
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {tools.map((tool, index) => (
+      <>
             <Link key={index} href={tool.link} passHref>
               <Card className="group transition-all duration-300 hover:shadow-xl hover:scale-105">
                 <CardHeader className="relative pb-0">
@@ -93,8 +103,23 @@ export default function ToolsPage() {
                 </CardContent>
               </Card>
             </Link>
+           {(index + 1) % adFrequency === 0 && index !== tools.length - 1 && (
+                <div key={`ad-${index}`} className="col-span-full">
+                  <AdUnit 
+                    client="ca-pub-7915372771416695"
+                    slot="8441706260"
+                    style={{ margin: '20px 0' }}
+                  />
+                </div>
+              )}
+            </>
           ))}
         </div>
+         <AdUnit 
+          client="ca-pub-7915372771416695"
+          slot="8441706260"
+          style={{ marginTop: '20px' }}
+        />
       </main>
     </div>
   )
