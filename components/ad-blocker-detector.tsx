@@ -11,10 +11,9 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 
 export default function AdBlockerDetector() {
-  const [isAdBlockerDetected, setIsAdBlockerDetected] = useState(false)
   const [showModal, setShowModal] = useState(false)
 
   const detectAdBlocker = async () => {
@@ -52,7 +51,6 @@ export default function AdBlockerDetector() {
   useEffect(() => {
     const checkAdBlocker = async () => {
       const detected = await detectAdBlocker()
-      setIsAdBlockerDetected(detected)
       setShowModal(detected)
     }
 
@@ -68,7 +66,6 @@ export default function AdBlockerDetector() {
       alert("It seems your ad blocker is still active. Please disable it and try again.")
     } else {
       setShowModal(false)
-      setIsAdBlockerDetected(false)
     }
   }
 
@@ -88,9 +85,9 @@ export default function AdBlockerDetector() {
         </DialogHeader>
         <div className="my-6">
           <Alert>
-            <AlertTitle>How to disable your ad blocker:</AlertTitle>
             <AlertDescription>
-              <ol className="list-decimal list-inside space-y-1 mt-2">
+              <h3 className="font-semibold mb-2">How to disable your ad blocker:</h3>
+              <ol className="list-decimal list-inside space-y-1">
                 <li>Look for the ad blocker icon in your browser's toolbar</li>
                 <li>Click on the icon and select "Pause" or "Disable" for this site</li>
                 <li>Refresh the page to see the changes</li>
