@@ -3,6 +3,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { MessageSquare, Search, ShoppingBag, Image, Star, Volume2 } from 'lucide-react'
 import { Metadata } from 'next'
+import AdUnit from '../../components/AdUnit'
+
 
 const tools = [
   {
@@ -63,7 +65,12 @@ export function generateMetadata(): Metadata {
 export default function ToolsPage() {
   return (
     <div className="min-h-screen py-16">
-      <main className="container mx-auto px-6">
+      <main className="container mx-auto px-6
+         <AdUnit 
+          client="ca-pub-7915372771416695"
+          slot="8441706260"
+          style={{ marginTop: '20px' }}
+        />
         <h1 className="text-5xl md:text-6xl font-extrabold mb-6 text-center animate-fade-in-down">
           Explore All Free AI Tools
         </h1>
@@ -95,6 +102,11 @@ export default function ToolsPage() {
             </Link>
           ))}
         </div>
+        <AdUnit 
+          client="ca-pub-7915372771416695"
+          slot="6282756837"
+          style={{ marginTop: '20px' }}
+        />
       </main>
     </div>
   )
