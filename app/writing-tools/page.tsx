@@ -158,7 +158,9 @@ export function generateMetadata(): Metadata {
     description: pageDescription,
   }
 }
-
+export default function ToolsPage() {
+  const adFrequency = 8
+    
 export default function ToolsPage() {
   return (
     <div className="min-h-screen py-16">
@@ -176,6 +178,7 @@ export default function ToolsPage() {
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {tools.map((tool, index) => (
+      <>
             <Link key={index} href={tool.link} passHref>
               <Card className="group transition-all duration-300 hover:shadow-xl hover:scale-105">
                 <CardHeader className="relative pb-0">
@@ -197,6 +200,16 @@ export default function ToolsPage() {
                 </CardContent>
               </Card>
             </Link>
+       {(index + 1) % adFrequency === 0 && index !== tools.length - 1 && (
+                <div key={`ad-${index}`} className="col-span-full">
+                  <AdUnit 
+                    client="ca-pub-7915372771416695"
+                    slot="8441706260"
+                    style={{ margin: '20px 0' }}
+                  />
+                </div>
+              )}
+        </>
           ))}
         </div>
         <AdUnit 
