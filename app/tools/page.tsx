@@ -259,7 +259,7 @@ export function generateMetadata(): Metadata {
 }
 
 export default function ToolsPage() {
-  const adFrequency = 4 // Show an ad after every 4 tools
+  const adFrequency = 8 
 
   return (
     <div className="min-h-screen py-16">
