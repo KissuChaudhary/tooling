@@ -34,7 +34,7 @@ export default function AdOverlay({ imageUrl, onClose }: AdOverlayProps) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded-lg max-w-md w-full">
-        <h2 className="text-2xl font-bold mb-4">Download Image</h2>
+        <h2 className="text-2xl font-bold mb-4">No Need to Interact, Image will be downloaded automatically!</h2>
         <div className="mb-4 bg-gray-200 p-4 text-center">
           {/* Placeholder for Google AdSense ad */}
           <AdUnit 
