@@ -72,8 +72,13 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="h/tools/ai-pickup-lines-generator" className="hover:text-foreground transition-colors">
+                <Link href="/tools/ai-pickup-lines-generator" className="hover:text-foreground transition-colors">
                   AI Pickup Lines Generator
+                </Link>
+              </li>
+               <li>
+                <Link href="/tools/ai-influencer-generator" className="hover:text-foreground transition-colors">
+                  AI Influencer Generator
                 </Link>
               </li>
             </ul>
