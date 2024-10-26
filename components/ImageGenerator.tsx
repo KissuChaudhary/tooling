@@ -104,7 +104,7 @@ export default function ImageGenerator() {
   const getImagePreviewStyle = () => {
     switch (params.image_size) {
       case 'portrait':
-        return 'aspect-[3/4] w-full max-w-[512px]'
+        return 'aspect-[2/3] w-full max-w-[512px]'
       case 'landscape':
         return 'aspect-[3/2] w-full max-w-[768px]'
       default:
