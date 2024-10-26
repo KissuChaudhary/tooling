@@ -77,6 +77,11 @@ export default function Header() {
                     AI Text to Speech
                   </Link>
                 </li>
+                  <li>
+                  <Link href="/tools/ai-influencer-generator" className="text-muted-foreground font-semibold hover:text-foreground transition-colors duration-200">
+                    AI Influencer
+                  </Link>
+                </li>
                 <li>
                   <Link href="/tools" className="text-muted-foreground hover:text-foreground font-semibold transition-colors duration-200">
                     AI Tools
@@ -162,6 +167,15 @@ export default function Header() {
                 onClick={toggleMenu}
               >
                 AI Image Generator
+              </Link>
+            </li>
+              <li>
+              <Link 
+                href="/tools/ai-influencer-generator" 
+                className="text-3xl font-bold text-foreground hover:text-primary transition-colors duration-200" 
+                onClick={toggleMenu}
+              >
+                AI Influencer
               </Link>
             </li>
             <li>
