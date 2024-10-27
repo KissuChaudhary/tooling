@@ -136,7 +136,7 @@ export default function Header() {
             <li>
               <Link 
                 href="/" 
-                className="text-3xl font-bold text-foreground hover:text-primary transition-colors duration-200" 
+                className="text-2xl font-bold text-foreground hover:text-primary transition-colors duration-200" 
                 onClick={toggleMenu}
               >
                 Home
@@ -145,7 +145,7 @@ export default function Header() {
             <li>
               <Link 
                 href="/blog" 
-                className="text-3xl font-bold text-foreground hover:text-primary transition-colors duration-200" 
+                className="text-2xl font-bold text-foreground hover:text-primary transition-colors duration-200" 
                 onClick={toggleMenu}
               >
                 Blog
@@ -154,7 +154,7 @@ export default function Header() {
             <li>
               <Link 
                 href="/tools" 
-                className="text-3xl font-bold text-foreground hover:text-primary transition-colors duration-200" 
+                className="text-2xl font-bold text-foreground hover:text-primary transition-colors duration-200" 
                 onClick={toggleMenu}
               >
                 AI Tools
@@ -162,26 +162,18 @@ export default function Header() {
             </li>
             <li>
               <Link 
-                href="/tools/ai-image-generator" 
-                className="text-3xl font-bold text-foreground hover:text-primary transition-colors duration-200" 
+                href="/ai-image-tools" 
+                className="text-2xl font-bold text-foreground hover:text-primary transition-colors duration-200" 
                 onClick={toggleMenu}
               >
-                AI Image Generator
+                AI Image Tools
               </Link>
             </li>
-              <li>
-              <Link 
-                href="/tools/ai-influencer-generator" 
-                className="text-3xl font-bold text-foreground hover:text-primary transition-colors duration-200" 
-                onClick={toggleMenu}
-              >
-                AI Influencer
-              </Link>
-            </li>
+
             <li>
               <Link 
                 href="/tools/ai-text-to-speech" 
-                className="text-3xl font-bold text-foreground hover:text-primary transition-colors duration-200" 
+                className="text-2xl font-bold text-foreground hover:text-primary transition-colors duration-200" 
                 onClick={toggleMenu}
               >
                 AI Text-To-Speech
