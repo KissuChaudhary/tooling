@@ -194,7 +194,7 @@ export default function FaceTransform() {
         style={{ marginBottom: '20px' }}
         />
         <CardHeader className="text-foreground">
-          <CardTitle className="text-3xl font-bold text-center">Face Transformer</CardTitle>
+          <CardTitle className="text-3xl font-bold text-center">AI Face Transformer</CardTitle>
         </CardHeader>
         <CardContent className="p-6">
           <div className="flex flex-col lg:flex-row gap-6">
@@ -320,7 +320,7 @@ export default function FaceTransform() {
                 <Button
                   onClick={handleSubmit}
                   disabled={loading}
-                  className="flex-1 bg-gradient-to-r from-purple-500 to-indigo-500 text-white py-2 rounded-lg hover:from-purple-600 hover:to-indigo-600 transition-all duration-300"
+                  className="flex-1 py-2 rounded-lg hover:from-purple-600 hover:to-indigo-600 transition-all duration-300"
                 >
                   {loading ? 'Processing...' : 'Transform Face'}
                 </Button>
