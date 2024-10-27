@@ -50,7 +50,6 @@ export async function POST(req: NextRequest) {
         scale: parseInt(scale)
       }
     } else if (imageUrl) {
-      if (!isValidUrl(imageUrl)) {
         return NextResponse.json({ error: 'Invalid or disallowed image URL' }, { status: 400 })
       }
       input = { image: imageUrl, scale: parseInt(scale) }
