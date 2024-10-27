@@ -3,8 +3,8 @@ import ImageUpscaler from '@/components/ImageUpscaler'
 import { Suspense } from 'react'
 import AdUnit from '@/components/AdUnit'
 import { CheckCircle, TrendingUp, Zap, Users } from 'lucide-react'
-import { Button } from '@/components/Button'
-import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+  import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'AI Image Upscaler Tool - Enhance Image Quality with AI',
