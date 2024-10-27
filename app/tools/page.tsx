@@ -7,6 +7,35 @@ import AdUnit from '../../components/AdUnit'
 
 
 const tools = [
+{
+    icon: <Image className="h-8 w-8 text-blue-500" />,
+    title: "AI Influencer Generator",
+    description: "Create Realistic Social Media AI Influencer",
+    link: "/tools/ai-influencer-generator",
+    badge: { text: "Popular", color: "bg-green-500" }
+  },
+{
+    icon: <Zap className="h-8 w-8 text-yellow-500" />,
+    title: "AI Face Transform",
+    description: "Redefine Your Look with AI – Transform Faces into Stunning Creations!",
+    link: "/tools/ai-face-transform",
+    badge: { text: "Popular", color: "bg-pink-500" }
+  },
+  {
+    icon: <Feather className="h-8 w-8 text-pink-500" />,
+    title: "AI Image Upscaler",
+    description: "Transform Low-Res into High-Def – Upscale Your Images with AI!",
+    link: "/tools/ai-image-upscaler",
+    badge: { text: "Hot", color: "bg-red-500" }
+  },
+  {
+    icon: <Zap className="h-8 w-8 text-yellow-500" />,
+    title: "AI Background Remover",
+    description: "Effortless Background Removal for Flawless Photos – Instantly!",
+    link: "/tools/ai-background-remover",
+    badge: { text: "Popular", color: "bg-pink-500" }
+  },
+  
   {
     icon: <MessageSquare className="h-8 w-8 text-indigo-500" />,
     title: "AI Answer Generator",
