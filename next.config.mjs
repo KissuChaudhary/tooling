@@ -7,7 +7,7 @@ const nextConfig = {
         hostname: '**',
       },
     ],
-    domains: ['fal.media'],
+    domains: ['fal.media', 'replicate.delivery'],
   },
   async redirects() {
     return [

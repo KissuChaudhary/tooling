@@ -1,9 +1,14 @@
+// components\Adover.tsx
+
+
+
 'use client'
 
 import React, { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import AdUnit from '../components/AdUnit'
+
 
 
 interface AdOverlayProps {
@@ -21,18 +26,34 @@ export default function AdOverlay({ imageUrl, onClose }: AdOverlayProps) {
       return () => clearTimeout(timer)
     } else if (!downloadStarted && imageUrl) {
       setDownloadStarted(true)
-      window.open(imageUrl, '_blank')
+      downloadImage(imageUrl)
     }
   }, [timeLeft, downloadStarted, imageUrl])
 
-  const handleManualDownload = () => {
+  const downloadImage = (url: string) => {
+    fetch(url)
+      .then(response => response.blob())
+      .then(blob => {
+        const blobUrl = window.URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = blobUrl
+        link.download = 'processed_image.png'
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        window.URL.revokeObjectURL(blobUrl)
+      })
+      .catch(error => console.error('Download failed:', error))
+  }
+
+  const handleDownload = () => {
     if (imageUrl) {
-      window.open(imageUrl, '_blank')
+      downloadImage(imageUrl)
     }
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-background text-foreground p-6 rounded-lg max-w-md w-full">
         <p className="text-2xl font-bold mb-4">No Need to Interact, Image will be downloaded automatically!</p>
         <div className="mb-4 bg-gray-200 p-4 text-center">
@@ -56,7 +77,7 @@ export default function AdOverlay({ imageUrl, onClose }: AdOverlayProps) {
           <div className="text-center mb-4">
             <p>If the download didn't start automatically, click the link below:</p>
             <button
-              onClick={handleManualDownload}
+              onClick={handleDownload}
               className="text-blue-500 hover:underline"
             >
               Download Image

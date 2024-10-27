@@ -1,3 +1,7 @@
+// components\Adover.tsx
+
+
+
 'use client'
 
 import React, { useState, useEffect } from 'react'
@@ -21,13 +25,29 @@ export default function AdOverlay({ imageUrl, onClose }: AdOverlayProps) {
       return () => clearTimeout(timer)
     } else if (!downloadStarted && imageUrl) {
       setDownloadStarted(true)
-      window.open(imageUrl, '_blank')
+      downloadImage(imageUrl)
     }
   }, [timeLeft, downloadStarted, imageUrl])
 
-  const handleManualDownload = () => {
+  const downloadImage = (url: string) => {
+    fetch(url)
+      .then(response => response.blob())
+      .then(blob => {
+        const blobUrl = window.URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = blobUrl
+        link.download = 'processed_image.png'
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        window.URL.revokeObjectURL(blobUrl)
+      })
+      .catch(error => console.error('Download failed:', error))
+  }
+
+  const handleDownloaded = () => {
     if (imageUrl) {
-      window.open(imageUrl, '_blank')
+      downloadImage(imageUrl)
     }
   }
 
@@ -56,7 +76,7 @@ export default function AdOverlay({ imageUrl, onClose }: AdOverlayProps) {
           <div className="text-center mb-4">
             <p>If the download didn't start automatically, click the link below:</p>
             <button
-              onClick={handleManualDownload}
+              onClick={handleDownloaded}
               className="text-blue-500 hover:underline"
             >
               Download Image
