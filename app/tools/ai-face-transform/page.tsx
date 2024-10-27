@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import AITransform from '@/components/AITransform'
+import FaceTransform from '@/components/FaceTransform'
 import { Suspense } from 'react'
 import AdUnit from '@/components/AdUnit'
 import { CheckCircle, TrendingUp, Zap, Users } from 'lucide-react'
@@ -28,7 +28,7 @@ export default function AITransformPage() {
           </div>
 
           <Suspense fallback={<div>Loading...</div>}>
-            <AITransform />
+            <FaceTransform />
           </Suspense>
 
           <section className="bg-muted py-12">
