@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { MessageSquare, Search, ShoppingBag, Image, Star, Volume2 } from 'lucide-react'
+import { Image, Zap, Feather, Star, Volume2 } from 'lucide-react'
 import { Metadata } from 'next'
 import AdUnit from '../../components/AdUnit'
 
@@ -29,11 +29,18 @@ const tools = [
     badge: { text: "Hot", color: "bg-red-500" }
   },
   {
-    icon: <Zap className="h-8 w-8 text-yellow-500" />,
+    icon: <Star className="h-8 w-8 text-yellow-500" />,
     title: "AI Background Remover",
     description: "Effortless Background Removal for Flawless Photos – Instantly!",
     link: "/tools/ai-background-remover",
     badge: { text: "Popular", color: "bg-pink-500" }
+  },
+    {
+    icon: <Volume2 className="h-8 w-8 text-yellow-500" />,
+    title: "AI Image Generator",
+    description: "Free AI Image Generator for creative minds.",
+    link: "/tools/ai-image-generator",
+    badge: { text: "Hot", color: "bg-blue-500" }
   },
 
 ]
