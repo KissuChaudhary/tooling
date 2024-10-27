@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import BackgroundRemover from '@/components/BackgroundRemover'
+import BackgroundRemover from '@/components/BackGroundRemover'
 import { Suspense } from 'react'
 import AdUnit from '@/components/AdUnit'
 import { CheckCircle, TrendingUp, Zap, Users } from 'lucide-react'
