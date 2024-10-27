@@ -67,11 +67,7 @@ export default function Header() {
                     Home
                   </Link>
                 </li>
-                <li>
-                  <Link href="/tools/ai-image-generator" className="text-muted-foreground font-semibold hover:text-foreground transition-colors duration-200">
-                    AI Image Generator
-                  </Link>
-                </li>
+              
                 <li>
                   <Link href="/tools/ai-text-to-speech" className="text-muted-foreground font-semibold hover:text-foreground transition-colors duration-200">
                     AI Text to Speech
