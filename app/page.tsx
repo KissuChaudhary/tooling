@@ -78,6 +78,41 @@ export default function Page() {
   ]
 
   const toolkit = [
+    {
+    icon: <Image className="h-8 w-8 text-blue-500" />,
+    title: "AI Influencer Generator",
+    description: "Create Realistic Social Media AI Influencer",
+    link: "/tools/ai-influencer-generator",
+    badge: { text: "Popular", color: "bg-green-500" }
+  },
+{
+    icon: <Zap className="h-8 w-8 text-yellow-500" />,
+    title: "AI Face Transform",
+    description: "Redefine Your Look with AI – Transform Faces into Stunning Creations!",
+    link: "/tools/ai-face-transform",
+    badge: { text: "Popular", color: "bg-pink-500" }
+  },
+  {
+    icon: <Feather className="h-8 w-8 text-pink-500" />,
+    title: "AI Image Upscaler",
+    description: "Transform Low-Res into High-Def – Upscale Your Images with AI!",
+    link: "/tools/ai-image-upscaler",
+    badge: { text: "Hot", color: "bg-red-500" }
+  },
+  {
+    icon: <Star className="h-8 w-8 text-yellow-500" />,
+    title: "AI Background Remover",
+    description: "Effortless Background Removal for Flawless Photos – Instantly!",
+    link: "/tools/ai-background-remover",
+    badge: { text: "Popular", color: "bg-pink-500" }
+  },
+    {
+    icon: <Volume2 className="h-8 w-8 text-yellow-500" />,
+    title: "AI Image Generator",
+    description: "Free AI Image Generator for creative minds.",
+    link: "/tools/ai-image-generator",
+    badge: { text: "Hot", color: "bg-blue-500" }
+  },
   {
     icon: <Zap className="h-8 w-8 text-yellow-500" />,
     title: "AI Essay Writer",
@@ -292,9 +327,9 @@ const faqData = [
         <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
       </Button>
     </Link>
-    <Link href="/tools/ai-image-generator">
+    <Link href="/tools/ai-influencer-generator">
       <Button size="lg" variant="outline" className="w-full sm:w-auto group">
-        Generate Image
+        Create AI Influencer
         <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
       </Button>
     </Link>
