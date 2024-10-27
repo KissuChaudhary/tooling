@@ -148,5 +148,8 @@ export default function ImageUpscalerPage() {
         style={{ marginBottom: '20px' }}
       />
     </div>
+        
+           </div>
+           </div>
   )
 }
