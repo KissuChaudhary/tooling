@@ -11,23 +11,9 @@ const replicate = new Replicate({
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
 const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/png', 'image/webp']
-const ALLOWED_URL_DOMAINS = ['http://localhost:3000/', 'yourdomain.com'] // Add your allowed domains here
 
 function isValidFileType(file: File): boolean {
   return ALLOWED_FILE_TYPES.includes(file.type)
-}
-
-function isValidUrl(url: string): boolean {
-  try {
-    const parsedUrl = new URL(url)
-    return ALLOWED_URL_DOMAINS.includes(parsedUrl.hostname)
-  } catch {
-    return false
-  }
-}
-
-function sanitizeFilename(filename: string): string {
-  return filename.replace(/[^a-zA-Z0-9.-]/g, '_')
 }
 
 export async function POST(req: NextRequest) {
