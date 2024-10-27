@@ -264,7 +264,7 @@ export default function FaceTransform() {
                       <SelectItem value="Clay">Clay</SelectItem>
                       <SelectItem value="3D">3D</SelectItem>
                       <SelectItem value="Emoji">Emoji</SelectItem>
-                      <SelectItem value="Pixel Art">Pixel Art</SelectItem>
+                      <SelectItem value="Pixels">Pixel Art</SelectItem>
                       <SelectItem value="Video Game">Video Game</SelectItem>
                       <SelectItem value="Toy">Toy</SelectItem>
                     </SelectContent>
