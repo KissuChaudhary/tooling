@@ -1,6 +1,3 @@
-// app\api\upscale-image\route.ts
-
-
 import { NextRequest, NextResponse } from 'next/server'
 import Replicate from 'replicate'
 import { createHash } from 'crypto'
@@ -45,14 +42,16 @@ export async function POST(req: NextRequest) {
       const buffer = Buffer.from(bytes)
       const base64 = buffer.toString('base64')
       const mimeType = file.type
+      
       input = { 
         image: `data:${mimeType};base64,${base64}`,
         scale: parseInt(scale)
       }
     } else if (imageUrl) {
-        return NextResponse.json({ error: 'Invalid or disallowed image URL' }, { status: 400 })
+      input = { 
+        image: imageUrl, 
+        scale: parseInt(scale) 
       }
-      input = { image: imageUrl, scale: parseInt(scale) }
     } else {
       // This case should never happen due to the earlier check, but it satisfies TypeScript
       return NextResponse.json({ error: 'No valid input provided' }, { status: 400 })
@@ -80,12 +79,11 @@ export async function GET(req: NextRequest) {
 
   try {
     const prediction = await replicate.predictions.get(predictionId)
-
+    
     if (prediction.status === 'succeeded') {
       // Generate a unique filename for the processed image
       const hash = createHash('md5').update(predictionId).digest('hex')
       const filename = `upscaled_image_${hash}.png`
-
       return NextResponse.json({ 
         output: prediction.output,
         filename: filename
