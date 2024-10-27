@@ -78,7 +78,7 @@ export default function Header() {
                   </Link>
                 </li>
                   <li>
-                  <Link href="/tools/ai-image-tools" className="text-muted-foreground font-semibold hover:text-foreground transition-colors duration-200">
+                  <Link href="/ai-image-tools" className="text-muted-foreground font-semibold hover:text-foreground transition-colors duration-200">
                     AI Image Tools
                   </Link>
                 </li>
