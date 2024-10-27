@@ -186,7 +186,7 @@ export default function FaceTransform() {
   }
 
    return (
-    <div className="mx-auto p-4 min-h-screen">
+    <div className="mx-auto p-2 min-h-screen">
       <Card className="w-full max-w-7xl mx-auto shadow">
            <AdUnit 
         client="ca-pub-7915372771416695"
