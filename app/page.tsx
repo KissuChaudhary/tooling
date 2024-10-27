@@ -16,6 +16,9 @@ import {
   Check,
   MessageSquare,
   BookOpen,
+  Feather,
+  Star,
+  Volume2,
   Sunrise,
   Music,
   Puzzle,
@@ -30,6 +33,7 @@ import {
   Rocket,
   Search,
   ChevronDown,
+  Image
 } from "lucide-react"
 
 
