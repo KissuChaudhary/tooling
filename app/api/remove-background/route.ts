@@ -42,13 +42,12 @@ export async function POST(req: NextRequest) {
       const base64 = buffer.toString('base64')
       const mimeType = file.type
       const sanitizedFilename = sanitizeFilename(file.name)
+      
       input = { 
         image: `data:${mimeType};base64,${base64}`,
         filename: sanitizedFilename
       }
     } else if (imageUrl) {
-        return NextResponse.json({ error: 'No file or image URL provided' }, { status: 400 })
-      }
       input = { image: imageUrl }
     } else {
       // This case should never happen due to the earlier check, but it satisfies TypeScript
@@ -77,12 +76,11 @@ export async function GET(req: NextRequest) {
 
   try {
     const prediction = await replicate.predictions.get(predictionId)
-
+    
     if (prediction.status === 'succeeded') {
       // Generate a unique filename for the processed image
       const hash = createHash('md5').update(predictionId).digest('hex')
       const filename = `processed_image_${hash}.png`
-
       return NextResponse.json({ 
         output: prediction.output,
         filename: filename
