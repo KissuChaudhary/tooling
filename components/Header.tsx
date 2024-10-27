@@ -78,8 +78,8 @@ export default function Header() {
                   </Link>
                 </li>
                   <li>
-                  <Link href="/tools/ai-influencer-generator" className="text-muted-foreground font-semibold hover:text-foreground transition-colors duration-200">
-                    AI Influencer
+                  <Link href="/tools/ai-image-tools" className="text-muted-foreground font-semibold hover:text-foreground transition-colors duration-200">
+                    AI Image Tools
                   </Link>
                 </li>
                 <li>
