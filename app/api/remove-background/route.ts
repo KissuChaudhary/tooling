@@ -47,8 +47,7 @@ export async function POST(req: NextRequest) {
         filename: sanitizedFilename
       }
     } else if (imageUrl) {
-      if (!isValidUrl(imageUrl)) {
-        return NextResponse.json({ error: 'Invalid or disallowed image URL' }, { status: 400 })
+        return NextResponse.json({ error: 'No file or image URL provided' }, { status: 400 })
       }
       input = { image: imageUrl }
     } else {
