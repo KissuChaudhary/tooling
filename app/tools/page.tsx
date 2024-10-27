@@ -42,6 +42,13 @@ const tools = [
     description: "Generate precise answers to your questions using AI.",
     link: "/tools/ai-answer-generator"
   },
+     {
+    icon: <Volume2 className="h-8 w-8 text-yellow-500" />,
+    title: "AI Image Generator",
+    description: "Free AI Image Generator for creative minds.",
+    link: "/tools/ai-image-generator",
+    badge: { text: "Hot", color: "bg-blue-500" }
+  },
   {
     icon: <History className="h-8 w-8 text-purple-600" />,
     title: "AI Backstory Generator",
