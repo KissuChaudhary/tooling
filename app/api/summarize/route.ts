@@ -9,63 +9,70 @@ const openai = new OpenAI({
 
 export async function POST(request: NextRequest) {
   try {
-    const { url } = await request.json();
+    const { url, text } = await request.json();
 
-    if (!url) {
+    if (!url && !text) {
       return NextResponse.json(
-        { error: 'URL is required' },
+        { error: 'Either URL or text is required' },
         { status: 400 }
       );
     }
 
-    // Fetch and parse content
-    const response = await fetch(url);
-    const html = await response.text();
-    const $ = cheerio.load(html);
-
-    // Remove unwanted elements
-    $('script, style, nav, footer, header, aside').remove();
-    $('.advertisement, #comments').remove();
-
-    // Try to find main content
-    const contentSelectors = [
-      'article',
-      '[role="main"]',
-      'main',
-      '.main-content',
-      '#main-content',
-      '.post-content',
-      '.article-content',
-      '.content'
-    ];
-
     let content = '';
-    const title = $('title').text() || $('h1').first().text() || '';
 
-    // Try each selector until we find content
-    for (const selector of contentSelectors) {
-      const element = $(selector);
-      if (element.length > 0) {
-        content = element.first().text().trim();
-        break;
+    if (url) {
+      // Fetch and parse content from URL
+      const response = await fetch(url);
+      const html = await response.text();
+      const $ = cheerio.load(html);
+
+      // Remove unwanted elements
+      $('script, style, nav, footer, header, aside').remove();
+      $('.advertisement, #comments').remove();
+
+      // Try to find main content
+      const contentSelectors = [
+        'article',
+        '[role="main"]',
+        'main',
+        '.main-content',
+        '#main-content',
+        '.post-content',
+        '.article-content',
+        '.content'
+      ];
+
+      // Try each selector until we find content
+      for (const selector of contentSelectors) {
+        const element = $(selector);
+        if (element.length > 0) {
+          content = element.first().text().trim();
+          break;
+        }
       }
-    }
 
-    // Fallback to body content if no main content found
-    if (!content) {
-      content = $('body').text().trim();
-    }
+      // Fallback to body content if no main content found
+      if (!content) {
+        content = $('body').text().trim();
+      }
 
-    // Clean up the content
-    content = content
-      .replace(/\s+/g, ' ')
-      .replace(/\n\s*\n/g, '\n')
-      .replace(/[\t\r]/g, '')
-      .trim();
+      // Clean up the content
+      content = content
+        .replace(/\s+/g, ' ')
+        .replace(/\n\s*\n/g, '\n')
+        .replace(/[\t\r]/g, '')
+        .trim();
+
+      // Limit content to 4000 characters for URL input
+      content = content.slice(0, 4000);
+    } else {
+      // Use the provided text (already limited to 1500 words in frontend)
+      content = text;
+    }
 
     // Get AI summary, key points, and best lines
     const aiResponse = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-4o-mini",
       messages: [
         {
           role: "system",
@@ -73,7 +80,7 @@ export async function POST(request: NextRequest) {
         },
         {
           role: "user",
-          content: `Please analyze this text and provide a summary, key points, and best lines: ${content.substring(0, 4000)}` // Limit content length
+          content: `Please analyze this text and provide a summary, key points, and best lines: ${content}`
         }
       ],
       response_format: { type: "json_object" }
@@ -88,7 +95,6 @@ export async function POST(request: NextRequest) {
     const aiResult = JSON.parse(aiContent);
 
     return NextResponse.json({
-      title,
       summary: aiResult.summary,
       keyPoints: aiResult.keyPoints,
       bestLines: aiResult.bestLines,
