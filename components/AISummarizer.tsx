@@ -1,72 +1,75 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Share2, Download, Copy, CheckCircle2, Timer, FileText } from 'lucide-react';
+import { Share2, Download, Copy, Timer, FileText, Link, AlignLeft } from 'lucide-react';
+import { useToast } from "@/components/ui/use-toast";
+import { Textarea } from "@/components/ui/textarea";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 
 interface SummaryContent {
-  fullText: string;
   summary: string;
   keyPoints: string[];
-  title?: string;
+  bestLines: string[];
   wordCount: number;
-  readingTime?: number;
 }
 
 export default function AISummarizer() {
+  const [inputType, setInputType] = useState<'url' | 'text'>('url');
   const [url, setUrl] = useState('');
+  const [text, setText] = useState('');
+  const [wordCount, setWordCount] = useState(0);
   const [content, setContent] = useState<SummaryContent | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [copied, setCopied] = useState(false);
+  const { toast } = useToast();
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setLoading(true);
-  setError('');
+  useEffect(() => {
+    const words = text.split(/\s+/).filter(word => word.length > 0);
+    setWordCount(words.length);
+  }, [text]);
 
-  try {
-    const response = await fetch('/api/summarize', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url }),
-    });
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    setContent(null);
 
-    // Check if the response content type is JSON before parsing
-    const contentType = response.headers.get('content-type');
-    let data;
+    try {
+      const response = await fetch('/api/summarize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(inputType === 'url' ? { url } : { text }),
+      });
 
-    if (contentType && contentType.includes('application/json')) {
-      data = await response.json();
-    } else {
-      // Handle non-JSON response (e.g., plain text or HTML)
-      const text = await response.text();
-      throw new Error(text || 'Unknown error occurred');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to fetch content');
+      }
+
+      const data = await response.json();
+      setContent(data);
+      setUrl('');
+      setText('');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setLoading(false);
     }
-
-    if (!response.ok) {
-      throw new Error(data.error || 'Failed to fetch content');
-    }
-
-    setContent(data);
-    setUrl('');
-  } catch (err) {
-    setError(err instanceof Error ? err.message : 'An error occurred');
-  } finally {
-    setLoading(false);
-  }
-};
-
+  };
 
   const handleCopy = async (text: string) => {
     await navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    toast({
+      title: "Copied to clipboard",
+      description: "The content has been copied to your clipboard.",
+    });
   };
 
   const handleDownload = (text: string, filename: string) => {
@@ -79,19 +82,41 @@ const handleSubmit = async (e: React.FormEvent) => {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+    toast({
+      title: "Download started",
+      description: `${filename} is being downloaded.`,
+    });
   };
 
   const handleShare = async () => {
     if (navigator.share && content) {
       try {
         await navigator.share({
-          title: content.title || 'Article Summary',
+          title: 'Article Summary',
           text: content.summary,
           url: url
         });
+        toast({
+          title: "Shared successfully",
+          description: "The content has been shared.",
+        });
       } catch (err) {
         console.error('Error sharing:', err);
+        toast({
+          title: "Share failed",
+          description: "There was an error while sharing the content.",
+          variant: "destructive",
+        });
       }
+    }
+  };
+
+  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newText = e.target.value;
+    const words = newText.split(/\s+/).filter(word => word.length > 0);
+    if (words.length <= 1500) {
+      setText(newText);
+      setWordCount(words.length);
     }
   };
 
@@ -102,19 +127,50 @@ const handleSubmit = async (e: React.FormEvent) => {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="flex gap-2">
-            <Input
-              type="url"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              placeholder="Enter URL to analyze"
-              required
-              className="flex-1"
-            />
-            <Button type="submit" disabled={loading}>
-              {loading ? 'Processing...' : 'Analyze'}
-            </Button>
-          </div>
+          <RadioGroup defaultValue="url" onValueChange={(value) => setInputType(value as 'url' | 'text')} className="flex space-x-4 mb-4">
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="url" id="url" />
+              <Label htmlFor="url">URL</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="text" id="text" />
+              <Label htmlFor="text">Text</Label>
+            </div>
+          </RadioGroup>
+
+          {inputType === 'url' ? (
+            <div className="flex gap-2">
+              <Input
+                type="url"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                placeholder="Enter URL to analyze"
+                required
+                className="flex-1"
+              />
+              <Button type="submit" disabled={loading}>
+                {loading ? 'Processing...' : 'Analyze'}
+              </Button>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              <Textarea
+                value={text}
+                onChange={handleTextChange}
+                placeholder="Enter or paste text to analyze (max 1500 words)"
+                required
+                className="min-h-[200px]"
+              />
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-muted-foreground">
+                  {wordCount}/1500 words
+                </span>
+                <Button type="submit" disabled={loading || wordCount === 0}>
+                  {loading ? 'Processing...' : 'Analyze'}
+                </Button>
+              </div>
+            </div>
+          )}
         </form>
 
         {error && (
@@ -131,29 +187,44 @@ const handleSubmit = async (e: React.FormEvent) => {
           </div>
         )}
 
+        {!content && !loading && (
+          <div className="mt-8 text-center space-y-4">
+            <div className="flex justify-center space-x-4">
+              <div className="text-center">
+                <Link className="w-12 h-12 text-primary" />
+                <p className="mt-2 text-sm font-medium">Analyze URLs</p>
+              </div>
+              <div className="text-center">
+                <AlignLeft className="w-12 h-12 text-primary" />
+                <p className="mt-2 text-sm font-medium">Summarize Text</p>
+              </div>
+            </div>
+            <p className="text-muted-foreground">
+              Enter a URL or paste text to get started with AI-powered summarization.
+            </p>
+          </div>
+        )}
+
         {content && !loading && (
           <div className="mt-8">
-            {content.title && (
-              <div className="mb-4">
-                <h2 className="text-xl font-semibold">{content.title}</h2>
-                <div className="flex gap-2 mt-2">
-                  <Badge variant="secondary" className="flex items-center gap-1">
-                    <FileText className="w-3 h-3" />
-                    {content.wordCount} words
-                  </Badge>
-                  <Badge variant="secondary" className="flex items-center gap-1">
-                    <Timer className="w-3 h-3" />
-                    {content.readingTime} min read
-                  </Badge>
-                </div>
+            <div className="mb-4">
+              <div className="flex gap-2 mt-2">
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  <FileText className="w-3 h-3" />
+                  {content.wordCount} words
+                </Badge>
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  <Timer className="w-3 h-3" />
+                  {Math.ceil(content.wordCount / 200)} min read
+                </Badge>
               </div>
-            )}
+            </div>
 
             <Tabs defaultValue="summary" className="w-full">
               <TabsList className="w-full">
                 <TabsTrigger value="summary" className="flex-1">Summary</TabsTrigger>
                 <TabsTrigger value="key" className="flex-1">Key Points</TabsTrigger>
-                <TabsTrigger value="full" className="flex-1">Full Text</TabsTrigger>
+                <TabsTrigger value="best" className="flex-1">Best Lines</TabsTrigger>
               </TabsList>
 
               <TabsContent value="summary" className="mt-4">
@@ -163,31 +234,30 @@ const handleSubmit = async (e: React.FormEvent) => {
                       {content.summary}
                     </div>
                     <div className="flex justify-end gap-2 mt-4">
-  <Button
-    variant="outline"
-    size="sm"
-    onClick={() => handleCopy(content.summary)}
-  >
-    {copied ? <CheckCircle2 className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-  </Button>
-  <Button
-    variant="outline"
-    size="sm"
-    onClick={() => handleDownload(content.summary, 'summary.txt')}
-  >
-    <Download className="w-4 h-4" />
-  </Button>
-  {typeof window !== 'undefined' && typeof navigator.share === 'function' && (
-    <Button
-      variant="outline"
-      size="sm"
-      onClick={handleShare}
-    >
-      <Share2 className="w-4 h-4" />
-    </Button>
-  )}
-</div>
-
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleCopy(content.summary)}
+                      >
+                        <Copy className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDownload(content.summary, 'summary.txt')}
+                      >
+                        <Download className="w-4 h-4" />
+                      </Button>
+                      {typeof navigator.share === 'function' && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={handleShare}
+                        >
+                          <Share2 className="w-4 h-4" />
+                        </Button>
+                      )}
+                    </div>
                   </CardContent>
                 </Card>
               </TabsContent>
@@ -209,11 +279,15 @@ const handleSubmit = async (e: React.FormEvent) => {
                 </Card>
               </TabsContent>
 
-              <TabsContent value="full" className="mt-4">
+              <TabsContent value="best" className="mt-4">
                 <Card>
                   <CardContent className="pt-6">
-                    <div className="prose max-w-none whitespace-pre-wrap">
-                      {content.fullText}
+                    <div className="space-y-4">
+                      {content.bestLines.map((line, index) => (
+                        <blockquote key={index} className="border-l-4 border-primary pl-4 italic">
+                          "{line}"
+                        </blockquote>
+                      ))}
                     </div>
                   </CardContent>
                 </Card>
@@ -224,4 +298,4 @@ const handleSubmit = async (e: React.FormEvent) => {
       </CardContent>
     </Card>
   );
-    }
+}
