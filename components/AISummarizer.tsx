@@ -8,7 +8,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Share2, Download, Copy, Timer, FileText, Link, AlignLeft } from 'lucide-react';
-import { useToast } from "@/components/ui/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
@@ -28,7 +27,7 @@ export default function AISummarizer() {
   const [content, setContent] = useState<SummaryContent | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const { toast } = useToast();
+  const [notification, setNotification] = useState('');
 
   useEffect(() => {
     const words = text.split(/\s+/).filter(word => word.length > 0);
@@ -66,10 +65,8 @@ export default function AISummarizer() {
 
   const handleCopy = async (text: string) => {
     await navigator.clipboard.writeText(text);
-    toast({
-      title: "Copied to clipboard",
-      description: "The content has been copied to your clipboard.",
-    });
+    setNotification('Copied to clipboard');
+    setTimeout(() => setNotification(''), 3000);
   };
 
   const handleDownload = (text: string, filename: string) => {
@@ -82,10 +79,8 @@ export default function AISummarizer() {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    toast({
-      title: "Download started",
-      description: `${filename} is being downloaded.`,
-    });
+    setNotification(`${filename} is being downloaded`);
+    setTimeout(() => setNotification(''), 3000);
   };
 
   const handleShare = async () => {
@@ -96,18 +91,12 @@ export default function AISummarizer() {
           text: content.summary,
           url: url
         });
-        toast({
-          title: "Shared successfully",
-          description: "The content has been shared.",
-        });
+        setNotification('Content shared successfully');
       } catch (err) {
         console.error('Error sharing:', err);
-        toast({
-          title: "Share failed",
-          description: "There was an error while sharing the content.",
-          variant: "destructive",
-        });
+        setNotification('Failed to share content');
       }
+      setTimeout(() => setNotification(''), 3000);
     }
   };
 
@@ -176,6 +165,12 @@ export default function AISummarizer() {
         {error && (
           <Alert variant="destructive" className="mt-4">
             <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+
+        {notification && (
+          <Alert className="mt-4">
+            <AlertDescription>{notification}</AlertDescription>
           </Alert>
         )}
 
