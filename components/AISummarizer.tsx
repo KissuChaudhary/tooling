@@ -4,13 +4,12 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { Slider } from "@/components/ui/slider";
+import { Toggle } from "@/components/ui/toggle";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Share2, Download, Copy, Timer, FileText, Link, AlignLeft, CheckCircle2 } from 'lucide-react';
-import { Textarea } from "@/components/ui/textarea";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
 
 interface SummaryContent {
   summary: string;
@@ -20,15 +19,18 @@ interface SummaryContent {
 }
 
 export default function AISummarizer() {
-  const [inputType, setInputType] = useState<'url' | 'text'>('url');
+  const [inputType, setInputType] = useState<'url' | 'text'>('text');
   const [url, setUrl] = useState('');
   const [text, setText] = useState('');
   const [wordCount, setWordCount] = useState(0);
   const [content, setContent] = useState<SummaryContent | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [notification, setNotification] = useState('');
   const [copied, setCopied] = useState(false);
+  const [summaryLength, setSummaryLength] = useState(50);
+  const [showSummary, setShowSummary] = useState(true);
+  const [showBullets, setShowBullets] = useState(false);
+  const [showBestLine, setShowBestLine] = useState(false);
 
   useEffect(() => {
     const words = text.split(/\s+/).filter(word => word.length > 0);
@@ -45,7 +47,14 @@ export default function AISummarizer() {
       const response = await fetch('/api/summarize', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(inputType === 'url' ? { url } : { text }),
+        body: JSON.stringify({ 
+          input: inputType === 'url' ? url : text,
+          inputType,
+          summaryLength,
+          showSummary,
+          showBullets,
+          showBestLine
+        }),
       });
 
       if (!response.ok) {
@@ -55,8 +64,6 @@ export default function AISummarizer() {
 
       const data = await response.json();
       setContent(data);
-      setUrl('');
-      setText('');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
@@ -80,98 +87,101 @@ export default function AISummarizer() {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    setNotification(`${filename} is being downloaded`);
-    setTimeout(() => setNotification(''), 3000);
   };
 
   const handleShare = async () => {
     if (navigator.share && content) {
       try {
         await navigator.share({
-          title: 'Article Summary',
+          title: 'AI Summarizer Result',
           text: content.summary,
-          url: url
+          url: window.location.href
         });
-        setNotification('Content shared successfully');
       } catch (err) {
         console.error('Error sharing:', err);
-        setNotification('Failed to share content');
       }
-      setTimeout(() => setNotification(''), 3000);
     }
   };
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newText = e.target.value;
-    const words = newText.split(/\s+/).filter(word => word.length > 0);
-    if (words.length <= 1500 && newText.length <= 10000) {
+    if (newText.length <= 10000) {
       setText(newText);
-      setWordCount(words.length);
     }
   };
 
   return (
     <Card className="w-full max-w-4xl mx-auto">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold text-center">AI Content Summarizer</CardTitle>
+        <CardTitle className="text-2xl font-bold text-center">AI Summarizer</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <RadioGroup defaultValue="url" onValueChange={(value) => setInputType(value as 'url' | 'text')} className="flex space-x-4 mb-4">
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="url" id="url" />
-              <Label htmlFor="url">URL</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="text" id="text" />
-              <Label htmlFor="text">Text</Label>
-            </div>
-          </RadioGroup>
+        <div className="flex justify-between items-center mb-4">
+          <div className="flex space-x-2">
+            <Toggle pressed={inputType === 'url'} onPressedChange={() => setInputType('url')}>
+              URL
+            </Toggle>
+            <Toggle pressed={inputType === 'text'} onPressedChange={() => setInputType('text')}>
+              Text
+            </Toggle>
+          </div>
+          <div className="flex items-center space-x-2">
+            <span className="text-sm">Short</span>
+            <Slider
+              value={[summaryLength]}
+              onValueChange={(value) => setSummaryLength(value[0])}
+              max={100}
+              step={1}
+              className="w-[200px]"
+            />
+            <span className="text-sm">Long</span>
+          </div>
+        </div>
 
+        <form onSubmit={handleSubmit} className="space-y-4">
           {inputType === 'url' ? (
-            <div className="flex gap-2">
-              <Input
-                type="url"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                placeholder="Enter URL to analyze"
-                required
-                className="flex-1"
-              />
-              <Button type="submit" disabled={loading}>
-                {loading ? 'Processing...' : 'Analyze'}
-              </Button>
-            </div>
+            <Input
+              type="url"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              placeholder="Enter URL to analyze"
+              required
+            />
           ) : (
-            <div className="space-y-2">
-              <Textarea
-                value={text}
-                onChange={handleTextChange}
-                placeholder="Enter or paste text to analyze (max 1500 words or 10000 characters)"
-                required
-                className="min-h-[200px]"
-              />
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">
-                  {wordCount}/1500 words | {text.length}/10000 characters
-                </span>
-                <Button type="submit" disabled={loading || wordCount === 0}>
-                  {loading ? 'Processing...' : 'Analyze'}
-                </Button>
-              </div>
-            </div>
+            <Textarea
+              value={text}
+              onChange={handleTextChange}
+              placeholder="Enter or paste text to analyze (max 10000 characters)"
+              required
+              className="min-h-[200px]"
+            />
           )}
+
+          <div className="flex justify-between items-center">
+            <span className="text-sm text-muted-foreground">
+              {wordCount} Words / {inputType === 'text' ? text.length : url.length} characters
+            </span>
+            <Button type="submit" disabled={loading}>
+              {loading ? 'Processing...' : 'Summarize'}
+            </Button>
+          </div>
         </form>
+
+        <div className="flex justify-center space-x-2 mt-4">
+          <Toggle pressed={showSummary} onPressedChange={setShowSummary}>
+            Summary
+          </Toggle>
+          <Toggle pressed={showBullets} onPressedChange={setShowBullets}>
+            Show Bullets
+          </Toggle>
+          <Toggle pressed={showBestLine} onPressedChange={setShowBestLine}>
+            Best Line
+          </Toggle>
+        </div>
 
         {error && (
           <Alert variant="destructive" className="mt-4">
             <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
-
-        {notification && (
-          <Alert className="mt-4">
-            <AlertDescription>{notification}</AlertDescription>
           </Alert>
         )}
 
@@ -180,24 +190,6 @@ export default function AISummarizer() {
             <div className="h-4 bg-gray-100 rounded animate-pulse" />
             <div className="h-4 bg-gray-100 rounded animate-pulse w-5/6" />
             <div className="h-4 bg-gray-100 rounded animate-pulse w-4/6" />
-          </div>
-        )}
-
-        {!content && !loading && (
-          <div className="mt-8 text-center space-y-4">
-            <div className="flex justify-center space-x-4">
-              <div className="text-center">
-                <Link className="w-12 h-12 text-primary" />
-                <p className="mt-2 text-sm font-medium">Analyze URLs</p>
-              </div>
-              <div className="text-center">
-                <AlignLeft className="w-12 h-12 text-primary" />
-                <p className="mt-2 text-sm font-medium">Summarize Text</p>
-              </div>
-            </div>
-            <p className="text-muted-foreground">
-              Enter a URL or paste text to get started with AI-powered summarization.
-            </p>
           </div>
         )}
 
@@ -216,79 +208,66 @@ export default function AISummarizer() {
               </div>
             </div>
 
-            <Tabs defaultValue="summary" className="w-full">
-              <TabsList className="w-full">
-                <TabsTrigger value="summary" className="flex-1">Summary</TabsTrigger>
-                <TabsTrigger value="key" className="flex-1">Key Points</TabsTrigger>
-                <TabsTrigger value="best" className="flex-1">Best Lines</TabsTrigger>
-              </TabsList>
+            {showSummary && (
+              <Card className="mb-4">
+                <CardContent className="pt-6">
+                  <h3 className="text-lg font-semibold mb-2">Summary</h3>
+                  <div className="prose max-w-none">
+                    {content.summary}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
-              <TabsContent value="summary" className="mt-4">
-                <Card>
-                  <CardContent className="pt-6">
-                    <div className="prose max-w-none">
-                      {content.summary}
-                    </div>
-                    <div className="flex justify-end gap-2 mt-4">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleCopy(content.summary)}
-                      >
-                        {copied ? <CheckCircle2 className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleDownload(content.summary, 'summary.txt')}
-                      >
-                        <Download className="w-4 h-4" />
-                      </Button>
-                      {typeof navigator.share === 'function' && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={handleShare}
-                        >
-                          <Share2 className="w-4 h-4" />
-                        </Button>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
+            {showBullets && (
+              <Card className="mb-4">
+                <CardContent className="pt-6">
+                  <h3 className="text-lg font-semibold mb-2">Key Points</h3>
+                  <ul className="list-disc pl-5 space-y-2">
+                    {content.keyPoints.map((point, index) => (
+                      <li key={index}>{point}</li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            )}
 
-              <TabsContent value="key" className="mt-4">
-                <Card>
-                  <CardContent className="pt-6">
-                    <div className="space-y-2">
-                      {content.keyPoints.map((point, index) => (
-                        <div key={index} className="flex items-start gap-2">
-                          <Badge variant="secondary" className="mt-1">
-                            {index + 1}
-                          </Badge>
-                          <span>{point}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
+            {showBestLine && (
+              <Card className="mb-4">
+                <CardContent className="pt-6">
+                  <h3 className="text-lg font-semibold mb-2">Best Line</h3>
+                  <blockquote className="border-l-4 border-primary pl-4 italic">
+                    "{content.bestLines[0]}"
+                  </blockquote>
+                </CardContent>
+              </Card>
+            )}
 
-              <TabsContent value="best" className="mt-4">
-                <Card>
-                  <CardContent className="pt-6">
-                    <div className="space-y-4">
-                      {content.bestLines.map((line, index) => (
-                        <blockquote key={index} className="border-l-4 border-primary pl-4 italic">
-                          "{line}"
-                        </blockquote>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
+            <div className="flex justify-end gap-2 mt-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleCopy(content.summary)}
+              >
+                {copied ? <CheckCircle2 className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleDownload(content.summary, 'summary.txt')}
+              >
+                <Download className="w-4 h-4" />
+              </Button>
+              {typeof navigator.share === 'function' && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleShare}
+                >
+                  <Share2 className="w-4 h-4" />
+                </Button>
+              )}
+            </div>
           </div>
         )}
       </CardContent>
