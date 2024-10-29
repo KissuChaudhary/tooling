@@ -340,9 +340,7 @@ const faqData = [
           </div>
           {/* Bottom logo */}
           <div className="flex justify-center pt-8">
-            <a href="https://www.producthunt.com/posts/saze-ai?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-saze-ai" target="_blank" rel="noopener noreferrer">
-              <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=455121&theme=light" alt="Saze AI - AI-Powered Content Creation Tools for Writers and Creators | Product Hunt" style={{ width: '250px', height: '54px' }} width="250" height="54" />
-            </a>
+            <a href="https://www.producthunt.com/products/saze-ai/reviews?utm_source=badge-product_review&utm_medium=badge&utm_souce=badge-saze&#0045;ai" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/product_review.svg?product_id=581923&theme=light" alt="Saze&#0032;AI - Free&#0032;AI&#0032;Writer&#0032;&#0124;&#0032;Best&#0032;Free&#0032;AI&#0032;Content&#0032;Generator&#0032;Tools | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
           </div>
           <div className="hidden lg:flex flex-col space-y-8 z-30 absolute right-0 top-1/2 transform -translate-y-1/2">
           <motion.a
