@@ -1,4 +1,3 @@
-// app/api/summarize/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import * as cheerio from 'cheerio';
 import OpenAI from 'openai';
@@ -64,38 +63,37 @@ export async function POST(request: NextRequest) {
       .replace(/[\t\r]/g, '')
       .trim();
 
-   
-// Get AI summary and key points
-const aiResponse = await openai.chat.completions.create({
-  model: "gpt-4o-mini",
-  messages: [
-    {
-      role: "system",
-      content: "You are an expert content analyzer. Provide a concise summary and extract key points from the given text. Format the response as JSON with 'summary' and 'keyPoints' fields."
-    },
-    {
-      role: "user",
-      content: `Please analyze this text and provide a summary and key points: ${content.substring(0, 4000)}` // Limit content length
+    // Get AI summary, key points, and best lines
+    const aiResponse = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [
+        {
+          role: "system",
+          content: "You are an expert content analyzer. Provide a concise summary, extract key points, and identify the best lines from the given text. Format the response as JSON with 'summary', 'keyPoints', and 'bestLines' fields."
+        },
+        {
+          role: "user",
+          content: `Please analyze this text and provide a summary, key points, and best lines: ${content.substring(0, 4000)}` // Limit content length
+        }
+      ],
+      response_format: { type: "json_object" }
+    });
+
+    const aiContent = aiResponse.choices[0].message?.content;
+
+    if (!aiContent) {
+      throw new Error('AI response content is null or undefined.');
     }
-  ],
-  response_format: { type: "json_object" }
-});
 
-const aiContent = aiResponse.choices[0].message?.content;
+    const aiResult = JSON.parse(aiContent);
 
-if (!aiContent) {
-  throw new Error('AI response content is null or undefined.');
-}
-
-const aiResult = JSON.parse(aiContent);
-
-return NextResponse.json({
-  title,
-  fullText: content,
-  summary: aiResult.summary,
-  keyPoints: aiResult.keyPoints,
-  wordCount: content.split(/\s+/).length
-});
+    return NextResponse.json({
+      title,
+      summary: aiResult.summary,
+      keyPoints: aiResult.keyPoints,
+      bestLines: aiResult.bestLines,
+      wordCount: content.split(/\s+/).length
+    });
 
   } catch (error) {
     return NextResponse.json(
