@@ -20,8 +20,7 @@ interface SummaryContent {
 
 export default function AISummarizer() {
   const [inputType, setInputType] = useState<'url' | 'text'>('text');
-  const [url, setUrl] = useState('');
-  const [text, setText] = useState('');
+  const [input, setInput] = useState('');
   const [wordCount, setWordCount] = useState(0);
   const [content, setContent] = useState<SummaryContent | null>(null);
   const [loading, setLoading] = useState(false);
@@ -33,9 +32,9 @@ export default function AISummarizer() {
   const [showBestLine, setShowBestLine] = useState(false);
 
   useEffect(() => {
-    const words = text.split(/\s+/).filter(word => word.length > 0);
+    const words = input.split(/\s+/).filter(word => word.length > 0);
     setWordCount(words.length);
-  }, [text]);
+  }, [input]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,7 +47,7 @@ export default function AISummarizer() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          input: inputType === 'url' ? url : text,
+          input,
           inputType,
           summaryLength,
           showSummary,
@@ -103,10 +102,10 @@ export default function AISummarizer() {
     }
   };
 
-  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const newText = e.target.value;
-    if (newText.length <= 10000) {
-      setText(newText);
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    const newInput = e.target.value;
+    if (newInput.length <= 10000) {
+      setInput(newInput);
     }
   };
 
@@ -142,15 +141,15 @@ export default function AISummarizer() {
           {inputType === 'url' ? (
             <Input
               type="url"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
+              value={input}
+              onChange={handleInputChange}
               placeholder="Enter URL to analyze"
               required
             />
           ) : (
             <Textarea
-              value={text}
-              onChange={handleTextChange}
+              value={input}
+              onChange={handleInputChange}
               placeholder="Enter or paste text to analyze (max 10000 characters)"
               required
               className="min-h-[200px]"
@@ -159,7 +158,7 @@ export default function AISummarizer() {
 
           <div className="flex justify-between items-center">
             <span className="text-sm text-muted-foreground">
-              {wordCount} Words / {inputType === 'text' ? text.length : url.length} characters
+              {wordCount} Words / {input.length} characters
             </span>
             <Button type="submit" disabled={loading}>
               {loading ? 'Processing...' : 'Summarize'}
