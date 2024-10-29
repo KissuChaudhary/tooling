@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -12,7 +12,6 @@ import { Textarea } from "@/components/ui/textarea"
 import Image from 'next/image'
 import AdOverlay from './AdOverlay'
 import AdUnit from '../components/AdUnit'
-
 
 interface GenerationParams {
   prompt: string
@@ -42,12 +41,26 @@ export default function ImageGenerator() {
   const [loadingImages, setLoadingImages] = useState<boolean[]>([])
   const [showAdOverlay, setShowAdOverlay] = useState(false)
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null)
+  const [loadingProgress, setLoadingProgress] = useState(0)
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout
+    if (isGenerating) {
+      interval = setInterval(() => {
+        setLoadingProgress((prev) => (prev < 100 ? prev + 1 : 100))
+      }, 100)
+    } else {
+      setLoadingProgress(0)
+    }
+    return () => clearInterval(interval)
+  }, [isGenerating])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsGenerating(true)
     setError(null)
     setImageUrls([])
+    setLoadingProgress(0)
 
     try {
       const apiParams = {
@@ -89,6 +102,7 @@ export default function ImageGenerator() {
     setImageUrls([])
     setError(null)
     setHasGenerated(false)
+    setLoadingProgress(0)
   }
 
   const handleDownload = (imageUrl: string) => {
@@ -123,7 +137,7 @@ export default function ImageGenerator() {
           style={{ marginBottom: '20px' }}
           />
             <div className="space-y-2">
-              <h2>Free AI Influener Generator</h2>
+              <h2>Free AI Influencer Generator</h2>
               <Label htmlFor="prompt">Prompt</Label>
               <Textarea
                 id="prompt"
@@ -202,9 +216,18 @@ export default function ImageGenerator() {
           slot="2181958821"
           style={{ marginBottom: '20px' }}
           />
-        <div className={`bg-white rounded-lg shadow flex items-center justify-center ${getImagePreviewStyle()}`}>
+        <div className={`bg-white rounded-lg shadow flex items-center justify-center ${getImagePreviewStyle()} relative overflow-hidden`}>
+          {isGenerating && (
+            <div className="absolute inset-0 bg-gray-200 z-10">
+              <div 
+                className="h-1 bg-blue-500 transition-all duration-300 ease-out"
+                style={{ width: `${loadingProgress}%` }}
+              ></div>
+              <p className="text-center mt-4">Generating: {loadingProgress}%</p>
+            </div>
+          )}
           {imageUrls.length > 0 ? (
-            <div className="relative w-full h-full">
+            <div className="relative w-full h-full transition-opacity duration-500 ease-in-out opacity-0" style={{ opacity: isGenerating ? 0 : 1 }}>
               <Image
                 src={imageUrls[0]}
                 alt="Generated image"
