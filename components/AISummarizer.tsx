@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Share2, Download, Copy, Timer, FileText, Link, AlignLeft } from 'lucide-react';
+import { Share2, Download, Copy, Timer, FileText, Link, AlignLeft, CheckCircle2 } from 'lucide-react';
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
@@ -28,6 +28,7 @@ export default function AISummarizer() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [notification, setNotification] = useState('');
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const words = text.split(/\s+/).filter(word => word.length > 0);
@@ -65,8 +66,8 @@ export default function AISummarizer() {
 
   const handleCopy = async (text: string) => {
     await navigator.clipboard.writeText(text);
-    setNotification('Copied to clipboard');
-    setTimeout(() => setNotification(''), 3000);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   const handleDownload = (text: string, filename: string) => {
@@ -103,7 +104,7 @@ export default function AISummarizer() {
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newText = e.target.value;
     const words = newText.split(/\s+/).filter(word => word.length > 0);
-    if (words.length <= 1500) {
+    if (words.length <= 1500 && newText.length <= 10000) {
       setText(newText);
       setWordCount(words.length);
     }
@@ -146,13 +147,13 @@ export default function AISummarizer() {
               <Textarea
                 value={text}
                 onChange={handleTextChange}
-                placeholder="Enter or paste text to analyze (max 1500 words)"
+                placeholder="Enter or paste text to analyze (max 1500 words or 10000 characters)"
                 required
                 className="min-h-[200px]"
               />
               <div className="flex justify-between items-center">
                 <span className="text-sm text-muted-foreground">
-                  {wordCount}/1500 words
+                  {wordCount}/1500 words | {text.length}/10000 characters
                 </span>
                 <Button type="submit" disabled={loading || wordCount === 0}>
                   {loading ? 'Processing...' : 'Analyze'}
@@ -234,7 +235,7 @@ export default function AISummarizer() {
                         size="sm"
                         onClick={() => handleCopy(content.summary)}
                       >
-                        <Copy className="w-4 h-4" />
+                        {copied ? <CheckCircle2 className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                       </Button>
                       <Button
                         variant="outline"
