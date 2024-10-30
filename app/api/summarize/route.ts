@@ -69,6 +69,7 @@ export async function POST(request: NextRequest) {
         // Limit content length for URL input
         content = content.substring(0, 4000);
       } catch (error) {
+        console.error('URL Fetch Error:', error);
         return NextResponse.json(
           { error: 'Failed to fetch or parse URL content' },
           { status: 400 }
@@ -130,7 +131,7 @@ export async function POST(request: NextRequest) {
       });
 
     } catch (error) {
-      console.error('AI Processing Error:', error);
+      console.error('AI Response Error:', error);
       return NextResponse.json(
         { error: 'Failed to generate summary' },
         { status: 500 }
