@@ -8,6 +8,7 @@ const openai = new OpenAI({
 
 export async function POST(request: NextRequest) {
   try {
+    // Parse the request body
     const { input, inputType, summaryLength } = await request.json();
 
     if (!input) {
@@ -19,84 +20,126 @@ export async function POST(request: NextRequest) {
 
     let content = '';
 
+    // Handle URL input
     if (inputType === 'url') {
-      const response = await fetch(input);
-      const html = await response.text();
-      const $ = cheerio.load(html);
-
-      $('script, style, nav, footer, header, aside').remove();
-      $('.advertisement, #comments').remove();
-
-      const contentSelectors = [
-        'article',
-        '[role="main"]',
-        'main',
-        '.main-content',
-        '#main-content',
-        '.post-content',
-        '.article-content',
-        '.content'
-      ];
-
-      for (const selector of contentSelectors) {
-        const element = $(selector);
-        if (element.length > 0) {
-          content = element.first().text().trim();
-          break;
+      try {
+        const response = await fetch(input);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch URL: ${response.statusText}`);
         }
+        const html = await response.text();
+        const $ = cheerio.load(html);
+
+        // Remove unwanted elements
+        $('script, style, nav, footer, header, aside').remove();
+        $('.advertisement, #comments').remove();
+
+        const contentSelectors = [
+          'article',
+          '[role="main"]',
+          'main',
+          '.main-content',
+          '#main-content',
+          '.post-content',
+          '.article-content',
+          '.content'
+        ];
+
+        // Try each selector until we find content
+        for (const selector of contentSelectors) {
+          const element = $(selector);
+          if (element.length > 0) {
+            content = element.first().text().trim();
+            break;
+          }
+        }
+
+        // Fallback to body content if no main content found
+        if (!content) {
+          content = $('body').text().trim();
+        }
+
+        // Clean up the content
+        content = content
+          .replace(/\s+/g, ' ')
+          .replace(/\n\s*\n/g, '\n')
+          .replace(/[\t\r]/g, '')
+          .trim();
+
+        // Limit content length for URL input
+        content = content.substring(0, 4000);
+      } catch (error) {
+        return NextResponse.json(
+          { error: 'Failed to fetch or parse URL content' },
+          { status: 400 }
+        );
       }
-
-      if (!content) {
-        content = $('body').text().trim();
-      }
-
-      content = content
-        .replace(/\s+/g, ' ')
-        .replace(/\n\s*\n/g, '\n')
-        .replace(/[\t\r]/g, '')
-        .trim();
-
-      content = content.slice(0, 4000);
     } else {
-      content = input;
+      // Handle direct text input
+      content = input.substring(0, 10000); // Limit text input to 10000 characters
     }
 
-    const maxTokens = Math.floor(summaryLength * 2);  // Adjust this formula as needed
+    // Calculate tokens based on summary length (0-100)
+    const maxTokens = Math.floor(((summaryLength || 50) / 100) * 500 + 100);
 
-    const aiResponse = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content: `You are an expert content analyzer. Provide a concise summary, extract key points, and identify the best lines from the given text. Adjust the length of the summary based on the provided summaryLength (0-100, where 0 is shortest and 100 is longest). Format the response as JSON with 'summary', 'keyPoints', and 'bestLines' fields.`
-        },
-        {
-          role: "user",
-          content: `Please analyze this text and provide a summary, key points, and best lines. The desired summary length is ${summaryLength}/100: ${content}`
+    try {
+      const aiResponse = await openai.chat.completions.create({
+        model: "gpt-4",
+        messages: [
+          {
+            role: "system",
+            content: `You are an expert content analyzer. Analyze the given text and provide three things:
+            1. A concise summary (adjust length based on summaryLength parameter: ${summaryLength}/100)
+            2. Key bullet points (3-5 points)
+            3. The most impactful or important line from the text.
+            Format your response as valid JSON with exactly these fields: "summary", "keyPoints" (array), and "bestLines" (array).`
+          },
+          {
+            role: "user",
+            content: content
+          }
+        ],
+        max_tokens: maxTokens,
+        temperature: 0.7,
+        response_format: { type: "json_object" }
+      });
+
+      // Validate AI response
+      const aiContent = aiResponse.choices[0].message?.content;
+      if (!aiContent) {
+        throw new Error('Empty response from AI');
+      }
+
+      // Parse and validate JSON response
+      let parsedResponse;
+      try {
+        parsedResponse = JSON.parse(aiContent);
+        if (!parsedResponse.summary || !Array.isArray(parsedResponse.keyPoints) || !Array.isArray(parsedResponse.bestLines)) {
+          throw new Error('Invalid response format');
         }
-      ],
-      max_tokens: maxTokens,
-      response_format: { type: "json_object" }
-    });
+      } catch (error) {
+        throw new Error('Failed to parse AI response');
+      }
 
-    const aiContent = aiResponse.choices[0].message?.content;
+      // Return the formatted response
+      return NextResponse.json({
+        summary: parsedResponse.summary,
+        keyPoints: parsedResponse.keyPoints,
+        bestLines: parsedResponse.bestLines,
+        wordCount: content.split(/\s+/).filter(word => word.length > 0).length
+      });
 
-    if (!aiContent) {
-      throw new Error('AI response content is null or undefined.');
+    } catch (error) {
+      console.error('AI Processing Error:', error);
+      return NextResponse.json(
+        { error: 'Failed to generate summary' },
+        { status: 500 }
+      );
     }
-
-    const aiResult = JSON.parse(aiContent);
-
-    return NextResponse.json({
-      summary: aiResult.summary,
-      keyPoints: aiResult.keyPoints,
-      bestLines: aiResult.bestLines,
-      wordCount: content.split(/\s+/).length
-    });
-
   } catch (error) {
+    console.error('Request Processing Error:', error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'An error occurred' },
+      { error: 'An unexpected error occurred' },
       { status: 500 }
     );
   }
