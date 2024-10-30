@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
         if (!parsedResponse.summary || !Array.isArray(parsedResponse.keyPoints) || !Array.isArray(parsedResponse.bestLines)) {
           throw new Error('Invalid response format');
         }
-      } catch (error) {
+      } catch (_error) {
         throw new Error('Failed to parse AI response');
       }
 
