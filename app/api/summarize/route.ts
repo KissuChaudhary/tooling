@@ -68,8 +68,8 @@ export async function POST(request: NextRequest) {
 
         // Limit content length for URL input
         content = content.substring(0, 4000);
-      } catch (error) {
-        console.error('URL Fetch Error:', error);
+      } catch (urlError) {
+        console.error('URL Fetch Error:', urlError);
         return NextResponse.json(
           { error: 'Failed to fetch or parse URL content' },
           { status: 400 }
@@ -112,14 +112,11 @@ export async function POST(request: NextRequest) {
       }
 
       // Parse and validate JSON response
-      let parsedResponse;
-      try {
-        parsedResponse = JSON.parse(aiContent);
-        if (!parsedResponse.summary || !Array.isArray(parsedResponse.keyPoints) || !Array.isArray(parsedResponse.bestLines)) {
-          throw new Error('Invalid response format');
-        }
-      } catch (_error) {
-        throw new Error('Failed to parse AI response');
+      const parsedResponse = JSON.parse(aiContent);
+      
+      // Validate response structure
+      if (!parsedResponse.summary || !Array.isArray(parsedResponse.keyPoints) || !Array.isArray(parsedResponse.bestLines)) {
+        throw new Error('Invalid response format');
       }
 
       // Return the formatted response
@@ -130,15 +127,15 @@ export async function POST(request: NextRequest) {
         wordCount: content.split(/\s+/).filter(word => word.length > 0).length
       });
 
-    } catch (error) {
-      console.error('AI Response Error:', error);
+    } catch (aiError) {
+      console.error('AI Response Error:', aiError);
       return NextResponse.json(
         { error: 'Failed to generate summary' },
         { status: 500 }
       );
     }
-  } catch (error) {
-    console.error('Request Processing Error:', error);
+  } catch (requestError) {
+    console.error('Request Processing Error:', requestError);
     return NextResponse.json(
       { error: 'An unexpected error occurred' },
       { status: 500 }
