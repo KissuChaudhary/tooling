@@ -9,7 +9,7 @@ import { Slider } from "@/components/ui/slider";
 import { Toggle } from "@/components/ui/toggle";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Share2, Download, Copy, Timer, FileText, Link, AlignLeft, CheckCircle2 } from 'lucide-react';
+import { Share2, Download, Copy, Timer, FileText, CheckCircle2 } from 'lucide-react';
 
 interface SummaryContent {
   summary: string;
