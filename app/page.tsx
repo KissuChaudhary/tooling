@@ -339,24 +339,36 @@ const faqData = [
     </Link>
           </div>
           {/* Bottom logo */}
-<div className="flex justify-center pt-8">
-  <a 
-    href="https://www.producthunt.com/products/saze-ai/reviews?utm_source=badge-product_review&utm_medium=badge&utm_souce=badge-saze-ai" 
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    <img 
-      src="https://api.producthunt.com/widgets/embed-image/v1/product_review.svg?product_id=581923&theme=light" 
-      alt="Saze AI - Free AI Writer | Best Free AI Content Generator Tools | Product Hunt" 
-      style={{
-        width: '250px',
-        height: '54px'
-      }}
-      width={250}
-      height={54}
-    />
-  </a>
-</div>
+<div className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-8">
+      <a 
+        href="https://theresanaiforthat.com/ai/sazeai/?ref=featured&v=3010829" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="flex-shrink-0"
+      >
+        <img 
+          width={300} 
+          height={65} 
+          src="https://media.theresanaiforthat.com/featured-on-taaft.png?width=600" 
+          alt="Featured on There's an AI for That"
+          className="w-[300px] h-auto"
+        />
+      </a>
+      <a 
+        href="https://www.producthunt.com/products/saze-ai/reviews?utm_source=badge-product_review&utm_medium=badge&utm_souce=badge-saze-ai" 
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex-shrink-0"
+      >
+        <img 
+          src="https://api.producthunt.com/widgets/embed-image/v1/product_review.svg?product_id=581923&theme=light" 
+          alt="Saze AI - Free AI Writer | Best Free AI Content Generator Tools | Product Hunt" 
+          width={250}
+          height={54}
+          className="w-[250px] h-[54px]"
+        />
+      </a>
+    </div>
           <div className="hidden lg:flex flex-col space-y-8 z-30 absolute right-0 top-1/2 transform -translate-y-1/2">
           <motion.a
             href="#"
