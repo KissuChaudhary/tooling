@@ -265,7 +265,7 @@ export default function ToolSearch({ onClose }: ToolSearchProps) {
   }, [router, onClose])
 
   // Virtualized list
-  const parentRef = React.useRef(null)
+  const parentRef = useRef<HTMLDivElement>(null)
   const rowVirtualizer = useVirtualizer({
     count: searchResults.length,
     getScrollElement: () => parentRef.current,
@@ -273,7 +273,7 @@ export default function ToolSearch({ onClose }: ToolSearchProps) {
     overscan: 5,
   })
 
-  return (
+return (
     <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50">
       <div className="fixed inset-0 w-full h-full flex items-start justify-center pt-4 px-4 sm:pt-16">
         <div className="w-full max-w-lg">
