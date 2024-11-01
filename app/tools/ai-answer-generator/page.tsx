@@ -1,4 +1,5 @@
 import AnswerGenerator from '@/components/AIAnswerForm';
+import ToolEngagement from '@/components/tool-engagement';
 import Head from 'next/head';
 import Script from 'next/script';
 import AdUnit from '@/components/AdUnit'
@@ -63,6 +64,10 @@ export default function AIAnswerGeneratorPage() {
       </Script>
       <div className="min-h-screen" style={{ paddingBottom: '3rem' }}>
         <AnswerGenerator />
+         <ToolEngagement 
+          toolName="AI Answer Generator"
+          toolDescription="Get the latest AI answer generation tips and updates"
+        />
         <AdUnit 
   client="ca-pub-7915372771416695"
   slot="8441706260"
