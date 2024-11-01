@@ -123,7 +123,7 @@ export default function RealisticInfluencerImagePromptsPage() {
     <div className="min-h-screen pt-8">
       <InfluencerPromptGenerator />
       <ToolEngagement 
-          toolName="Free AI Influencer Generator"
+          toolName="Free AI Influencer  Prompt Generator"
         />
       <AdUnit 
   client="ca-pub-7915372771416695"
