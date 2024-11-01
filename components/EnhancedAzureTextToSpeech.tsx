@@ -259,7 +259,7 @@ const EnhancedAzureTextToSpeech = () => {
               }}
               placeholder="Enter text to convert to speech..."
               className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white bg-white dark:bg-gray-800 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-              rows={4}
+              rows={8}
             />
             <div className="mt-2 text-sm text-gray-500 dark:text-gray-400 flex justify-between">
               <span>{`${wordCount}/${MAX_WORDS} words`}</span>
