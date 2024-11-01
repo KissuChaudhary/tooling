@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Clock, Fingerprint, UserCheck, MessageCircle, Eye, RefreshCw, Copy, Check } from 'lucide-react';
 import { useState } from 'react';
 import AdUnit from '@/components/AdUnit'
+import ToolEngagement from '@/components/tool-engagement'
 
 interface BenefitCardProps {
   icon: React.ReactElement;
@@ -121,6 +122,9 @@ export default function RealisticInfluencerImagePromptsPage() {
   return (
     <div className="min-h-screen pt-8">
       <InfluencerPromptGenerator />
+      <ToolEngagement 
+          toolName="Free AI Influencer Generator"
+        />
       <AdUnit 
   client="ca-pub-7915372771416695"
   slot="8441706260"
