@@ -5,6 +5,7 @@ import AdUnit from '@/components/AdUnit'
 import { CheckCircle, TrendingUp, Zap, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import ToolEngagement from '@/components/tool-engagement'
 
 export const metadata: Metadata = {
   title: 'AI Face Transform Tool - Turn Your Photos into Art with AI',
@@ -30,7 +31,9 @@ export default function AITransformPage() {
           <Suspense fallback={<div>Loading...</div>}>
             <FaceTransform />
           </Suspense>
-
+<ToolEngagement 
+          toolName="AI Face Transform"
+        />
           <section className="bg-muted py-12">
             <div className="container mx-auto px-4">
               <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">Transform Your Photos with Ease</h2>
