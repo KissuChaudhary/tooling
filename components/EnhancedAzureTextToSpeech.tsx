@@ -161,10 +161,14 @@ const EnhancedAzureTextToSpeech = () => {
     } catch (error) {
       console.error('Speech synthesis error:', error)
       if (request.id === text) {
-        if (error.message.includes('concurrent request limit') || error.message.includes('throttled')) {
-          setError('Looks like everyone loves us at the same time! Hang tight, we\'ll be back once the traffic clears up.')
+        if (error instanceof Error) {
+          if (error.message.includes('concurrent request limit') || error.message.includes('throttled')) {
+            setError('Looks like everyone loves us at the same time! Hang tight, we\'ll be back once the traffic clears up.')
+          } else {
+            setError('An error occurred during speech synthesis: ' + error.message)
+          }
         } else {
-          setError('An error occurred during speech synthesis: ' + (error as Error).message)
+          setError('An unknown error occurred during speech synthesis.')
         }
         setIsLoading(false)
       }
