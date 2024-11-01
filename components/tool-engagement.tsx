@@ -5,27 +5,21 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
-import { Facebook, Linkedin, Twitter, Share2, Star } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { Facebook, Linkedin, Twitter, Share2 } from "lucide-react"
 
 interface ToolEngagementProps {
   toolName: string;
-  toolId: string;
   toolDescription?: string;
 
 }
 
 export default function ToolEngagement({ 
   toolName,
-  toolId,
   toolDescription = "Get the latest updates and tips",
 
 }: ToolEngagementProps) {
   const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [rating, setRating] = useState(0)
-  const [hover, setHover] = useState(0)
-  const [hasRated, setHasRated] = useState(false)
 
   const { toast } = useToast()
 
