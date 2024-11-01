@@ -67,13 +67,12 @@ export default function ToolEngagement({
 
   return (
     <div className="max-w-7xl mx-auto p-4 mt-10">
-
     <div className="flex flex-col justify-center md:flex-row gap-8">
       <Card>
         <CardHeader>
           <CardTitle>Stay Updated!</CardTitle>
           <CardDescription>
-            {toolDescription}
+Stay ahead in AI. Sign up for expert tips and updates!
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -97,7 +96,7 @@ export default function ToolEngagement({
         <CardHeader>
           <CardTitle>Share {toolName}</CardTitle>
           <CardDescription>
-            We're free. Consider sharing as payment 😊
+All this AI goodness is free – sharing is the best thank you! 😊
           </CardDescription>
         </CardHeader>
         <CardContent>
