@@ -10,12 +10,11 @@ import { Facebook, Linkedin, Twitter, Share2 } from "lucide-react"
 interface ToolEngagementProps {
   toolName: string;
   toolDescription?: string;
-
 }
 
 export default function ToolEngagement({ 
   toolName,
-  toolDescription = "Get the latest updates and tips",
+  toolDescription = "Stay ahead in AI. Sign up for expert tips and updates!",
 }: ToolEngagementProps) {
   const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -72,7 +71,7 @@ export default function ToolEngagement({
         <CardHeader>
           <CardTitle>Stay Updated!</CardTitle>
           <CardDescription>
-Stay ahead in AI. Sign up for expert tips and updates!
+            {toolDescription}
           </CardDescription>
         </CardHeader>
         <CardContent>
