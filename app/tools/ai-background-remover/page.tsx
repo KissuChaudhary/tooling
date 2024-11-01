@@ -5,6 +5,7 @@ import AdUnit from '@/components/AdUnit'
 import { CheckCircle, TrendingUp, Zap, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import ToolEngagement from '@/components/tool-engagement'
 
 export const metadata: Metadata = {
   title: 'AI Background Remover - Remove Backgrounds Instantly with AI',
@@ -29,8 +30,12 @@ export default function BackgroundRemoverPage() {
 
           <Suspense fallback={<div>Loading...</div>}>
             <BackgroundRemover />
+            
           </Suspense>
 
+          <ToolEngagement 
+          toolName="AI Background Remover"
+        />
           <section className="bg-muted py-12">
             <div className="container mx-auto px-4">
               <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">Remove Backgrounds with Ease</h2>
