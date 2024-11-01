@@ -4,6 +4,7 @@ import Script from 'next/script';
 import React from 'react';
 import { Clock, MessageCircle, Heart, PenTool, ThumbsUp, Smile } from 'lucide-react';
 import AdUnit from '@/components/AdUnit'
+import ToolEngagement from '@/components/tool-engagement'
 
 export const metadata = {
   title: "AI Love Letter Writer | Personalized Romantic Letters with AI - Saze AI",
@@ -81,6 +82,9 @@ export default function AILoveLetterWriterPage() {
       </Script>
       <div className="min-h-screen px-4 sm:px-6 lg:px-8" style={{ paddingBottom: '3rem' }}>
         <LoveLetterWriter />
+        <ToolEngagement 
+          toolName="AI Love Letter Writer"
+        />
         <AdUnit 
   client="ca-pub-7915372771416695"
   slot="8441706260"
