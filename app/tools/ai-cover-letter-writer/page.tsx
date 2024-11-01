@@ -4,6 +4,7 @@ import Script from 'next/script';
 import React from 'react';
 import { Briefcase, Building, Settings, Clock, CheckCircle } from 'lucide-react';
 import AdUnit from '@/components/AdUnit'
+import ToolEngagement from '@/components/tool-engagement'
 
 export const metadata = {
   title: "AI Cover Letter Writer | Create Professional Cover Letters - Saze AI",
@@ -81,6 +82,9 @@ export default function AICoverLetterWriterPage() {
 
       <div className="min-h-screen bg-background text-foreground" style={{ paddingBottom: '3rem' }}>
         <CoverLetterWriter />
+        <ToolEngagement 
+          toolName="AI Cover Letter Writer"
+        />
         <AdUnit 
   client="ca-pub-7915372771416695"
   slot="8441706260"
