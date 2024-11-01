@@ -4,7 +4,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useTheme } from 'next-themes'
 import { useState, useEffect } from 'react'
-import { Moon, Sun, Menu, X } from 'lucide-react'
+import { Moon, Sun, Menu, X, Search } from 'lucide-react'
+import ToolSearch from './ToolSearch'
 
 export default function Header() {
   const [mounted, setMounted] = useState(false)
@@ -12,6 +13,7 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isSticky, setIsSticky] = useState(false)
   const [lastScrollY, setLastScrollY] = useState(0)
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
 
   useEffect(() => {
     setMounted(true)
@@ -33,6 +35,10 @@ export default function Header() {
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
+  }
+
+  const toggleSearch = () => {
+    setIsSearchOpen(!isSearchOpen)
   }
 
   return (
@@ -73,7 +79,7 @@ export default function Header() {
                     AI Text to Speech
                   </Link>
                 </li>
-                  <li>
+                <li>
                   <Link href="/ai-image-tools" className="text-muted-foreground font-semibold hover:text-foreground transition-colors duration-200">
                     AI Image Tools
                   </Link>
@@ -90,6 +96,14 @@ export default function Header() {
                 </li>
               </ul>
             </nav>
+            <button
+              aria-label="Toggle Search"
+              type="button"
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-primary text-primary-foreground transition-colors duration-300 ease-in-out"
+              onClick={toggleSearch}
+            >
+              <Search className="w-5 h-5" />
+            </button>
             <button
               aria-label="Toggle Dark Mode"
               type="button"
@@ -165,7 +179,6 @@ export default function Header() {
                 AI Image Tools
               </Link>
             </li>
-
             <li>
               <Link 
                 href="/tools/ai-text-to-speech" 
@@ -178,6 +191,13 @@ export default function Header() {
           </ul>
         </nav>
       </div>
+      {isSearchOpen && (
+        <div className="fixed inset-0 bg-background bg-opacity-50 flex items-start justify-center pt-20 px-4 z-[1001]">
+          <div className="w-full max-w-2xl">
+            <ToolSearch onClose={toggleSearch} />
+          </div>
+        </div>
+      )}
     </header>
   )
 }
