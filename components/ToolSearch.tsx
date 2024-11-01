@@ -1,11 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { X } from 'lucide-react'
+import { useVirtualizer } from '@tanstack/react-virtual'
 
 interface Tool {
   name: string;
@@ -227,8 +228,23 @@ interface ToolSearchProps {
 
 export default function ToolSearch({ onClose }: ToolSearchProps) {
   const [searchTerm, setSearchTerm] = useState('')
-  const [searchResults, setSearchResults] = useState<Tool[]>([])
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
   const router = useRouter()
+
+  // Debounce search term
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearchTerm(searchTerm), 300)
+    return () => clearTimeout(timer)
+  }, [searchTerm])
+
+  // Memoize search results
+  const searchResults = useMemo(() => {
+    if (!debouncedSearchTerm) return []
+    return tools.filter(tool =>
+      tool.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+      tool.description.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+    )
+  }, [debouncedSearchTerm])
 
   // Close search on escape key
   useEffect(() => {
@@ -239,21 +255,23 @@ export default function ToolSearch({ onClose }: ToolSearchProps) {
     return () => window.removeEventListener('keydown', handleEscape)
   }, [onClose])
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value
-    setSearchTerm(value)
+  const handleSearch = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value)
+  }, [])
 
-    const filteredTools = tools.filter(tool =>
-      tool.name.toLowerCase().includes(value.toLowerCase()) ||
-      tool.description.toLowerCase().includes(value.toLowerCase())
-    )
-    setSearchResults(filteredTools)
-  }
-
-  const handleToolSelect = (slug: string) => {
+  const handleToolSelect = useCallback((slug: string) => {
     router.push(`/tools/${slug}`)
     onClose()
-  }
+  }, [router, onClose])
+
+  // Virtualized list
+  const parentRef = React.useRef(null)
+  const rowVirtualizer = useVirtualizer({
+    count: searchResults.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 70,
+    overscan: 5,
+  })
 
   return (
     <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50">
@@ -283,25 +301,43 @@ export default function ToolSearch({ onClose }: ToolSearchProps) {
                 </div>
               </div>
               <div 
+                ref={parentRef}
                 className="overflow-y-auto max-h-[calc(100vh-200px)] overscroll-contain"
                 style={{ scrollbarGutter: 'stable' }}
               >
-                {searchTerm ? (
+                {debouncedSearchTerm ? (
                   searchResults.length > 0 ? (
-                    <div className="divide-y">
-                      {searchResults.map((tool) => (
-                        <button
-                          key={tool.slug}
-                          onClick={() => handleToolSelect(tool.slug)}
-                          className="w-full text-left px-4 py-3 hover:bg-muted/50 transition-colors"
+                    <div
+                      style={{
+                        height: `${rowVirtualizer.getTotalSize()}px`,
+                        width: '100%',
+                        position: 'relative',
+                      }}
+                    >
+                      {rowVirtualizer.getVirtualItems().map((virtualRow) => (
+                        <div
+                          key={virtualRow.index}
+                          style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: `${virtualRow.size}px`,
+                            transform: `translateY(${virtualRow.start}px)`,
+                          }}
                         >
-                          <h3 className="font-semibold text-base mb-1">
-                            {tool.name}
-                          </h3>
-                          <p className="text-sm text-muted-foreground">
-                            {tool.description}
-                          </p>
-                        </button>
+                          <button
+                            onClick={() => handleToolSelect(searchResults[virtualRow.index].slug)}
+                            className="w-full text-left px-4 py-3 hover:bg-muted/50 transition-colors"
+                          >
+                            <h3 className="font-semibold text-base mb-1">
+                              {searchResults[virtualRow.index].name}
+                            </h3>
+                            <p className="text-sm text-muted-foreground">
+                              {searchResults[virtualRow.index].description}
+                            </p>
+                          </button>
+                        </div>
                       ))}
                     </div>
                   ) : (
