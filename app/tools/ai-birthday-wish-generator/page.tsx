@@ -4,6 +4,7 @@ import Script from 'next/script';
 import React from 'react';
 import { Clock, Fingerprint, UserCheck, MessageCircle, Eye, RefreshCw } from 'lucide-react';
 import AdUnit from '@/components/AdUnit'
+import ToolEngagement from '@/components/tool-engagement'
 
 export const metadata = {
     title: "AI Birthday Wish Generator | Personalized Birthday Messages - Saze AI",
@@ -81,7 +82,9 @@ export default function BirthdayWishPage() {
             </Script>
             <div className="min-h-screen" >
                 <BirthdayWishGenerator />
-          
+          <ToolEngagement 
+          toolName="AI Birthday Wish Generator"
+        />
                 {/* What is AI Birthday Wish Generator Section */}
                 <section className="py-12">
                           <AdUnit 
