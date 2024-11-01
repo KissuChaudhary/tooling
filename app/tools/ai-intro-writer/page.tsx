@@ -4,6 +4,7 @@ import Script from 'next/script';
 import React from 'react';
 import { Hash, Heart, Smile, MessageCircle, Target, Users } from 'lucide-react';
 import AdUnit from '@/components/AdUnit'
+import ToolEngagement from '@/components/tool-engagement'
 
 export const metadata = {
   title: "AI Introduction Writer | Generate Captivating Introductions - Saze AI",
@@ -83,6 +84,9 @@ export default function AIIntroductionWriterPage() {
 
       <div className="min-h-screen bg-background text-foreground" style={{ paddingBottom: '3rem' }}>
         <IntroductionWriter />
+        <ToolEngagement 
+          toolName="AI Intro Writer"
+        />
         <AdUnit 
   client="ca-pub-7915372771416695"
   slot="8441706260"
