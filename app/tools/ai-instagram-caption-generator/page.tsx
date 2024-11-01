@@ -4,6 +4,7 @@ import Script from 'next/script';
 import React from 'react';
 import { Hash, Heart, Smile, MessageCircle } from 'lucide-react';
 import AdUnit from '@/components/AdUnit'
+import ToolEngagement from '@/components/tool-engagement'
 
 export const metadata = {
   title: "Free AI Instagram Caption Generator | Create Engaging Captions - Saze AI",
@@ -81,6 +82,9 @@ export default function AIInstagramCaptionGeneratorPage() {
 
       <div className="min-h-screen bg-background text-foreground" style={{ paddingBottom: '3rem' }}>
         <InstagramCaptionGenerator />
+        <ToolEngagement 
+          toolName="AI Email Generator"
+        />
         <AdUnit 
   client="ca-pub-7915372771416695"
   slot="8441706260"
