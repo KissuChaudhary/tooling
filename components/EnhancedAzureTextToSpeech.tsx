@@ -366,13 +366,13 @@ const EnhancedAzureTextToSpeech = () => {
             
             </div>
           )}
-          {error && (
-            <Alert variant={error.startsWith('Looks like everyone loves us') ? "warning" : "destructive"}>
-              <AlertCircle className="h-4 w-4" />
-              <AlertTitle>{error.startsWith('Looks like everyone loves us') ? 'High Traffic' : 'Error'}</AlertTitle>
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
+         {error && (
+          <Alert variant={error.startsWith('Looks like everyone loves us') ? "default" : "destructive"}>
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>{error.startsWith('Looks like everyone loves us') ? 'High Traffic' : 'Error'}</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
         </div>
       </div>
     </div>
