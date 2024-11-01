@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -230,6 +230,15 @@ export default function ToolSearch({ onClose }: ToolSearchProps) {
   const [searchResults, setSearchResults] = useState<Tool[]>([])
   const router = useRouter()
 
+  // Close search on escape key
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', handleEscape)
+    return () => window.removeEventListener('keydown', handleEscape)
+  }, [onClose])
+
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value
     setSearchTerm(value)
@@ -247,47 +256,69 @@ export default function ToolSearch({ onClose }: ToolSearchProps) {
   }
 
   return (
-    <Card className="w-full shadow-lg">
-      <CardContent className="p-4">
-        <div className="flex items-center gap-2 mb-4">
-          <Input
-            type="text"
-            placeholder="Search AI tools..."
-            value={searchTerm}
-            onChange={handleSearch}
-            className="flex-grow"
-            autoFocus
-          />
-          <Button variant="ghost" size="icon" onClick={onClose} className="shrink-0">
-            <X className="h-4 w-4" />
-            <span className="sr-only">Close search</span>
-          </Button>
+    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50">
+      <div className="fixed inset-0 w-full h-full flex items-start justify-center pt-4 px-4 sm:pt-16">
+        <div className="w-full max-w-lg">
+          <Card className="shadow-lg border rounded-lg overflow-hidden">
+            <CardContent className="p-0">
+              <div className="p-4 border-b">
+                <div className="flex items-center gap-2">
+                  <Input
+                    type="text"
+                    placeholder="Search AI tools..."
+                    value={searchTerm}
+                    onChange={handleSearch}
+                    className="flex-grow"
+                    autoFocus
+                  />
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    onClick={onClose}
+                    className="shrink-0"
+                  >
+                    <X className="h-4 w-4" />
+                    <span className="sr-only">Close search</span>
+                  </Button>
+                </div>
+              </div>
+              <div 
+                className="overflow-y-auto max-h-[calc(100vh-200px)] overscroll-contain"
+                style={{ scrollbarGutter: 'stable' }}
+              >
+                {searchTerm ? (
+                  searchResults.length > 0 ? (
+                    <div className="divide-y">
+                      {searchResults.map((tool) => (
+                        <button
+                          key={tool.slug}
+                          onClick={() => handleToolSelect(tool.slug)}
+                          className="w-full text-left px-4 py-3 hover:bg-muted/50 transition-colors"
+                        >
+                          <h3 className="font-semibold text-base mb-1">
+                            {tool.name}
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            {tool.description}
+                          </p>
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="p-4 text-center text-muted-foreground">
+                      No tools found
+                    </div>
+                  )
+                ) : (
+                  <div className="p-4 text-center text-muted-foreground">
+                    Start typing to search AI tools...
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
         </div>
-        {searchTerm && (
-          <div className="max-h-[60vh] overflow-y-auto">
-            {searchResults.length > 0 ? (
-              <ul className="divide-y">
-                {searchResults.map((tool) => (
-                  <li key={tool.slug} className="py-2">
-                    <Button
-                      variant="ghost"
-                      className="w-full text-left"
-                      onClick={() => handleToolSelect(tool.slug)}
-                    >
-                      <div>
-                        <h3 className="font-semibold">{tool.name}</h3>
-                        <p className="text-sm text-muted-foreground">{tool.description}</p>
-                      </div>
-                    </Button>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-center text-muted-foreground py-4">No tools found</p>
-            )}
-          </div>
-        )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
-      }
+}
