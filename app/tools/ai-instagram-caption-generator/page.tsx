@@ -83,7 +83,7 @@ export default function AIInstagramCaptionGeneratorPage() {
       <div className="min-h-screen bg-background text-foreground" style={{ paddingBottom: '3rem' }}>
         <InstagramCaptionGenerator />
         <ToolEngagement 
-          toolName="AI Email Generator"
+          toolName="AI Instgram Caption Generator"
         />
         <AdUnit 
   client="ca-pub-7915372771416695"
