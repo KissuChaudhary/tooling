@@ -1,20 +1,20 @@
 import './globals.css'
+import { Metadata } from 'next'
+import Script from 'next/script'
 import { Providers } from './Providers'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import WebSiteSchema from './WebSiteSchema'
-import { Metadata } from 'next'
 import ScrollToTopButton from '@/components/ScrollToTopButton'
-import Script from 'next/script'
 import AdBlockerDetector from '@/components/ad-blocker-detector'
 import { Toaster } from '@/components/ui/toaster'
 
 export const metadata: Metadata = {
   title: {
-    default: 'Saze AI: Free AI Writing Tools',
+    default: 'Saze AI: Free AI Writing, Image Generation, and Creative Tools Hub',
     template: '%s | Saze AI'
   },
-  description: 'Saze AI is a free AI platform designed to make your work and learning easier with unlimited access to our free AI tools.',
+  description: 'Saze AI is an AI-powered content generating tool to help you quickly create high-quality content that requires minimal effort, time, and cost.',
   keywords: ['AI', 'writing tools', 'productivity', 'free AI tools'],
   authors: [{ name: 'Saze AI Team' }],
   creator: 'Saze AI',
@@ -99,14 +99,15 @@ export default function RootLayout({
           <div className="flex flex-col min-h-screen">
             <WebSiteSchema />
             <Header />
-            <main>
+            <main className="flex-grow">
               {children}
               <AdBlockerDetector />
             </main>
             <ScrollToTopButton />
             <Footer />
           </div>
-        </Toaster>
+          <Toaster />
+        </Providers>
       </body>
     </html>
   )
