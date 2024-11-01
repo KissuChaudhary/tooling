@@ -66,7 +66,6 @@ export default function AIAnswerGeneratorPage() {
         <AnswerGenerator />
          <ToolEngagement 
           toolName="AI Answer Generator"
-          toolDescription="Get the latest AI answer generation tips and updates"
         />
         <AdUnit 
   client="ca-pub-7915372771416695"
