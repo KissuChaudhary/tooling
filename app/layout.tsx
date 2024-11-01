@@ -7,7 +7,7 @@ import { Metadata } from 'next'
 import ScrollToTopButton from '@/components/ScrollToTopButton'
 import Script from 'next/script'
 import AdBlockerDetector from '@/components/ad-blocker-detector'
-
+import { Toaster } from '@/components/ui/toaster'
 
 export const metadata: Metadata = {
   title: {
@@ -106,7 +106,7 @@ export default function RootLayout({
             <ScrollToTopButton />
             <Footer />
           </div>
-        </Providers>
+        </Toaster>
       </body>
     </html>
   )
