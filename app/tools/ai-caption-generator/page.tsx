@@ -4,6 +4,7 @@ import Script from 'next/script';
 import React from 'react';
 import { Image, Lightbulb, Clock, Hash, Sparkles } from 'lucide-react';
 import AdUnit from '@/components/AdUnit'
+import ToolEngagement from '@/components/tool-engagement'
 
 export const metadata = {
   title: "AI Caption Generator | Create Engaging Captions Effortlessly - Saze AI", 
@@ -80,6 +81,9 @@ export default function AICaptionGeneratorPage() {
     </Script>
       <div className="min-h-screen bg-background text-foreground" style={{ paddingBottom: '3rem' }}>
         <CaptionGenerator />
+        <ToolEngagement 
+          toolName="AI Caption Generator"
+        />
         <AdUnit 
   client="ca-pub-7915372771416695"
   slot="8441706260"
