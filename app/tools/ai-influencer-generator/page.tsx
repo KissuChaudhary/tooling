@@ -36,7 +36,7 @@ export default function Home() {
       <div>
         <ImageGenerator />
         <ToolEngagement 
-          toolName="AI Email Generator"
+          toolName="AI Influencer Generator"
         />
       </div>
 
