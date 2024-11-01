@@ -4,7 +4,8 @@ import { Suspense } from 'react'
 import AdUnit from '@/components/AdUnit'
 import { CheckCircle, TrendingUp, Zap, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-  import Link from 'next/link'
+import Link from 'next/link'
+import ToolEngagement from '@/components/tool-engagement'
 
 export const metadata: Metadata = {
   title: 'AI Image Upscaler Tool - Enhance Image Quality with AI',
@@ -30,7 +31,9 @@ export default function ImageUpscalerPage() {
           <Suspense fallback={<div>Loading...</div>}>
             <ImageUpscaler />
           </Suspense>
-
+<ToolEngagement 
+          toolName="Free AI Image Upscaler"
+        />
           <section className="bg-muted py-12">
    <div className="container mx-auto px-4">
       <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">Enhance Your Images with Ease</h2>
