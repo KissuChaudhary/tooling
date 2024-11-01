@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import Link from 'next/link'
 import { CheckCircle, TrendingUp, Users, Zap } from 'lucide-react'
 import AdUnit from '@/components/AdUnit'
-
+import ToolEngagement from '@/components/tool-engagement'
 
 export const metadata: Metadata = {
   title: 'AI Influencer Generator | Create Stunning Influencer Content with AI',
@@ -35,6 +35,9 @@ export default function Home() {
     <main className="min-h-screen flex flex-col">
       <div>
         <ImageGenerator />
+        <ToolEngagement 
+          toolName="AI Email Generator"
+        />
       </div>
 
       <section className="bg-muted py-12">
