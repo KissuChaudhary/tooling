@@ -68,7 +68,9 @@ export default function ToolEngagement({
   }
 
   return (
-    <div className="grid gap-6 mt-8 max-w-2xl mx-auto px-4">
+     <div className="max-w-7xl mx-auto p-4 mt-10">
+
+    <div className="flex flex-col justify-center md:flex-row gap-8">
       <Card>
         <CardHeader>
           <CardTitle>Stay Updated!</CardTitle>
@@ -146,5 +148,6 @@ export default function ToolEngagement({
         </CardContent>
       </Card>
     </div>
+           </div>
   )
 }
