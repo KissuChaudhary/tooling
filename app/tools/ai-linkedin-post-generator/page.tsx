@@ -85,7 +85,7 @@ export default function AILinkedInPostGeneratorPage() {
       <div className="min-h-screen bg-background text-foreground" style={{ paddingBottom: '3rem' }}>
         <LinkedInPostGenerator />
        <ToolEngagement 
-          toolName="AI Email Generator"
+          toolName="AI Linkedin Post Generator"
         />
         <AdUnit 
   client="ca-pub-7915372771416695"
