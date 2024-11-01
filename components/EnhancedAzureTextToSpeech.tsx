@@ -1,15 +1,17 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import { Loader2, Download, Mic } from 'lucide-react'
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+import { Loader2, Download, Mic, AlertCircle } from 'lucide-react'
 import * as sdk from 'microsoft-cognitiveservices-speech-sdk'
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
+import { Progress } from "@/components/ui/progress"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { useToast } from "@/components/ui/use-toast"
 import AdUnit from '@/components/AdUnit'
-
 
 interface Voice {
   Name: string
@@ -19,6 +21,20 @@ interface Voice {
   Gender: string
   Locale: string
 }
+
+interface SynthesisRequest {
+  id: string
+  text: string
+  voice: string
+  pitch: number
+  rate: number
+  volume: number
+}
+
+const MAX_RETRIES = 3
+const RETRY_DELAY = 1000 // 1 second
+const MAX_WORDS = 200
+const MAX_CHARACTERS = 1000
 
 const EnhancedAzureTextToSpeech = () => {
   const [text, setText] = useState('')
@@ -30,6 +46,14 @@ const EnhancedAzureTextToSpeech = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [audioUrl, setAudioUrl] = useState('')
+  const [queuePosition, setQueuePosition] = useState(0)
+  const [queueLength, setQueueLength] = useState(0)
+  const [wordCount, setWordCount] = useState(0)
+  const [charCount, setCharCount] = useState(0)
+
+  const synthesisQueue = useRef<SynthesisRequest[]>([])
+  const isProcessing = useRef(false)
+  const { toast } = useToast()
 
   useEffect(() => {
     fetchVoices()
@@ -52,51 +76,127 @@ const EnhancedAzureTextToSpeech = () => {
     }
   }
 
-  const synthesizeSpeech = async () => {
+  const updateQueueStatus = useCallback(() => {
+    setQueueLength(synthesisQueue.current.length)
+    const position = synthesisQueue.current.findIndex(req => req.id === text)
+    setQueuePosition(position === -1 ? 0 : position + 1)
+  }, [text])
+
+  const processSynthesisQueue = useCallback(async () => {
+    if (isProcessing.current || synthesisQueue.current.length === 0) return
+
+    isProcessing.current = true
+    const request = synthesisQueue.current[0]
+    let retries = 0
+
+    const processRequest = async (): Promise<string> => {
+      try {
+        const speechConfig = sdk.SpeechConfig.fromSubscription(
+          process.env.NEXT_PUBLIC_AZURE_SPEECH_KEY!,
+          process.env.NEXT_PUBLIC_AZURE_SPEECH_REGION!
+        )
+        speechConfig.speechSynthesisVoiceName = request.voice
+
+        const synthesizer = new sdk.SpeechSynthesizer(speechConfig)
+
+        const ssml = `
+          <speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-US">
+            <voice name="${request.voice}">
+              <prosody pitch="${request.pitch}%" rate="${request.rate}%" volume="${request.volume}%">
+                ${request.text}
+              </prosody>
+            </voice>
+          </speak>
+        `
+
+        const result = await new Promise<sdk.SpeechSynthesisResult>((resolve, reject) => {
+          synthesizer.speakSsmlAsync(ssml, resolve, reject)
+        })
+
+        if (result.reason === sdk.ResultReason.SynthesizingAudioCompleted) {
+          const blob = new Blob([result.audioData], { type: 'audio/wav' })
+          return URL.createObjectURL(blob)
+        } else {
+          throw new Error('Speech synthesis failed')
+        }
+      } catch (error) {
+        console.error('Speech synthesis error:', error)
+        if (retries < MAX_RETRIES) {
+          retries++
+          await new Promise(resolve => setTimeout(resolve, RETRY_DELAY * retries))
+          return processRequest()
+        }
+        throw error
+      }
+    }
+
+    try {
+      const url = await processRequest()
+      if (request.id === text) {
+        setAudioUrl(url)
+        setIsLoading(false)
+      }
+      toast({
+        title: "Speech Synthesized",
+        description: "Your text has been successfully converted to speech.",
+      })
+    } catch (error) {
+      console.error('Speech synthesis error:', error)
+      if (request.id === text) {
+        setError('An error occurred during speech synthesis')
+        setIsLoading(false)
+      }
+      toast({
+        title: "Synthesis Failed",
+        description: "There was an error synthesizing your speech. Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      synthesisQueue.current.shift()
+      isProcessing.current = false
+      updateQueueStatus()
+      processSynthesisQueue()
+    }
+  }, [text, toast, updateQueueStatus])
+
+  const updateCounts = useCallback((value: string) => {
+    const trimmedValue = value.trim()
+    const words = trimmedValue ? trimmedValue.split(/\s+/) : []
+    setWordCount(words.length)
+    setCharCount(value.length)
+  }, [])
+
+  const isLimitExceeded = useMemo(() => {
+    return wordCount > MAX_WORDS || charCount > MAX_CHARACTERS
+  }, [wordCount, charCount])
+
+  useEffect(() => {
+    updateCounts(text)
+  }, [text, updateCounts])
+
+  const synthesizeSpeech = useCallback(() => {
+    if (isLimitExceeded) {
+      setError('Word or character limit exceeded. Please shorten your text.')
+      return
+    }
+
     setIsLoading(true)
     setError('')
     setAudioUrl('')
 
-    const speechConfig = sdk.SpeechConfig.fromSubscription(
-      process.env.NEXT_PUBLIC_AZURE_SPEECH_KEY!,
-      process.env.NEXT_PUBLIC_AZURE_SPEECH_REGION!
-    )
-    speechConfig.speechSynthesisVoiceName = selectedVoice
+    const newRequest: SynthesisRequest = {
+      id: text,
+      text,
+      voice: selectedVoice,
+      pitch,
+      rate,
+      volume
+    }
 
-    const synthesizer = new sdk.SpeechSynthesizer(speechConfig)
-
-    const ssml = `
-      <speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-US">
-        <voice name="${selectedVoice}">
-          <prosody pitch="${pitch}%" rate="${rate}%" volume="${volume}%">
-            ${text}
-          </prosody>
-        </voice>
-      </speak>
-    `
-
-    synthesizer.speakSsmlAsync(
-      ssml,
-      result => {
-        if (result.reason === sdk.ResultReason.SynthesizingAudioCompleted) {
-          const blob = new Blob([result.audioData], { type: 'audio/wav' })
-          const url = URL.createObjectURL(blob)
-          setAudioUrl(url)
-        } else {
-          setError('Speech synthesis canceled, did not complete, or error occurred')
-          console.error('Speech synthesis error:', result.errorDetails)
-        }
-        synthesizer.close()
-        setIsLoading(false)
-      },
-      error => {
-        console.error('Speech synthesis error:', error)
-        synthesizer.close()
-        setIsLoading(false)
-        setError('An error occurred during speech synthesis')
-      }
-    )
-  }
+    synthesisQueue.current.push(newRequest)
+    updateQueueStatus()
+    processSynthesisQueue()
+  }, [text, selectedVoice, pitch, rate, volume, updateQueueStatus, processSynthesisQueue, isLimitExceeded])
 
   const handleDownload = () => {
     if (audioUrl) {
@@ -113,16 +213,15 @@ const EnhancedAzureTextToSpeech = () => {
     <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl w-full space-y-8">
         <div>
-        <AdUnit 
-  client="ca-pub-7915372771416695"
-  slot="8441706260"
-  style={{ marginBottom: '20px' }}
-/>
+          <AdUnit 
+            client="ca-pub-7915372771416695"
+            slot="8441706260"
+            style={{ marginBottom: '20px' }}
+          />
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white flex items-center justify-center">
             <Mic className="w-8 h-8 mr-2 text-blue-500 dark:text-blue-400" />
             Saze AI Text-to-Speech Synthesizer
           </h2>
-          
         </div>
         <div className="mt-8 space-y-6">
           <div>
@@ -130,11 +229,25 @@ const EnhancedAzureTextToSpeech = () => {
             <Textarea
               id="text"
               value={text}
-              onChange={(e) => setText(e.target.value)}
+              onChange={(e) => {
+                const newText = e.target.value
+                if (newText.length <= MAX_CHARACTERS) {
+                  setText(newText)
+                }
+              }}
               placeholder="Enter text to convert to speech..."
               className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-700 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white bg-white dark:bg-gray-800 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
               rows={4}
             />
+            <div className="mt-2 text-sm text-gray-500 dark:text-gray-400 flex justify-between">
+              <span>{`${wordCount}/${MAX_WORDS} words`}</span>
+              <span>{`${charCount}/${MAX_CHARACTERS} characters`}</span>
+            </div>
+            {isLimitExceeded && (
+              <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                Word or character limit exceeded. Please shorten your text.
+              </p>
+            )}
           </div>
           <div>
             <Label htmlFor="voice" className="sr-only">Voice</Label>
@@ -151,7 +264,7 @@ const EnhancedAzureTextToSpeech = () => {
               </SelectContent>
             </Select>
           </div>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <Label htmlFor="pitch" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Pitch ({pitch}%)</Label>
               <Slider
@@ -192,7 +305,7 @@ const EnhancedAzureTextToSpeech = () => {
           <div>
             <Button
               onClick={synthesizeSpeech}
-              disabled={isLoading || !text.trim()}
+              disabled={isLoading || !text.trim() || isLimitExceeded}
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-900"
             >
               {isLoading ? (
@@ -205,6 +318,18 @@ const EnhancedAzureTextToSpeech = () => {
               )}
             </Button>
           </div>
+          {queueLength > 1 && (
+            <Alert>
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>In Queue</AlertTitle>
+              <AlertDescription>
+                Your request is in queue. Position: {queuePosition} of {queueLength}
+              </AlertDescription>
+            </Alert>
+          )}
+          {queueLength > 0 && (
+            <Progress value={(queuePosition / queueLength) * 100} className="w-full" />
+          )}
           {audioUrl && (
             <div className="mt-4">
               <audio controls src={audioUrl} className="w-full mb-4" />
@@ -214,10 +339,15 @@ const EnhancedAzureTextToSpeech = () => {
               </Button>
             </div>
           )}
-          {error && <p className="mt-2 text-center text-sm text-red-600 dark:text-red-400">{error}</p>}
+          {error && (
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
         </div>
       </div>
-
     </div>
   )
 }
