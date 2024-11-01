@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     telephone: false,
   },
   openGraph: {
-    title: 'Saze AI: Free AI Writing Tools',
+    title: 'Saze AI: Free AI Writing, Image Generation, and Creative Tools Hub',
     description: 'Access 40+ free AI tools to boost your productivity and enhance content quality.',
     url: 'https://sazeai.com',
     siteName: 'Saze AI',
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Saze AI: Free AI Writing Tools',
+    title: 'Saze AI: Free AI Writing, Image Generation, and Creative Tools Hub',
     description: 'Access 40+ free AI tools to boost your productivity and enhance content quality.',
     images: ['https://sazeai.com/favicon.jpg'], // Replace with your actual Twitter image URL
     creator: '@SazeAI', // Replace with your actual Twitter handle
