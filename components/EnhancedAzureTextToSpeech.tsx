@@ -161,12 +161,16 @@ const EnhancedAzureTextToSpeech = () => {
     } catch (error) {
       console.error('Speech synthesis error:', error)
       if (request.id === text) {
-        setError('An error occurred during speech synthesis: ' + (error as Error).message)
+        if (error.message.includes('concurrent request limit') || error.message.includes('throttled')) {
+          setError('Looks like everyone loves us at the same time! Hang tight, we\'ll be back once the traffic clears up.')
+        } else {
+          setError('An error occurred during speech synthesis: ' + (error as Error).message)
+        }
         setIsLoading(false)
       }
       toast({
         title: "Synthesis Failed",
-        description: "There was an error synthesizing your speech. Please try again.",
+        description: "There was an error synthesizing your speech. Please try again later.",
         variant: "destructive",
       })
     } finally {
@@ -359,9 +363,9 @@ const EnhancedAzureTextToSpeech = () => {
             </div>
           )}
           {error && (
-            <Alert variant="destructive">
+            <Alert variant={error.startsWith('Looks like everyone loves us') ? "warning" : "destructive"}>
               <AlertCircle className="h-4 w-4" />
-              <AlertTitle>Error</AlertTitle>
+              <AlertTitle>{error.startsWith('Looks like everyone loves us') ? 'High Traffic' : 'Error'}</AlertTitle>
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
