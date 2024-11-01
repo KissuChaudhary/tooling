@@ -4,6 +4,7 @@ import Script from 'next/script';
 import React from 'react';
 import { Book, Feather, Target, Users, FileText } from 'lucide-react';
 import AdUnit from '@/components/AdUnit'
+import ToolEngagement from '@/components/tool-engagement'
 
 export const metadata = {
   title: "AI Essay Writer | Generate Quality Essays in Minutes - Saze AI",
@@ -81,6 +82,9 @@ export default function AIEssayWriterPage() {
 
       <div className="min-h-screen bg-background text-foreground" style={{ paddingBottom: '3rem' }}>
         <EssayGenerator />
+        <ToolEngagement 
+          toolName="AI Essay Writer"
+        />
         <AdUnit 
   client="ca-pub-7915372771416695"
   slot="8441706260"
