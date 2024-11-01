@@ -1,4 +1,5 @@
 import './globals.css'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Metadata } from 'next'
 import Script from 'next/script'
 import { Providers } from './Providers'
@@ -101,6 +102,7 @@ export default function RootLayout({
             <Header />
             <main className="flex-grow">
               {children}
+              <SpeedInsights />
               <AdBlockerDetector />
             </main>
             <ScrollToTopButton />
