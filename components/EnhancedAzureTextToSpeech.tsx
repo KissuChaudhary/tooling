@@ -33,6 +33,7 @@ interface SynthesisRequest {
 
 const MAX_RETRIES = 3
 const RETRY_DELAY = 1000 // 1 second
+const RATE_LIMIT_DELAY = 5000 // 5 seconds between requests
 const MAX_WORDS = 200
 const MAX_CHARACTERS = 1000
 
@@ -53,6 +54,7 @@ const EnhancedAzureTextToSpeech = () => {
 
   const synthesisQueue = useRef<SynthesisRequest[]>([])
   const isProcessing = useRef(false)
+  const lastRequestTime = useRef(0)
   const { toast } = useToast()
 
   useEffect(() => {
@@ -83,21 +85,27 @@ const EnhancedAzureTextToSpeech = () => {
   }, [text])
 
   const processSynthesisQueue = useCallback(async () => {
-    if (isProcessing.current || synthesisQueue.current.length === 0) return;
+    if (isProcessing.current || synthesisQueue.current.length === 0) return
 
-    isProcessing.current = true;
-    const request = synthesisQueue.current[0];
-    let retries = 0;
+    isProcessing.current = true
+    const request = synthesisQueue.current[0]
+    let retries = 0
 
     const processRequest = async (): Promise<string> => {
+      const now = Date.now()
+      const timeSinceLastRequest = now - lastRequestTime.current
+      if (timeSinceLastRequest < RATE_LIMIT_DELAY) {
+        await new Promise(resolve => setTimeout(resolve, RATE_LIMIT_DELAY - timeSinceLastRequest))
+      }
+
       try {
         const speechConfig = sdk.SpeechConfig.fromSubscription(
           process.env.NEXT_PUBLIC_AZURE_SPEECH_KEY!,
           process.env.NEXT_PUBLIC_AZURE_SPEECH_REGION!
-        );
-        speechConfig.speechSynthesisVoiceName = request.voice;
+        )
+        speechConfig.speechSynthesisVoiceName = request.voice
 
-        const synthesizer = new sdk.SpeechSynthesizer(speechConfig);
+        const synthesizer = new sdk.SpeechSynthesizer(speechConfig)
 
         const ssml = `
           <speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-US">
@@ -107,65 +115,67 @@ const EnhancedAzureTextToSpeech = () => {
               </prosody>
             </voice>
           </speak>
-        `;
+        `
 
         return new Promise((resolve, reject) => {
           synthesizer.speakSsmlAsync(
             ssml,
             result => {
-              synthesizer.close();
+              synthesizer.close()
               if (result.reason === sdk.ResultReason.SynthesizingAudioCompleted) {
-                const blob = new Blob([result.audioData], { type: 'audio/wav' });
-                resolve(URL.createObjectURL(blob));
+                const blob = new Blob([result.audioData], { type: 'audio/wav' })
+                resolve(URL.createObjectURL(blob))
               } else {
-                reject(new Error(`Speech synthesis failed: ${result.errorDetails}`));
+                reject(new Error(`Speech synthesis failed: ${result.errorDetails}`))
               }
             },
             error => {
-              synthesizer.close();
-              reject(error);
+              synthesizer.close()
+              reject(error)
             }
-          );
-        });
+          )
+        })
       } catch (error) {
-        console.error('Speech synthesis error:', error);
+        console.error('Speech synthesis error:', error)
         if (retries < MAX_RETRIES) {
-          retries++;
-          await new Promise(resolve => setTimeout(resolve, RETRY_DELAY * retries));
-          return processRequest();
+          retries++
+          await new Promise(resolve => setTimeout(resolve, RETRY_DELAY * retries))
+          return processRequest()
         }
-        throw error;
+        throw error
+      } finally {
+        lastRequestTime.current = Date.now()
       }
-    };
+    }
 
     try {
-      const url = await processRequest();
+      const url = await processRequest()
       if (request.id === text) {
-        setAudioUrl(url);
-        setIsLoading(false);
+        setAudioUrl(url)
+        setIsLoading(false)
       }
       toast({
         title: "Speech Synthesized",
         description: "Your text has been successfully converted to speech.",
-      });
+      })
     } catch (error) {
-      console.error('Speech synthesis error:', error);
+      console.error('Speech synthesis error:', error)
       if (request.id === text) {
-        setError('An error occurred during speech synthesis: ' + (error as Error).message);
-        setIsLoading(false);
+        setError('An error occurred during speech synthesis: ' + (error as Error).message)
+        setIsLoading(false)
       }
       toast({
         title: "Synthesis Failed",
         description: "There was an error synthesizing your speech. Please try again.",
         variant: "destructive",
-      });
+      })
     } finally {
-      synthesisQueue.current.shift();
-      isProcessing.current = false;
-      updateQueueStatus();
-      processSynthesisQueue();
+      synthesisQueue.current.shift()
+      isProcessing.current = false
+      updateQueueStatus()
+      setTimeout(processSynthesisQueue, RATE_LIMIT_DELAY)
     }
-  }, [text, toast, updateQueueStatus]);
+  }, [text, toast, updateQueueStatus])
 
   const updateCounts = useCallback((value: string) => {
     const trimmedValue = value.trim()
@@ -345,6 +355,7 @@ const EnhancedAzureTextToSpeech = () => {
                 <Download className="mr-2 h-5 w-5" />
                 Download Audio
               </Button>
+            
             </div>
           )}
           {error && (
