@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
 import { Facebook, Linkedin, Twitter, Share2 } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 interface ToolEngagementProps {
   toolName: string;
@@ -16,11 +17,9 @@ interface ToolEngagementProps {
 export default function ToolEngagement({ 
   toolName,
   toolDescription = "Get the latest updates and tips",
-
 }: ToolEngagementProps) {
   const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
-
   const { toast } = useToast()
 
   const handleSubscribe = async (e: React.FormEvent) => {
@@ -57,7 +56,7 @@ export default function ToolEngagement({
     }
   }
 
-
+ 
   const shareUrl = typeof window !== 'undefined' ? window.location.href : ''
   const shareText = `Check out this awesome ${toolName} tool!`
 
@@ -68,7 +67,7 @@ export default function ToolEngagement({
   }
 
   return (
-     <div className="max-w-7xl mx-auto p-4 mt-10">
+    <div className="max-w-7xl mx-auto p-4 mt-10">
 
     <div className="flex flex-col justify-center md:flex-row gap-8">
       <Card>
@@ -147,7 +146,7 @@ export default function ToolEngagement({
           </div>
         </CardContent>
       </Card>
+      </div>
     </div>
-           </div>
   )
 }
