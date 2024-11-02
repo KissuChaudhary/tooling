@@ -7,7 +7,6 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import WebSiteSchema from './WebSiteSchema'
 import ScrollToTopButton from '@/components/ScrollToTopButton'
-import AdBlockerDetector from '@/components/ad-blocker-detector'
 import { Toaster } from '@/components/ui/toaster'
 
 export const metadata: Metadata = {
@@ -103,7 +102,7 @@ export default function RootLayout({
             <main className="flex-grow">
               {children}
               <SpeedInsights />
-              <AdBlockerDetector />
+              
             </main>
             <ScrollToTopButton />
             <Footer />
