@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { ShieldAlert } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import {
@@ -16,7 +16,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 export default function AdBlockerDetector() {
   const [showModal, setShowModal] = useState(false)
 
-  const detectAdBlocker = async () => {
+  const detectAdBlocker = useCallback(async () => {
     let adBlockDetected = false
 
     // Method 1: Adbox detection
@@ -46,19 +46,40 @@ export default function AdBlockerDetector() {
     }
 
     return adBlockDetected
-  }
+  }, [])
+
+  const checkAdBlocker = useCallback(async () => {
+    const detected = await detectAdBlocker()
+    setShowModal(detected)
+  }, [detectAdBlocker])
 
   useEffect(() => {
-    const checkAdBlocker = async () => {
-      const detected = await detectAdBlocker()
-      setShowModal(detected)
+    let interval: NodeJS.Timeout | null = null
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        if (interval) {
+          clearInterval(interval)
+          interval = null
+        }
+      } else {
+        checkAdBlocker()
+        interval = setInterval(checkAdBlocker, 5000) // Check every 5 seconds when page is visible
+      }
     }
 
-    checkAdBlocker()
-    const interval = setInterval(checkAdBlocker, 5000) // Check every 5 seconds
+    document.addEventListener('visibilitychange', handleVisibilityChange)
 
-    return () => clearInterval(interval)
-  }, [])
+    // Initial check and interval setup
+    handleVisibilityChange()
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      if (interval) {
+        clearInterval(interval)
+      }
+    }
+  }, [checkAdBlocker])
 
   const handleClose = async () => {
     const stillDetected = await detectAdBlocker()
