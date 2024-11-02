@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { ShieldAlert } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import {
@@ -13,73 +13,81 @@ import {
 } from "@/components/ui/dialog"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 
+const INITIAL_CHECK_INTERVAL = 5000
+const MAX_CHECK_INTERVAL = 300000 // 5 minutes
+const LOCAL_STORAGE_KEY = 'adBlockerDetected'
+
 export default function AdBlockerDetector() {
   const [showModal, setShowModal] = useState(false)
+  const checkIntervalRef = useRef(INITIAL_CHECK_INTERVAL)
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const detectAdBlocker = useCallback(async () => {
-    let adBlockDetected = false
-
-    // Method 1: Adbox detection
-    const testAd = document.createElement('div')
-    testAd.innerHTML = '&nbsp;'
-    testAd.className = 'adsbox'
-    document.body.appendChild(testAd)
-
-    await new Promise(resolve => setTimeout(resolve, 100))
-
-    if (testAd.offsetHeight === 0) {
-      adBlockDetected = true
+    try {
+      await fetch('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js', {
+        method: 'HEAD',
+        mode: 'no-cors',
+        cache: 'no-store',
+      })
+      return false
+    } catch {
+      return true
     }
-    testAd.remove()
-
-    // Method 2: Google AdSense fetch
-    if (!adBlockDetected) {
-      try {
-        await fetch('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js', {
-          method: 'HEAD',
-          mode: 'no-cors',
-          cache: 'no-store',
-        })
-      } catch {
-        adBlockDetected = true
-      }
-    }
-
-    return adBlockDetected
   }, [])
 
   const checkAdBlocker = useCallback(async () => {
+    const cachedResult = localStorage.getItem(LOCAL_STORAGE_KEY)
+    if (cachedResult) {
+      setShowModal(cachedResult === 'true')
+      return
+    }
+
     const detected = await detectAdBlocker()
     setShowModal(detected)
+    localStorage.setItem(LOCAL_STORAGE_KEY, detected.toString())
+
+    // Implement exponential backoff
+    checkIntervalRef.current = Math.min(checkIntervalRef.current * 2, MAX_CHECK_INTERVAL)
   }, [detectAdBlocker])
 
-  useEffect(() => {
-    let interval: NodeJS.Timeout | null = null
+  const debouncedCheck = useCallback(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+    timeoutRef.current = setTimeout(checkAdBlocker, 300)
+  }, [checkAdBlocker])
 
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        if (interval) {
-          clearInterval(interval)
-          interval = null
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          debouncedCheck()
         }
-      } else {
-        checkAdBlocker()
-        interval = setInterval(checkAdBlocker, 5000) // Check every 5 seconds when page is visible
+      },
+      { threshold: 0.1 }
+    )
+
+    const dummyElement = document.createElement('div')
+    document.body.appendChild(dummyElement)
+    observer.observe(dummyElement)
+
+    const visibilityHandler = () => {
+      if (!document.hidden) {
+        debouncedCheck()
       }
     }
 
-    document.addEventListener('visibilitychange', handleVisibilityChange)
-
-    // Initial check and interval setup
-    handleVisibilityChange()
+    document.addEventListener('visibilitychange', visibilityHandler)
 
     return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange)
-      if (interval) {
-        clearInterval(interval)
+      observer.disconnect()
+      document.body.removeChild(dummyElement)
+      document.removeEventListener('visibilitychange', visibilityHandler)
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
       }
     }
-  }, [checkAdBlocker])
+  }, [debouncedCheck])
 
   const handleClose = async () => {
     const stillDetected = await detectAdBlocker()
@@ -87,6 +95,7 @@ export default function AdBlockerDetector() {
       alert("It seems your ad blocker is still active. Please disable it and try again.")
     } else {
       setShowModal(false)
+      localStorage.setItem(LOCAL_STORAGE_KEY, 'false')
     }
   }
 
