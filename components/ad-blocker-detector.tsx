@@ -19,8 +19,8 @@ export default function AdBlockerDetector() {
   const [showModal, setShowModal] = useState(false)
   const detectionPerformedRef = useRef(false)
 
-  const detectAdBlocker = useCallback(async () => {
-    if (detectionPerformedRef.current) return
+  const detectAdBlocker = useCallback(async (): Promise<boolean> => {
+    if (detectionPerformedRef.current) return false
 
     const testAd = document.createElement('div')
     testAd.innerHTML = '&nbsp;'
@@ -52,6 +52,7 @@ export default function AdBlockerDetector() {
     detectionPerformedRef.current = true
     localStorage.setItem(LOCAL_STORAGE_KEY, adBlockDetected.toString())
     setShowModal(adBlockDetected)
+    return adBlockDetected
   }, [])
 
   useEffect(() => {
@@ -88,6 +89,8 @@ export default function AdBlockerDetector() {
       localStorage.setItem(LOCAL_STORAGE_KEY, 'false')
     }
   }
+
+  if (typeof window === 'undefined') return null
 
   if (!showModal) return null
 
