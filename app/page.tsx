@@ -38,6 +38,7 @@ import {
 
 
 export default function Page() {
+  const [hoveredStep, setHoveredStep] = useState<number | null>(null)
   const fadeIn: Variants = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 }
@@ -74,13 +75,28 @@ export default function Page() {
     }
   ]
 
-  const steps = [
-    { title: "Choose a Tool", description: "Select from our wide range of AI text tools", icon: Zap },
-    { title: "Input Your Content", description: "Paste your text or start writing from scratch", icon: PenTool },
-    { title: "Let AI Work Its Magic", description: "Our advanced AI processes and enhances your content", icon: Sparkles },
-    { title: "Review and Edit", description: "Fine-tune the AI-generated results to perfection", icon: Check },
+const steps = [
+    {
+      icon: <Lightbulb className="h-8 w-8" />,
+      title: "Choose a Tool",
+      description: "Select from our wide range of AI text tools",
+    },
+    {
+      icon: <Pencil className="h-8 w-8" />,
+      title: "Input Your Content",
+      description: "Paste your text or start writing from scratch",
+    },
+    {
+      icon: <Sparkles className="h-8 w-8" />,
+      title: "Let AI Work Its Magic",
+      description: "Our advanced AI processes and enhances your content",
+    },
+    {
+      icon: <CheckCircle className="h-8 w-8" />,
+      title: "Review and Edit",
+      description: "Fine-tune the AI-generated results to perfection",
+    },
   ]
-
   const toolkit = [
     {
     icon: <Image className="h-8 w-8 text-blue-500" />,
@@ -465,34 +481,47 @@ const faqData = [
         </div>
       </section>
 
-      <section className="py-20 bg-white bg-gradient-to-b dark:from-gray-900 dark:to-gray-800">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12">
-            How <span className="text-primary">Saze AI</span> Works ?
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {steps.map((step, index) => (
+     <section className="py-16 px-4 bg-gradient-to-br from-gray-900 to-black dark:from-gray-800 dark:to-black text-white min-h-screen flex items-center justify-center overflow-hidden">
+      <div className="max-w-4xl mx-auto relative">
+        <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
+          How Saze AI Works
+        </h2>
+        <div className="relative">
+          {steps.map((step, index) => (
+            <motion.div
+              key={index}
+              className="mb-16 flex items-center gap-8 relative z-10"
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.2 }}
+            >
               <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="rounded-lg border shadow-lg p-6 flex items-start"
+                className="relative"
+                whileHover={{ scale: 1.1 }}
+                onHoverStart={() => setHoveredStep(index)}
+                onHoverEnd={() => setHoveredStep(null)}
               >
-                <div className="flex-shrink-0 mr-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                    <step.icon className="w-6 h-6 text-blue-600" />
-                  </div>
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center relative z-10">
+                  {React.cloneElement(step.icon, { className: "h-8 w-8 text-white" })}
                 </div>
-                <div>
-                  <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
-                  <p className="text-gray-400">{step.description}</p>
-                </div>
+                <motion.div
+                  className="absolute inset-0 rounded-full bg-blue-500 blur-md z-0"
+                  animate={{
+                    scale: hoveredStep === index ? [1, 1.2, 1] : 1,
+                  }}
+                  transition={{ duration: 1, repeat: hoveredStep === index ? Infinity : 0 }}
+                />
               </motion.div>
-            ))}
-          </div>
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
+                <p className="text-gray-300">{step.description}</p>
+              </div>
+            </motion.div>
+          ))}
+          <div className="absolute left-8 top-8 bottom-8 w-0.5 bg-gradient-to-b from-blue-500 to-purple-600" />
         </div>
-      </section>
+      </div>
+    </section>
 
       {/* Our Toolkit Section */}
       <section className="py-20 bg-gray-50 bg-gradient-to-b dark:from-gray-900 dark:to-gray-800">
