@@ -13,7 +13,6 @@ import {
   Heart,
   Brain,
   Lightbulb,
-  Check,
   MessageSquare,
   BookOpen,
   Feather,
@@ -32,6 +31,7 @@ import {
   ShoppingBag,
   Rocket,
   Search,
+  CheckCircle,
   ChevronDown,
   Image
 } from "lucide-react"
