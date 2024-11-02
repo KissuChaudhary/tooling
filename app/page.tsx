@@ -12,6 +12,7 @@ import {
   ArrowRight,
   Heart,
   Brain,
+  Pencil,
   Lightbulb,
   MessageSquare,
   BookOpen,
