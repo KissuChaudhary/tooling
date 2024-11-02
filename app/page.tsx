@@ -12,7 +12,7 @@ import {
   ArrowRight,
   Heart,
   Brain,
-  Pencil,
+  Cpu, Database, Award,
   Lightbulb,
   MessageSquare,
   BookOpen,
@@ -32,14 +32,15 @@ import {
   ShoppingBag,
   Rocket,
   Search,
-  CheckCircle,
+  
   ChevronDown,
   Image
 } from "lucide-react"
 
 
 export default function Page() {
-  const [hoveredStep, setHoveredStep] = useState<number | null>(null)
+    const [hoveredStep, setHoveredStep] = useState<number | null>(null)
+
   const fadeIn: Variants = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 }
@@ -76,28 +77,35 @@ export default function Page() {
     }
   ]
 
-const steps = [
-    {
-      icon: <Lightbulb className="h-8 w-8" />,
-      title: "Choose a Tool",
-      description: "Select from our wide range of AI text tools",
-    },
-    {
-      icon: <Pencil className="h-8 w-8" />,
-      title: "Input Your Content",
-      description: "Paste your text or start writing from scratch",
-    },
-    {
-      icon: <Sparkles className="h-8 w-8" />,
-      title: "Let AI Work Its Magic",
-      description: "Our advanced AI processes and enhances your content",
-    },
-    {
-      icon: <CheckCircle className="h-8 w-8" />,
-      title: "Review and Edit",
-      description: "Fine-tune the AI-generated results to perfection",
-    },
-  ]
+interface Step {
+  icon: React.ElementType
+  title: string
+  description: string
+}
+
+const steps: Step[] = [
+  {
+    icon: Cpu,
+    title: "AI Processing",
+    description: "Our advanced AI algorithms process your data with lightning speed and accuracy."
+  },
+  {
+    icon: Database,
+    title: "Data Analysis",
+    description: "We analyze vast amounts of data to extract meaningful insights and patterns."
+  },
+  {
+    icon: Zap,
+    title: "Real-time Results",
+    description: "Get instant results and actionable insights in real-time."
+  },
+  {
+    icon: Award,
+    title: "Continuous Learning",
+    description: "Our AI continuously learns and improves, adapting to new challenges."
+  }
+]
+
   const toolkit = [
     {
     icon: <Image className="h-8 w-8 text-blue-500" />,
@@ -503,7 +511,7 @@ const faqData = [
                 onHoverEnd={() => setHoveredStep(null)}
               >
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center relative z-10">
-                  {React.cloneElement(step.icon, { className: "h-8 w-8 text-white" })}
+                  <step.icon className="h-8 w-8 text-white" aria-hidden="true" />
                 </div>
                 <motion.div
                   className="absolute inset-0 rounded-full bg-blue-500 blur-md z-0"
