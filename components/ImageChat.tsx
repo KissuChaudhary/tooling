@@ -14,7 +14,6 @@ import {
   TooltipProvider 
 } from '@/components/ui/tooltip'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import AdUnit from '@/components/AdUnit'
 
 export default function Home() {
   const [imageUrl, setImageUrl] = useState<string | null>(null)
