@@ -1,6 +1,5 @@
 import ImageChat from '@/components/ImageChat'
 import Head from 'next/head';
-import AIImageChatTool from '@/components/AIImageChatTool'; 
 import Script from 'next/script';
 import React from 'react';
 import { Image, Chat, Text, MessageCircle, Eye, Globe } from 'lucide-react';
