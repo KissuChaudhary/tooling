@@ -75,11 +75,6 @@ export default function Home() {
 
   return (
     <TooltipProvider>
-      <AdUnit 
-          client="ca-pub-7915372771416695"
-          slot="8441706260"
-          style={{ marginBottom: '20px' }}
-        />
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-8">
         <main className="container mx-auto px-4 max-w-6xl">
           <Card className="border-none shadow-xl">
