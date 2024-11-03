@@ -15,7 +15,6 @@ import {
   Cpu, Database, Award,
   Lightbulb,
   MessageSquare,
-  BookOpen,
   Feather,
   Star,
   Volume2,
@@ -170,14 +169,6 @@ const steps: Step[] = [
     link: "/tools/ai-answer-generator"
   },
 
-
-
-  {
-    icon: <BookOpen className="h-8 w-8 text-emerald-500" />,
-    title: "AI Conclusion Generator",
-    description: "Generate impactful conclusions for your writing.",
-    link: "/tools/ai-conclusion-generator"
-  },
   {
     icon: <Sunrise className="h-8 w-8 text-amber-500" />,
     title: "AI Haiku Generator",
