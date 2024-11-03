@@ -2,7 +2,7 @@ import ImageChat from '@/components/ImageChat'
 import Head from 'next/head';
 import Script from 'next/script';
 import React from 'react';
-import { Image, Chat, Text, MessageCircle, Eye, Globe } from 'lucide-react';
+import { Image, Pencil, Text, MessageCircle, Eye, Globe } from 'lucide-react';
 import AdUnit from '@/components/AdUnit';
 import ToolEngagement from '@/components/tool-engagement';
 
@@ -112,7 +112,7 @@ export default function AIImageChatToolPage() {
                 description="Engage in chats using images as inputs, enhancing communication with visual content."
               />
               <BenefitCard
-                icon={<Chat size={24} />}
+                icon={<Pencil size={24} />}
                 title="Chat with Images"
                 description="Start conversations with AI by uploading images, letting the AI respond intelligently to visual content."
               />
