@@ -46,6 +46,11 @@ export default function AiImageChat() {
       </Script>
 
       <div className="min-h-screen bg-background text-foreground" style={{ paddingBottom: '3rem' }}>
+        <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
         <ImageChat />
         <ToolEngagement 
           toolName="AI Image Chat Tool"
