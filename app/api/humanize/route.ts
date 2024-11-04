@@ -1,9 +1,8 @@
-// app/api/humanize/route.ts
 import { NextRequest, NextResponse } from 'next/server'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 import { z } from 'zod'
 import DOMPurify from 'isomorphic-dompurify'
-import applyRateLimit from '../middleware/rateLimiter'
+import { applyRateLimit } from '../middleware/rateLimiter'
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
 
@@ -14,7 +13,8 @@ const inputSchema = z.object({
 export async function POST(request: NextRequest) {
   try {
     // Apply rate limiting
-    await applyRateLimit(request, NextResponse)
+    const response = await applyRateLimit(request)
+    if (response) return response
 
     const body = await request.json()
     const { text } = inputSchema.parse(body)
