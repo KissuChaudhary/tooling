@@ -40,12 +40,15 @@ export default function AITextHumanizer() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: inputText }),
       })
-      if (!response.ok) throw new Error('Failed to humanize text')
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to humanize text')
+      }
       const data = await response.json()
       setOutputText(data.humanizedText)
     } catch (error) {
       console.error('Error:', error)
-      setError('Failed to humanize text. Please try again.')
+      setError(error instanceof Error ? error.message : 'Failed to humanize text. Please try again.')
     } finally {
       setIsLoading(false)
     }
@@ -98,13 +101,18 @@ export default function AITextHumanizer() {
               placeholder="Paste your AI-generated text here..."
               rows={5}
               className="w-full p-2 border rounded-md"
+              disabled={isLoading}
             />
             <p className="text-sm text-gray-500 mt-1">
               {inputText.length}/{MAX_CHARS} characters
             </p>
           </div>
           <div className="flex space-x-2">
-            <Button type="submit" disabled={isLoading || inputText.length === 0} className="flex-1">
+            <Button 
+              type="submit" 
+              disabled={isLoading || inputText.length === 0} 
+              className="flex-1"
+            >
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -114,7 +122,12 @@ export default function AITextHumanizer() {
                 'Humanize Text'
               )}
             </Button>
-            <Button type="button" onClick={handleReset} variant="outline">
+            <Button 
+              type="button" 
+              onClick={handleReset} 
+              variant="outline"
+              disabled={isLoading}
+            >
               <RotateCcw className="h-4 w-4 mr-2" />
               Reset
             </Button>
