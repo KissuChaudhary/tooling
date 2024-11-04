@@ -52,7 +52,7 @@ export default function AIPopup() {
             </button>
             <h2 className="font-bold text-base sm:text-lg text-white flex items-center gap-1.5">
               <Sparkles className="h-4 w-4 sm:h-5 sm:w-5" />
-             💼 Look Professional Instantly! 💼
+             Look Professional Instantly!
             </h2>
           </div>
           
