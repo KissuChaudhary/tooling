@@ -118,7 +118,7 @@ export default function AITextHumanizer() {
               <Button 
                 type="submit" 
                 disabled={isLoading || inputText.length === 0} 
-                className="flex-1 bg-blue-500 hover:bg-blue-600 text-white transition-colors"
+                className="flex-1 transition-colors"
               >
                 {isLoading ? (
                   <>
