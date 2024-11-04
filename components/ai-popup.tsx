@@ -6,24 +6,12 @@ import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { X, Sparkles } from "lucide-react"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
-import { Database } from "@/types/supabase"
 
 export default function AIPopup() {
   const [isVisible, setIsVisible] = useState(false)
   const [hasScrolled, setHasScrolled] = useState(false)
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   useEffect(() => {
-    const supabase = createClientComponentClient<Database>()
-
-    const checkAuth = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      setIsAuthenticated(!!user)
-    }
-
-    checkAuth()
-
     const handleScroll = () => {
       if (!hasScrolled && window.scrollY > 80) {
         setHasScrolled(true)
@@ -33,7 +21,7 @@ export default function AIPopup() {
     window.addEventListener('scroll', handleScroll)
 
     const timer = setTimeout(() => {
-      if (hasScrolled && !isAuthenticated) {
+      if (hasScrolled) {
         setIsVisible(true)
       }
     }, 2000) // 2 seconds delay
@@ -42,11 +30,7 @@ export default function AIPopup() {
       window.removeEventListener('scroll', handleScroll)
       clearTimeout(timer)
     }
-  }, [hasScrolled, isAuthenticated])
-
-  if (isAuthenticated) {
-    return null
-  }
+  }, [hasScrolled])
 
   return (
     <AnimatePresence>
