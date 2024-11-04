@@ -1,22 +1,26 @@
-// app/api/middleware/rateLimiter.ts
-import rateLimit from 'express-rate-limit'
-import { NextApiRequest, NextApiResponse } from 'next'
+import { NextRequest, NextResponse } from 'next/server'
+import { LRUCache } from 'lru-cache'
 
-const rateLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // Limit each IP to 100 requests per windowMs
-  message: 'Whoa there, speed racer! Looks like you have got us working overtime. Take a breather and try again later',
-  standardHeaders: true,
-  legacyHeaders: false,
+const rateLimit = new LRUCache({
+  max: 500,
+  ttl: 15 * 60 * 1000, // 15 minutes
 })
 
-export default function applyRateLimit(req: NextApiRequest, res: NextApiResponse) {
-  return new Promise((resolve, reject) => {
-    rateLimiter(req, res, (result: Error | undefined) => {
-      if (result instanceof Error) {
-        return reject(result)
-      }
-      return resolve(result)
-    })
-  })
+function getIP(request: NextRequest): string {
+  const xff = request.headers.get('x-forwarded-for')
+  return xff ? (Array.isArray(xff) ? xff[0] : xff.split(',')[0]) : '127.0.0.1'
+}
+
+export async function applyRateLimit(request: NextRequest) {
+  const ip = getIP(request)
+  const tokenCount = rateLimit.get(ip) || 0
+
+  if (tokenCount > 5) {
+    return NextResponse.json(
+      { error: 'Whoa there, speed racer! Looks like you have got us working overtime. Take a breather and try again later' },
+      { status: 429 }
+    )
+  }
+
+  rateLimit.set(ip, tokenCount + 1)
 }
