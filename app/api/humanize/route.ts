@@ -13,8 +13,8 @@ const inputSchema = z.object({
 export async function POST(request: NextRequest) {
   try {
     // Apply rate limiting
-    const response = await applyRateLimit(request)
-    if (response) return response
+    const rateLimitResult = await applyRateLimit(request)
+    if (rateLimitResult) return rateLimitResult
 
     const body = await request.json()
     const { text } = inputSchema.parse(body)
