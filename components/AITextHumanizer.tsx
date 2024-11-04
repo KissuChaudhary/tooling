@@ -92,7 +92,7 @@ export default function AITextHumanizer() {
       
       <Card className="w-full max-w-3xl mx-auto bg-white/80 backdrop-blur-sm shadow-lg relative z-10">
         <CardHeader className="text-center">
-          <CardTitle className="text-3xl font-bold text-gray-800">AI Text Humanizer</CardTitle>
+          <h1 className="text-3xl font-bold text-gray-800">AI Text Humanizer</h1>
           <CardDescription className="text-lg text-gray-600">Transform AI-generated text into more human-like language</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
