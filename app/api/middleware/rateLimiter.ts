@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { LRUCache } from 'lru-cache'
 
-const rateLimit = new LRUCache({
+const rateLimit = new LRUCache<string, number>({
   max: 500,
   ttl: 15 * 60 * 1000, // 15 minutes
 })
@@ -13,7 +13,7 @@ function getIP(request: NextRequest): string {
 
 export async function applyRateLimit(request: NextRequest) {
   const ip = getIP(request)
-  const tokenCount = rateLimit.get(ip) || 0
+  const tokenCount = rateLimit.get(ip) ?? 0
 
   if (tokenCount > 5) {
     return NextResponse.json(
