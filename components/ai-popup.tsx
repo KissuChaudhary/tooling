@@ -62,7 +62,7 @@ export default function AIPopup() {
             </p>
             <div className="relative w-full aspect-[512/728] rounded-lg overflow-hidden">
               <Image
-                src="/content/glamour1.webp"
+                src="/content/headshots1.webp"
                 alt="AI-generated image example"
                 width={384}
                 height={546}
