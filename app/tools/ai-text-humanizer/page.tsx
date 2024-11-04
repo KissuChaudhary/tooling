@@ -1,5 +1,5 @@
 // app/page.tsx
-import AITextHumanizer from './components/AITextHumanizer'
+import AITextHumanizer from '@/components/AITextHumanizer'
 
 export default function Home() {
   return (
