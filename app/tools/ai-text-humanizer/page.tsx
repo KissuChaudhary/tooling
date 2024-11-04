@@ -1,4 +1,4 @@
-// app/page.tsx
+import Script from 'next/script'
 import AITextHumanizer from '@/components/AITextHumanizer'
 
 export default function Home() {
