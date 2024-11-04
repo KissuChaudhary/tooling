@@ -8,6 +8,8 @@ import Footer from '../components/Footer'
 import WebSiteSchema from './WebSiteSchema'
 import ScrollToTopButton from '@/components/ScrollToTopButton'
 import { Toaster } from '@/components/ui/toaster'
+import AIPopup from '@/components/ai-popup'
+
 
 export const metadata: Metadata = {
   title: {
@@ -104,6 +106,7 @@ export default function RootLayout({
               <SpeedInsights />
               
             </main>
+            <AIPopup />
             <ScrollToTopButton />
             <Footer />
           </div>
