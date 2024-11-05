@@ -584,7 +584,7 @@ async function handleOpenAIRequest(messages: any[]) {
     body: JSON.stringify({
       model: "gpt-4o-mini",
       messages: messages,
-      max_tokens: 500
+      max_tokens: 1000
     })
   });
 
