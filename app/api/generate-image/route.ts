@@ -10,7 +10,7 @@ export async function POST(req: Request) {
 
   try {
     const response = await fetch(
-      `${apiHost}/v1/generation/stable-diffusion-v1-6/text-to-image`,
+      `${apiHost}/v1/generation/stable-diffusion-xl-1024-v1-0/text-to-image`,
       {
         method: 'POST',
         headers: {
