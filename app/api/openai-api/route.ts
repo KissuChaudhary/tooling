@@ -5,7 +5,7 @@ import { LRUCache } from 'lru-cache';
 
 // Rate limiting setup
 const rateLimit = new LRUCache<string, number>({
-  max: 5000,
+  max: 500,
   ttl: 1200,
 });
 
