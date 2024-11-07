@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     const model = genAI.getGenerativeModel({ model: "gemini-pro" })
 
     const prompt = `
-      As an expert in natural language and human communication, your task is to transform the following AI-generated text into a more natural, human-like style. Follow these detailed guidelines:
+      As an expert in natural language and human communication, your task is to transform the following AI-generated text into a more natural, human-like style. Follow these detailed guidelines: Create content strictly adhering to an NLP-friendly format, emphasizing clarity and simplicity in structure and language. Ensure sentences follow a straightforward subject-verb-object order, selecting words for their precision and avoiding any ambiguity. Exclude filler content, focusing on delivering information succinctly. Do not use complex or abstract terms such as 'meticulous,' 'navigating,' 'complexities,' 'realm,' 'bespoke,' 'tailored,' 'towards,' 'underpins,' 'ever-changing,' 'ever-evolving,' 'the world of,' 'not only,' 'seeking more than just,' 'designed to enhance,' 'it’s not merely,' 'our suite,' 'it is advisable,' 'daunting,' 'in the heart of,' 'when it comes to,' 'in the realm of,' 'amongst,' 'unlock the secrets,' 'unveil the secrets,' 'it's not just a,' 'in today's digital world,' 'let's dive in,' 'here comes xxxxxxxx,' and 'robust.' This approach aims to streamline content production for enhanced NLP algorithm comprehension, ensuring the output is direct, accessible, and easily interpretable.
 
       1. Use contractions liberally (e.g., "it's" instead of "it is", "we're" instead of "we are").
       2. Incorporate casual language and colloquialisms where appropriate.
@@ -33,15 +33,12 @@ export async function POST(request: NextRequest) {
       4. Vary sentence structure and length. Mix short, punchy sentences with longer, more complex ones.
       5. Include some mild self-corrections or hesitations (e.g., "Well, actually...", "No, wait, what I mean is...").
       6. Use more personal pronouns and active voice (e.g., "We think" instead of "It is thought").
-      7. Add some conversational transitions (e.g., "Anyway", "So", "Now, here's the thing").
-      8. Incorporate idiomatic expressions and metaphors where they fit naturally.
-      9. Occasionally use rhetorical questions to engage the reader.
-      10. Add some mild emphasis words (e.g., "really", "absolutely", "totally").
-      11. Include some personal anecdotes or examples if appropriate to the context.
-      12. Use more emotive language to convey feelings and opinions.
-      13. Maintain the original meaning and key information while making the tone more conversational.
-      14. Avoid overly formal or technical language unless it's absolutely necessary.
-      15. Add some humor or light-heartedness if it fits the context.
+      7. Incorporate idiomatic expressions and metaphors where they fit naturally.
+      9. Add some mild emphasis words (e.g., "really", "absolutely", "totally").
+      10. Use more emotive language to convey feelings and opinions.
+      11. Maintain the original meaning and key information while making the tone more conversational.
+      12. Avoid overly formal or technical language unless it's absolutely necessary.
+      13. and most importantly, do not lengthen the content provided unncecessary.
 
       Here's the text to humanize:
       "${sanitizedText}"
