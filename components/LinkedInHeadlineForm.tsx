@@ -51,7 +51,7 @@ export default function LinkedInHeadlineGenerator() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
   const [errors, setErrors] = useState<Errors>({});
-  const [model, setModel] = useState<'gpt4o' | 'gemini'>('gpt4o');
+  const [model, setModel] = useState<'gpt4o' | 'gemini'>('gemini');
 
   const handleChange = (name: keyof FormData, value: string) => {
     const characterCount = value.length;
@@ -76,12 +76,14 @@ export default function LinkedInHeadlineGenerator() {
     return Object.keys(newErrors).length === 0;
   };
 
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validateForm()) return;
   
     setIsLoading(true);
+    setErrors({});
+    setGeneratedHeadline('');
+
     try {
       const response = await fetch('/api/openai-api', {
         method: 'POST',
@@ -91,17 +93,20 @@ export default function LinkedInHeadlineGenerator() {
         body: JSON.stringify({
           tool: 'linkedinHeadline',
           model,
-          data: formData, // Nest the form data under 'data'
+          data: formData,
         }),
       });
-      if (!response.ok) {
-        throw new Error('Failed to generate headline');
-      }
+      
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'An error occurred while generating the headline');
+      }
+
       setGeneratedHeadline(data.headline);
     } catch (error) {
       console.error('Error:', error);
-      setErrors({ submit: 'Failed to generate headline. Please try again.' });
+      setErrors({ submit: error instanceof Error ? error.message : 'An unexpected error occurred' });
     } finally {
       setIsLoading(false);
     }
@@ -118,10 +123,10 @@ export default function LinkedInHeadlineGenerator() {
       <h1 className="text-4xl font-extrabold mb-8 text-center tracking-tight">LinkedIn Headline Generator</h1>
       <p className="text-xl text-center mb-12 max-w-3xl mx-auto">Craft a Compelling LinkedIn Headline with Saze AI – Tailored, Professional, and Instantly Engaging.</p>
       <AdUnit 
-  client="ca-pub-7915372771416695"
-  slot="8441706260"
-  style={{ marginBottom: '20px' }}
-/>
+        client="ca-pub-7915372771416695"
+        slot="8441706260"
+        style={{ marginBottom: '20px' }}
+      />
       <div className="flex justify-center items-center space-x-4 mb-8">
         <div className="flex items-center space-x-2">
           <svg
@@ -155,7 +160,7 @@ export default function LinkedInHeadlineGenerator() {
         </div>
         <Switch
           id="model-switch"
-          checked={model === 'gemini'}
+          checked={model === 'gpt4o'}
           onCheckedChange={(checked) => setModel(checked ? 'gpt4o' : 'gemini')}
         />
         <div className="flex items-center space-x-2">
