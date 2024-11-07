@@ -37,6 +37,8 @@ export default function ImageGenerator() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [hasGenerated, setHasGenerated] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [flaggedError, setFlaggedError] = useState<string | null>(null)
+  const [showFlaggedError, setShowFlaggedError] = useState(false)
   const [imageUrls, setImageUrls] = useState<string[]>([])
   const [loadingImages, setLoadingImages] = useState<boolean[]>([])
   const [showAdOverlay, setShowAdOverlay] = useState(false)
@@ -55,10 +57,21 @@ export default function ImageGenerator() {
     return () => clearInterval(interval)
   }, [isGenerating])
 
+  useEffect(() => {
+    if (flaggedError) {
+      setShowFlaggedError(true)
+      const timer = setTimeout(() => {
+        setShowFlaggedError(false)
+      }, 5000) // Hide the error after 5 seconds
+      return () => clearTimeout(timer)
+    }
+  }, [flaggedError])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsGenerating(true)
     setError(null)
+    setFlaggedError(null)
     setImageUrls([])
     setLoadingProgress(0)
 
@@ -79,7 +92,12 @@ export default function ImageGenerator() {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to generate image')
+        if (response.status === 400 && data.error.includes('inappropriate content')) {
+          setFlaggedError(data.error)
+        } else {
+          throw new Error(data.error || 'Failed to generate image')
+        }
+        return
       }
 
       if (!data.images || !Array.isArray(data.images)) {
@@ -101,6 +119,7 @@ export default function ImageGenerator() {
     setParams(initialParams)
     setImageUrls([])
     setError(null)
+    setFlaggedError(null)
     setHasGenerated(false)
     setLoadingProgress(0)
   }
@@ -131,11 +150,11 @@ export default function ImageGenerator() {
       <Card className="w-full md:w-[30%] md:h-screen md:overflow-y-auto">
         <CardContent className="p-4">
           <form onSubmit={handleSubmit} className="space-y-4">
-          <AdUnit 
-          client="ca-pub-7915372771416695"
-          slot="2181958821"
-          style={{ marginBottom: '20px' }}
-          />
+            <AdUnit 
+              client="ca-pub-7915372771416695"
+              slot="2181958821"
+              style={{ marginBottom: '20px' }}
+            />
             <div className="space-y-2">
               <h2>Free AI Influencer Generator</h2>
               <Label htmlFor="prompt">Prompt</Label>
@@ -186,6 +205,13 @@ export default function ImageGenerator() {
               <Label htmlFor="enable_safety_checker">Enable Safety Checker</Label>
             </div>
 
+            {showFlaggedError && flaggedError && (
+              <Alert variant="destructive" className="transition-opacity duration-300 ease-in-out">
+                <AlertTitle>Content Flagged</AlertTitle>
+                <AlertDescription>{flaggedError}</AlertDescription>
+              </Alert>
+            )}
+
             <div className="flex space-x-2">
               <Button type="submit" className="w-full" disabled={isGenerating || hasGenerated}>
                 {isGenerating ? 'Generating...' : 'Generate Image'}
@@ -195,10 +221,10 @@ export default function ImageGenerator() {
               </Button>
             </div>
             <AdUnit 
-          client="ca-pub-7915372771416695"
-          slot="2181958821"
-          style={{ marginBottom: '20px' }}
-          />
+              client="ca-pub-7915372771416695"
+              slot="2181958821"
+              style={{ marginBottom: '20px' }}
+            />
           </form>
 
           {error && (
@@ -211,11 +237,11 @@ export default function ImageGenerator() {
       </Card>
 
       <div className="w-full md:w-[70%] md:h-screen dotted-bg flex flex-col flex justify-center items-center p-4">
-      <AdUnit 
+        <AdUnit 
           client="ca-pub-7915372771416695"
           slot="2181958821"
           style={{ marginBottom: '20px' }}
-          />
+        />
         <div className={`bg-white rounded-lg shadow flex items-center justify-center ${getImagePreviewStyle()} relative overflow-hidden`}>
           {isGenerating && (
             <div className="absolute inset-0 bg-gray-200 z-10">
