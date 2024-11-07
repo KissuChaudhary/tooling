@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Replicate from 'replicate'
 import { createHash } from 'crypto'
+import { cookies } from 'next/headers'
 
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN,
@@ -8,6 +9,7 @@ const replicate = new Replicate({
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
 const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/png', 'image/webp']
+const MAX_USES_PER_DAY = 3
 
 function isValidFileType(file: File): boolean {
   return ALLOWED_FILE_TYPES.includes(file.type)
@@ -19,6 +21,14 @@ function sanitizeFilename(filename: string): string {
 
 export async function POST(req: NextRequest) {
   try {
+    // Check user limit
+    const cookieStore = cookies()
+    const usageCount = parseInt(cookieStore.get('background_remover_usage')?.value || '0')
+    
+    if (usageCount >= MAX_USES_PER_DAY) {
+      return NextResponse.json({ error: "Congrats! You've officially hit your background removal limit for today. No more magic for you. Try again tomorrow, if you can wait that long!" }, { status: 429 })
+    }
+
     const formData = await req.formData()
     const file = formData.get('file') as File | null
     const imageUrl = formData.get('imageUrl') as string | null
@@ -57,6 +67,12 @@ export async function POST(req: NextRequest) {
     const prediction = await replicate.predictions.create({
       version: "da7d45f3b836795f945f221fc0b01a6d3ab7f5e163f13208948ad436001e2255",
       input: input,
+    })
+
+    // Increment usage count
+    cookieStore.set('background_remover_usage', (usageCount + 1).toString(), {
+      expires: new Date(new Date().setHours(24, 0, 0, 0)), // Set to expire at midnight
+      path: '/',
     })
 
     return NextResponse.json({ predictionId: prediction.id })
