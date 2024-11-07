@@ -323,6 +323,30 @@ const RequestSchema = z.object({
   ]),
 });
 
+// New function to check content using OpenAI's moderation API
+async function moderateContent(content: string) {
+  const openaiApiKey = process.env.OPENAI_API_KEY;
+  if (!openaiApiKey) {
+    throw new Error('OpenAI API key is not set');
+  }
+
+  const response = await fetch('https://api.openai.com/v1/moderations', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${openaiApiKey}`
+    },
+    body: JSON.stringify({ input: content })
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to check content moderation');
+  }
+
+  const result = await response.json();
+  return result.results[0];
+}
+
 export async function POST(request: NextRequest) {
   // Rate limiting
   const ip = getIP(request);
@@ -341,6 +365,20 @@ export async function POST(request: NextRequest) {
   }
 
   const { tool, model, data } = body;
+
+  // Combine all user inputs into a single string for moderation
+  const userInput = Object.values(data).join(' ');
+
+  // Check content moderation
+  try {
+    const moderationResult = await moderateContent(userInput);
+    if (moderationResult.flagged) {
+      return NextResponse.json({ error: "Content flagged as inappropriate" }, { status: 400 });
+    }
+  } catch (error) {
+    console.error('Moderation API error:', error);
+    return NextResponse.json({ error: "Failed to moderate content" }, { status: 500 });
+  }
 
   let messages;
 
@@ -441,7 +479,7 @@ export async function POST(request: NextRequest) {
     case 'aiSeoMetaDescriptionGenerator':
       messages = createSeoMetaDescriptionGeneratorMessages(data);
       break;
-    case    'aiSloganGenerator':
+    case 'aiSloganGenerator':
       messages = createSloganGeneratorMessages(data);
       break;
     case 'aiYoutubeTitleGenerator':
@@ -471,6 +509,17 @@ export async function POST(request: NextRequest) {
       content = await handleGeminiRequest(messages);
     } else {
       throw new Error('Invalid model specified');
+    }
+
+    // Moderate the generated content as well
+    try {
+      const generatedContentModerationResult = await moderateContent(content);
+      if (generatedContentModerationResult.flagged) {
+        return NextResponse.json({ error: "Generated content flagged as inappropriate" }, { status: 400 });
+      }
+    } catch (error) {
+      console.error('Generated content moderation API error:', error);
+      return NextResponse.json({ error: "Failed to moderate generated content" }, { status: 500 });
     }
 
     // Return appropriate response based on tool type
