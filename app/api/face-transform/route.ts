@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Replicate from 'replicate'
+import { cookies } from 'next/headers'
 
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN,
@@ -7,6 +8,7 @@ const replicate = new Replicate({
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
 const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/png', 'image/webp']
+const MAX_USES_PER_DAY = 3
 
 function isValidFileType(file: File): boolean {
   return ALLOWED_FILE_TYPES.includes(file.type)
@@ -14,6 +16,14 @@ function isValidFileType(file: File): boolean {
 
 export async function POST(req: NextRequest) {
   try {
+    // Check user limit
+    const cookieStore = cookies()
+    const usageCount = parseInt(cookieStore.get('face_transform_usage')?.value || '0')
+    
+    if (usageCount >= MAX_USES_PER_DAY) {
+      return NextResponse.json({ error: 'Daily limit reached. Please try again tomorrow.' }, { status: 429 })
+    }
+
     const formData = await req.formData()
     const file = formData.get('file') as File | null
     const imageUrl = formData.get('imageUrl') as string | null
@@ -61,6 +71,12 @@ export async function POST(req: NextRequest) {
         instant_id_strength: 0.8, // Default value
         control_depth_strength: 0.8 // Default value
       },
+    })
+
+    // Increment usage count
+    cookieStore.set('face_transform_usage', (usageCount + 1).toString(), {
+      expires: new Date(new Date().setHours(24, 0, 0, 0)), // Set to expire at midnight
+      path: '/',
     })
 
     return NextResponse.json({ predictionId: prediction.id })
