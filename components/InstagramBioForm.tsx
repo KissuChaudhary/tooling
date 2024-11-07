@@ -4,6 +4,9 @@ import React, { useState } from 'react';
 import { Loader2, Clipboard, Check, AlertCircle } from 'lucide-react';
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import AdUnit from '../components/AdUnit'
 
 interface FormData {
@@ -30,7 +33,7 @@ const characterLimits: CharacterLimits = {
   callToAction: 50
 };
 
-export default function InstagramBioForm() {
+export default function InstagramBioGenerator() {
   const [formData, setFormData] = useState<FormData>({
     name: '',
     occupation: '',
@@ -49,13 +52,13 @@ export default function InstagramBioForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
   const [errors, setErrors] = useState<Errors>({});
-  const [model, setModel] = useState<'gpt4o' | 'gemini'>('gpt4o');
+  const [model, setModel] = useState<'gpt4o' | 'gemini'>('gemini');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const characterCount = value.length;
     
-    if (characterCount <= characterLimits[name]) {
+    if (characterCount <= characterLimits[name as keyof FormData]) {
       setFormData(prev => ({ ...prev, [name]: value }));
       setCharacterCounts(prev => ({ ...prev, [name]: characterCount.toString() }));
       if (errors[name]) {
@@ -80,6 +83,9 @@ export default function InstagramBioForm() {
     if (!validateForm()) return;
   
     setIsLoading(true);
+    setErrors({});
+    setGeneratedBio('');
+
     try {
       const response = await fetch('/api/openai-api', {
         method: 'POST',
@@ -89,17 +95,20 @@ export default function InstagramBioForm() {
         body: JSON.stringify({
           tool: 'instagramBio',
           model,
-          data: formData, // Nest the form data under 'data'
+          data: formData,
         }),
       });
-      if (!response.ok) {
-        throw new Error('Failed to generate bio');
-      }
+      
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'An error occurred while generating the bio');
+      }
+
       setGeneratedBio(data.bio);
     } catch (error) {
       console.error('Error:', error);
-      setErrors({ submit: 'Failed to generate bio. Please try again.' });
+      setErrors({ submit: error instanceof Error ? error.message : 'An unexpected error occurred' });
     } finally {
       setIsLoading(false);
     }
@@ -116,10 +125,10 @@ export default function InstagramBioForm() {
       <h1 className="text-4xl font-extrabold mb-8 text-center tracking-tight">Instagram Bio Generator</h1>
       <p className="text-xl text-center mb-12 max-w-3xl mx-auto">Create Engaging Instagram Bios with Saze AI – Unique, Trendy, and Instantly Captivating.</p>
       <AdUnit 
-  client="ca-pub-7915372771416695"
-  slot="8441706260"
-  style={{ marginBottom: '20px' }}
-/>
+        client="ca-pub-7915372771416695"
+        slot="8441706260"
+        style={{ marginBottom: '20px' }}
+      />
       <div className="flex justify-center items-center space-x-4 mb-8">
         <div className="flex items-center space-x-2">
           <svg
@@ -153,7 +162,7 @@ export default function InstagramBioForm() {
         </div>
         <Switch
           id="model-switch"
-          checked={model === 'gemini'}
+          checked={model === 'gpt4o'}
           onCheckedChange={(checked) => setModel(checked ? 'gpt4o' : 'gemini')}
         />
         <div className="flex items-center space-x-2">
@@ -177,85 +186,86 @@ export default function InstagramBioForm() {
         </div>
       </div>
       <div className="flex flex-col md:flex-row gap-8">
-        <div className="w-full md:w-1/2 h-full p-6 border border-gray-200 rounded-xl shadow-sm">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {(Object.keys(formData) as Array<keyof FormData>).map((field) => (
-              <div key={field} className="relative">
-                <div className="flex justify-between items-center mb-1">
-                  <label htmlFor={field} className="block text-sm font-medium text-gray-400 capitalize">
-                    {field.split(/(?=[A-Z])/).join(' ')}
-                  </label>
-                  <p className={`text-sm ${parseInt(characterCounts[field]) === characterLimits[field] ? 'text-orange-500' : 'text-gray-500'}`}>
-                    {characterCounts[field]}/{characterLimits[field]} characters
-                  </p>
+        <Card className="w-full md:w-1/2">
+          <CardHeader>
+            <CardTitle>Bio Details</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {(Object.keys(formData) as Array<keyof FormData>).map((field) => (
+                <div key={field} className="relative">
+                  <div className="flex justify-between items-center mb-1">
+                    <Label htmlFor={field} className="text-sm font-medium text-gray-400 capitalize">
+                      {field.split(/(?=[A-Z])/).join(' ')}
+                    </Label>
+                    <p className={`text-sm ${parseInt(characterCounts[field]) === characterLimits[field] ? 'text-orange-500' : 'text-gray-500'}`}>
+                      {characterCounts[field]}/{characterLimits[field]} characters
+                    </p>
+                  </div>
+                  <Input
+                    id={field}
+                    name={field}
+                    value={formData[field]}
+                    onChange={handleChange}
+                    maxLength={characterLimits[field]}
+                    className={errors[field] ? 'border-red-500' : ''}
+                    placeholder={`Enter your ${field.split(/(?=[A-Z])/).join(' ').toLowerCase()}...`}
+                  />
+                  {errors[field] && (
+                    <p className="mt-1 text-sm text-red-600 flex items-center">
+                      <AlertCircle className="h-4 w-4 mr-1" />
+                      {errors[field]}
+                    </p>
+                  )}
                 </div>
-                <input
-                  type="text"
-                  id={field}
-                  name={field}
-                  value={formData[field]}
-                  onChange={handleChange}
-                  maxLength={characterLimits[field]}
-                  className={`block w-full px-4 py-3 rounded-md border ${errors[field] ? 'border-red-500' : 'border-gray-300'} focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm transition duration-150 ease-in-out`}
-                  placeholder={`Enter your ${field.split(/(?=[A-Z])/).join(' ').toLowerCase()}...`}
-                />
-                {errors[field] && (
-                  <p className="mt-1 text-sm text-red-600 flex items-center">
-                    <AlertCircle className="h-4 w-4 mr-1" />
-                    {errors[field]}
-                  </p>
-                )}
-              </div>
-            ))}
-            <button 
-              type="submit" 
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="animate-spin -ml-1 mr-3 h-6 w-6 text-white" />
-                  Generating...
-                </>
-              ) : 'Generate Bio'}
-            </button>
-            {errors.submit && (
-              <p className="mt-2 text-sm text-red-600 flex items-center justify-center">
-                <AlertCircle className="h-4 w-4 mr-1" />
-                {errors.submit}
-              </p>
-            )}
-          </form>
-        </div>
-        <div className="w-full md:w-1/2">
-          <div className="h-full p-6 border border-gray-200 rounded-xl shadow-sm">
-            <div className="flex justify-between items-start mb-4">
-              <h2 className="text-2xl font-bold text-gray-800">Your Generated Bio:</h2>
-              <button
-                onClick={handleCopy}
-                className="flex items-center text-sm text-indigo-600 hover:text-indigo-800 transition duration-150 ease-in-out"
-                disabled={!generatedBio}
-              >
-                {copied ? (
+              ))}
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? (
                   <>
-                    <Check className="h-5 w-5 mr-1" />
-                    Copied!
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Generating...
                   </>
-                ) : (
-                  <>
-                    <Clipboard className="h-5 w-5 mr-1" />
-                    Copy
-                  </>
-                )}
-              </button>
-            </div>
+                ) : 'Generate Bio'}
+              </Button>
+              {errors.submit && (
+                <p className="mt-2 text-sm text-red-600 flex items-center justify-center">
+                  <AlertCircle className="h-4 w-4 mr-1" />
+                  {errors.submit}
+                </p>
+              )}
+            </form>
+          </CardContent>
+        </Card>
+
+        <Card className="w-full md:w-1/2">
+          <CardHeader>
+            <CardTitle>Generated Bio</CardTitle>
+          </CardHeader>
+          <CardContent>
             {generatedBio ? (
-              <p className="text-gray-700  whitespace-pre-wrap text-lg leading-relaxed">{generatedBio}</p>
+              <>
+                <div className="bg-gray-100 p-4 rounded-md mb-4">
+                  <p className="whitespace-pre-wrap">{generatedBio}</p>
+                </div>
+                <Button onClick={handleCopy} variant="outline" className="w-full">
+                  {copied ? (
+                    <>
+                      <Check className="mr-2 h-4 w-4" />
+                      Copied!
+                    </>
+                  ) : (
+                    <>
+                      <Clipboard className="mr-2 h-4 w-4" />
+                      Copy to Clipboard
+                    </>
+                  )}
+                </Button>
+              </>
             ) : (
               <p className="text-gray-500 italic">Your generated Instagram bio will appear here.</p>
             )}
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
