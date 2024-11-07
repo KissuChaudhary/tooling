@@ -51,7 +51,7 @@ export default function InstagramCaptionGenerator() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
   const [errors, setErrors] = useState<Errors>({});
-  const [model, setModel] = useState<'gpt4o' | 'gemini'>('gpt4o');
+  const [model, setModel] = useState<'gpt4o' | 'gemini'>('gemini');
 
   const handleChange = (name: keyof FormData, value: string) => {
     const characterCount = value.length;
@@ -81,6 +81,9 @@ export default function InstagramCaptionGenerator() {
     if (!validateForm()) return;
   
     setIsLoading(true);
+    setErrors({});
+    setGeneratedCaption('');
+
     try {
       const response = await fetch('/api/openai-api', {
         method: 'POST',
@@ -90,17 +93,20 @@ export default function InstagramCaptionGenerator() {
         body: JSON.stringify({
           tool: 'instagramCaption',
           model,
-          data: formData, // Nest the form data under 'data'
+          data: formData,
         }),
       });
-      if (!response.ok) {
-        throw new Error('Failed to generate caption');
-      }
+      
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'An error occurred while generating the caption');
+      }
+
       setGeneratedCaption(data.caption);
     } catch (error) {
       console.error('Error:', error);
-      setErrors({ submit: 'Failed to generate caption. Please try again.' });
+      setErrors({ submit: error instanceof Error ? error.message : 'An unexpected error occurred' });
     } finally {
       setIsLoading(false);
     }
@@ -117,10 +123,10 @@ export default function InstagramCaptionGenerator() {
       <h1 className="text-4xl font-extrabold mb-8 text-center tracking-tight">Instagram Caption Generator</h1>
       <p className="text-xl text-center mb-12 max-w-3xl mx-auto">Create Engaging Instagram Captions with Saze AI – Tailored, Catchy, and Instantly Shareable.</p>
       <AdUnit 
-  client="ca-pub-7915372771416695"
-  slot="8441706260"
-  style={{ marginBottom: '20px' }}
-/>
+        client="ca-pub-7915372771416695"
+        slot="8441706260"
+        style={{ marginBottom: '20px' }}
+      />
       <div className="flex justify-center items-center space-x-4 mb-8">
         <div className="flex items-center space-x-2">
           <svg
@@ -154,7 +160,7 @@ export default function InstagramCaptionGenerator() {
         </div>
         <Switch
           id="model-switch"
-          checked={model === 'gemini'}
+          checked={model === 'gpt4o'}
           onCheckedChange={(checked) => setModel(checked ? 'gpt4o' : 'gemini')}
         />
         <div className="flex items-center space-x-2">
@@ -178,7 +184,7 @@ export default function InstagramCaptionGenerator() {
         </div>
       </div>
       <div className="flex flex-col md:flex-row gap-8">
-        <Card className="w-full md: w-1/2">
+        <Card className="w-full md:w-1/2">
           <CardHeader>
             <CardTitle>Caption Details</CardTitle>
           </CardHeader>
@@ -262,7 +268,6 @@ export default function InstagramCaptionGenerator() {
                     <>
                       <Clipboard className="mr-2 h-4 w-4" />
                       Copy to Clipboard
-                    
                     </>
                   )}
                 </Button>
