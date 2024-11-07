@@ -41,7 +41,7 @@ export default function SloganGenerator() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
   const [errors, setErrors] = useState<Errors>({});
-  const [model, setModel] = useState<'gpt4o' | 'gemini'>('gpt4o');
+  const [model, setModel] = useState<'gpt4o' | 'gemini'>('gemini');
 
   const handleChange = (name: keyof FormData, value: string) => {
     if (value.length <= characterLimits[name]) {
@@ -73,6 +73,9 @@ export default function SloganGenerator() {
     if (!validateForm()) return;
   
     setIsLoading(true);
+    setErrors({});
+    setGeneratedSlogan('');
+
     try {
       const response = await fetch('/api/openai-api', {
         method: 'POST',
@@ -85,14 +88,17 @@ export default function SloganGenerator() {
           data: formData,
         }),
       });
-      if (!response.ok) {
-        throw new Error('Failed to generate slogan');
-      }
+      
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'An error occurred while generating the slogan');
+      }
+
       setGeneratedSlogan(data.slogan);
     } catch (error) {
       console.error('Error:', error);
-      setErrors({ submit: 'Failed to generate slogan. Please try again.' });
+      setErrors({ submit: error instanceof Error ? error.message : 'An unexpected error occurred' });
     } finally {
       setIsLoading(false);
     }
@@ -109,10 +115,10 @@ export default function SloganGenerator() {
       <h1 className="text-4xl font-extrabold mb-8 text-center tracking-tight">AI Slogan Generator</h1>
       <p className="text-xl text-center mb-12 max-w-3xl mx-auto">Create Catchy Slogans with Saze AI – Boost Your Brand's Impact.</p>
       <AdUnit 
-  client="ca-pub-7915372771416695"
-  slot="8441706260"
-  style={{ marginBottom: '20px' }}
-/>
+        client="ca-pub-7915372771416695"
+        slot="8441706260"
+        style={{ marginBottom: '20px' }}
+      />
       <div className="flex justify-center items-center space-x-4 mb-8">
         <div className="flex items-center space-x-2">
           <svg
@@ -146,7 +152,7 @@ export default function SloganGenerator() {
         </div>
         <Switch
           id="model-switch"
-          checked={model === 'gemini'}
+          checked={model === 'gpt4o'}
           onCheckedChange={(checked) => setModel(checked ? 'gpt4o' : 'gemini')}
         />
         <div className="flex items-center space-x-2">
@@ -250,7 +256,7 @@ export default function SloganGenerator() {
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin"   />
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Generating...
                   </>
                 ) : 'Generate Slogan'}
