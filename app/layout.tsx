@@ -104,12 +104,12 @@ export default function RootLayout({
             <main className="flex-grow">
               {children}
               <SpeedInsights />
-              
+                <RatingPopup />
             </main>
-            <AIPopup />
-            <ScrollToTopButton />
-            <Footer />
-          </div>
+                <AIPopup />
+                <ScrollToTopButton />
+                <Footer />
+        </div>
           <Toaster />
         </Providers>
       </body>
