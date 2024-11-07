@@ -34,7 +34,7 @@ export default function FaceTransform() {
   const [denoisingStrength, setDenoisingStrength] = useState(0.65)
   const [instantIdStrength, setInstantIdStrength] = useState(0.8)
   const [controlDepthStrength, setControlDepthStrength] = useState(0.8)
-  const [limitReached, setLimitReached] = useState(false)
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -71,7 +71,9 @@ export default function FaceTransform() {
       if (!response.ok) {
         const errorData = await response.json()
         if (response.status === 429) {
-          setLimitReached(true)
+          setError("Congrats! You've officially hit your transformation limit for today. No more magic for you. Try again tomorrow, if you can wait that long!")
+          setLoading(false)
+          return
         }
         throw new Error(errorData.error || 'Failed to start image processing')
       }
@@ -178,7 +180,6 @@ export default function FaceTransform() {
     setDenoisingStrength(0.65)
     setInstantIdStrength(0.8)
     setControlDepthStrength(0.8)
-    setLimitReached(false)
   }
 
   const downloadImage = () => {
@@ -201,12 +202,6 @@ export default function FaceTransform() {
           <CardTitle className="text-3xl font-bold text-center">AI Face Transformer</CardTitle>
         </CardHeader>
         <CardContent className="p-6">
-          {limitReached ? (
-            <div className="text-center p-4 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded">
-              <h2 className="text-xl font-bold mb-2">Daily Limit Reached</h2>
-              <p>You've reached the maximum number of transformations for today. Please try again tomorrow or consider upgrading for unlimited access.</p>
-            </div>
-          ) : (
             <div className="flex flex-col lg:flex-row gap-6">
               {/* Form Section */}
               <div className="w-full lg:w-1/2 space-y-6">
@@ -351,7 +346,7 @@ export default function FaceTransform() {
                 )}
 
                 {error && (
-                  <div className="flex items-center p-4 text-red-800 rounded-lg bg-red-50 dark:bg-red-900 dark:text-red-100">
+                  <div className="flex items-center p-4 mb-4 text-yellow-800 rounded-lg bg-yellow-50 dark:bg-yellow-900 dark:text-yellow-100">
                     <AlertCircle className="flex-shrink-0 w-5 h-5 mr-2" />
                     <span className="text-sm font-medium">{error}</span>
                   </div>
@@ -404,7 +399,6 @@ export default function FaceTransform() {
                 )}
               </div>
             </div>
-          )}
         </CardContent>
       </Card>
       {showAdOverlay && resultImage.length > 0 && (
