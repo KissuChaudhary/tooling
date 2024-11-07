@@ -53,6 +53,11 @@ export default function ImageUpscaler() {
 
       if (!response.ok) {
         const errorData = await response.json()
+        if (response.status === 429) {
+          setError(errorData.error)
+          setLoading(false)
+          return
+        }
         throw new Error(errorData.error || 'Failed to start image processing')
       }
 
@@ -236,7 +241,7 @@ export default function ImageUpscaler() {
                 <Select value={scale} onValueChange={setScale}>
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select scale" />
-                  </SelectTrigger>
+                </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="2">2x</SelectItem>
                     <SelectItem value="4">4x</SelectItem>
@@ -245,7 +250,7 @@ export default function ImageUpscaler() {
               </div>
 
               {error && (
-                <div className="flex items-center p-4 text-red-800 rounded-lg bg-red-50 dark:bg-red-900 dark:text-red-100">
+                <div className="flex items-center p-4 text-yellow-800 rounded-lg bg-yellow-50 dark:bg-yellow-900 dark:text-yellow-100">
                   <AlertCircle className="flex-shrink-0 w-5 h-5 mr-2" />
                   <span className="text-sm font-medium">{error}</span>
                 </div>
@@ -255,7 +260,7 @@ export default function ImageUpscaler() {
                 <Button
                   onClick={handleSubmit}
                   disabled={loading}
-                  className="flex-1 bg-gradient-to-r from-purple-500 to-indigo-500 text-white py-2 rounded-lg hover:from-purple-600 hover:to-indigo-600 transition-all duration-300"
+                  className="flex-1 py-2 rounded-lg transition-all duration-300"
                 >
                   {loading ? 'Processing...' : 'Upscale Image'}
                 </Button>
