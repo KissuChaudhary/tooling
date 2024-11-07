@@ -373,7 +373,7 @@ export async function POST(request: NextRequest) {
   try {
     const moderationResult = await moderateContent(userInput);
     if (moderationResult.flagged) {
-      return NextResponse.json({ error: "Content flagged as inappropriate" }, { status: 400 });
+      return NextResponse.json({ error: "Content flagged for abusive or explicit material. Please revise to meet our guidelines." }, { status: 400 });
     }
   } catch (error) {
     console.error('Moderation API error:', error);
