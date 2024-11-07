@@ -37,7 +37,7 @@ export default function SEOTitleGenerator() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
   const [errors, setErrors] = useState<Errors>({});
-  const [model, setModel] = useState<'gpt4o' | 'gemini'>('gpt4o');
+  const [model, setModel] = useState<'gpt4o' | 'gemini'>('gemini');
   const [titleCount, setTitleCount] = useState<number>(5);
 
   const handleInputChange = (name: keyof FormData, value: string) => {
@@ -67,6 +67,9 @@ export default function SEOTitleGenerator() {
     if (!validateForm()) return;
   
     setIsLoading(true);
+    setErrors({});
+    setGeneratedTitles([]);
+
     try {
       const response = await fetch('/api/openai-api', {
         method: 'POST',
@@ -79,14 +82,17 @@ export default function SEOTitleGenerator() {
           data: { ...formData, count: titleCount },
         }),
       });
-      if (!response.ok) {
-        throw new Error('Failed to generate SEO titles');
-      }
+      
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'An error occurred while generating SEO titles');
+      }
+
       setGeneratedTitles(data.seoTitle);
     } catch (error) {
       console.error('Error:', error);
-      setErrors({ submit: 'Failed to generate SEO titles. Please try again.' });
+      setErrors({ submit: error instanceof Error ? error.message : 'An unexpected error occurred' });
     } finally {
       setIsLoading(false);
     }
@@ -103,10 +109,10 @@ export default function SEOTitleGenerator() {
       <h1 className="text-4xl font-extrabold mb-8 text-center tracking-tight">AI SEO Title Generator</h1>
       <p className="text-xl text-center mb-12 max-w-3xl mx-auto">Generate SEO-Optimized Titles with Saze AI – Boost Your Content's Visibility.</p>
       <AdUnit 
-  client="ca-pub-7915372771416695"
-  slot="8441706260"
-  style={{ marginBottom: '20px' }}
-/>
+        client="ca-pub-7915372771416695"
+        slot="8441706260"
+        style={{ marginBottom: '20px' }}
+      />
       <div className="flex justify-center items-center space-x-4 mb-8">
         <div className="flex items-center space-x-2">
           <svg
@@ -140,7 +146,7 @@ export default function SEOTitleGenerator() {
         </div>
         <Switch
           id="model-switch"
-          checked={model === 'gemini'}
+          checked={model === 'gpt4o'}
           onCheckedChange={(checked) => setModel(checked ? 'gpt4o' : 'gemini')}
         />
         <div className="flex items-center space-x-2">
@@ -254,7 +260,6 @@ export default function SEOTitleGenerator() {
         <Card className="w-full md:w-1/2">
           <CardHeader>
             <CardTitle>Generated SEO Titles</CardTitle>
-          
           </CardHeader>
           <CardContent>
             {generatedTitles.length > 0 ? (
