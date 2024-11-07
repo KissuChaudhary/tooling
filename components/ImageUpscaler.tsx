@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
 import { AlertCircle, Download, Upload, RefreshCw } from 'lucide-react'
@@ -174,9 +174,7 @@ export default function ImageUpscaler() {
           slot="2181958821"
           style={{ marginBottom: '20px' }}
         />
-        <CardHeader className="text-foreground">
-          <CardTitle className="text-3xl font-bold text-center">AI Image Upscaler</CardTitle>
-        </CardHeader>
+      
         <CardContent className="p-6">
           <div className="flex flex-col lg:flex-row gap-6">
             {/* Form Section */}
