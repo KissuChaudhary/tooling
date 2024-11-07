@@ -9,7 +9,7 @@ import WebSiteSchema from './WebSiteSchema'
 import ScrollToTopButton from '@/components/ScrollToTopButton'
 import { Toaster } from '@/components/ui/toaster'
 import AIPopup from '@/components/ai-popup'
-
+import RatingPopup from '@/components/RatingPopup'
 
 export const metadata: Metadata = {
   title: {
