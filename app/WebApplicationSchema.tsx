@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import { Fragment } from 'react';
 
 const WebApplicationSchema: React.FC = () => {
   const schema = {
@@ -15,6 +15,11 @@ const WebApplicationSchema: React.FC = () => {
           "price": "0",
           "priceCurrency": "USD"
         },
+        "additionalType": [
+          "https://schema.org/CreativeWork",
+          "https://schema.org/SoftwareApplication"
+        ],
+        "softwareVersion": "1.0",  // Optional: add a version if relevant
         "featureList": [
           "40+ AI Tools",
           "Boost Productivity",
@@ -34,18 +39,10 @@ const WebApplicationSchema: React.FC = () => {
         "about": {
           "@type": "Thing",
           "name": "AI Writing and Creative Tools"
-        },
-        "mainEntity": {
-          "@type": "WebApplication",
-          "name": "Saze AI"
-        },
-        "speakable": {
-          "@type": "SpeakableSpecification",
-          "cssSelector": [".speakable"]
         }
       }
     ]
-  }
+  };
 
   return (
     <Fragment>
@@ -54,7 +51,7 @@ const WebApplicationSchema: React.FC = () => {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
     </Fragment>
-  )
-}
+  );
+};
 
-export default WebApplicationSchema
+export default WebApplicationSchema;
