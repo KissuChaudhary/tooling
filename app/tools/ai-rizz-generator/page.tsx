@@ -1,4 +1,4 @@
-import AIRizzGenerator from '@/components/AIRizzGenerator';
+import AIRizzGenerator from '@/components/rizzGenerator';
 import ToolEngagement from '@/components/tool-engagement';
 import Head from 'next/head';
 import Script from 'next/script';
