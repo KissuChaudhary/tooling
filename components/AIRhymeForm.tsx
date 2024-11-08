@@ -1,18 +1,18 @@
 "use client"
 
 import React, { useState } from 'react'
-import { Loader2, Clipboard, Check, AlertCircle, X } from 'lucide-react'
+import { Loader2, Clipboard, Check, AlertCircle } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
 import { Input } from "@/components/ui/input"
-import { Slider } from "@/components/ui/slider"
-import { useCompletion } from 'ai/react'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import AdUnit from '../components/AdUnit'
 
 interface FormData {
   word: string;
-  rhymeCount: number;
+  count: number;
 }
 
 interface Errors {
@@ -24,35 +24,33 @@ const characterLimit = 50;
 export default function RhymeGenerator() {
   const [formData, setFormData] = useState<FormData>({
     word: '',
-    rhymeCount: 5,
+    count: 5,
   });
   const [characterCount, setCharacterCount] = useState('0');
-  const [errors, setErrors] = useState<Errors>({});
+  const [generatedRhymes, setGeneratedRhymes] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
-  const [model, setModel] = useState<'gpt4' | 'gemini'>('gpt4');
+  const [errors, setErrors] = useState<Errors>({});
+  const [model, setModel] = useState<'gpt4o' | 'gemini'>('gemini');
 
-  const { complete, completion, isLoading, error } = useCompletion({
-    api: '/api/generate-rhymes',
-  });
-
-  const handleChange = (name: keyof FormData, value: string | number) => {
+  const handleInputChange = (name: keyof FormData, value: string | number) => {
     if (name === 'word' && typeof value === 'string') {
       if (value.length <= characterLimit) {
         setFormData(prev => ({ ...prev, [name]: value }));
         setCharacterCount(value.length.toString());
+        if (errors[name]) {
+          setErrors(prev => ({ ...prev, [name]: '' }));
+        }
       }
-    } else if (name === 'rhymeCount' && typeof value === 'number') {
+    } else if (name === 'count' && typeof value === 'number') {
       setFormData(prev => ({ ...prev, [name]: value }));
-    }
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
     }
   };
 
   const validateForm = (): boolean => {
     const newErrors: Errors = {};
     if (!formData.word.trim()) {
-      newErrors.word = 'Word or phrase is required';
+      newErrors.word = 'Word is required';
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -62,16 +60,40 @@ export default function RhymeGenerator() {
     e.preventDefault();
     if (!validateForm()) return;
   
+    setIsLoading(true);
+    setErrors({});
+    setGeneratedRhymes([]);
+
     try {
-      await complete(`Generate ${formData.rhymeCount} rhymes for the word or phrase: "${formData.word}" using the ${model} model.`);
-    } catch (err) {
-      console.error('Error:', err);
-      setErrors({ submit: 'Failed to generate rhymes. Please try again.' });
+      const response = await fetch('/api/openai-api', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          tool: 'aiRhymeGenerator',
+          model,
+          data: formData,
+        }),
+      });
+      
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'An error occurred while generating rhymes');
+      }
+
+      setGeneratedRhymes(data.rhymes);
+    } catch (error) {
+      console.error('Error:', error);
+      setErrors({ submit: error instanceof Error ? error.message : 'An unexpected error occurred' });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(completion);
+    navigator.clipboard.writeText(generatedRhymes.join('\n'));
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -79,8 +101,12 @@ export default function RhymeGenerator() {
   return (
     <div className="max-w-7xl mx-auto p-4 mt-10">
       <h1 className="text-4xl font-extrabold mb-8 text-center tracking-tight">AI Rhyme Generator</h1>
-      <p className="text-xl text-center mb-12 max-w-3xl mx-auto">Generate Creative Rhymes with AI – Unleash Your Inner Poet!</p>
-      
+      <p className="text-xl text-center mb-12 max-w-3xl mx-auto">Generate Creative Rhymes with Saze AI – Unleash Your Inner Poet!</p>
+      <AdUnit 
+        client="ca-pub-7915372771416695"
+        slot="8441706260"
+        style={{ marginBottom: '20px' }}
+      />
       <div className="flex justify-center items-center space-x-4 mb-8">
         <div className="flex items-center space-x-2">
           <svg
@@ -114,12 +140,12 @@ export default function RhymeGenerator() {
         </div>
         <Switch
           id="model-switch"
-          checked={model === 'gemini'}
-          onCheckedChange={(checked) => setModel(checked ? 'gpt4' : 'gemini')}
+          checked={model === 'gpt4o'}
+          onCheckedChange={(checked) => setModel(checked ? 'gpt4o' : 'gemini')}
         />
         <div className="flex items-center space-x-2">
-          <Label htmlFor="model-switch" className={model === 'gpt4' ? 'font-bold' : ''}>
-            GPT-4
+          <Label htmlFor="model-switch" className={model === 'gpt4o' ? 'font-bold' : ''}>
+            GPT-4o
           </Label>
           <svg
             className="w-6 h-6"
@@ -137,7 +163,6 @@ export default function RhymeGenerator() {
           </svg>
         </div>
       </div>
-      
       <div className="flex flex-col md:flex-row gap-8">
         <Card className="w-full md:w-1/2">
           <CardHeader>
@@ -147,14 +172,14 @@ export default function RhymeGenerator() {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
                 <Label htmlFor="word" className="text-sm font-medium text-gray-700">
-                  Word or Phrase
+                  Word
                 </Label>
                 <div className="relative">
                   <Input
                     id="word"
                     value={formData.word}
-                    onChange={(e) => handleChange('word', e.target.value)}
-                    placeholder="Enter a word or phrase..."
+                    onChange={(e) => handleInputChange('word', e.target.value)}
+                    placeholder="Enter a word to rhyme..."
                     className={errors.word ? 'border-red-500' : ''}
                   />
                   <p className={`absolute right-0 -bottom-5 text-xs ${parseInt(characterCount) === characterLimit ? 'text-orange-500' : 'text-gray-500'}`}>
@@ -169,20 +194,24 @@ export default function RhymeGenerator() {
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="rhymeCount" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="count" className="text-sm font-medium text-gray-700">
                   Number of Rhymes
                 </Label>
-                <div className="flex items-center space-x-4">
-                  <Slider
-                    id="rhymeCount"
-                    min={1}
-                    max={10}
-                    step={1}
-                    value={[formData.rhymeCount]}
-                    onValueChange={(value) => handleChange('rhymeCount', value[0])}
-                  />
-                  <span className="font-bold">{formData.rhymeCount}</span>
-                </div>
+                <Select 
+                  onValueChange={(value) => handleInputChange('count', parseInt(value))} 
+                  defaultValue={formData.count.toString()}
+                >
+                  <SelectTrigger id="count">
+                    <SelectValue placeholder="Select number of rhymes" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {[1, 3, 5, 7, 10].map((num) => (
+                      <SelectItem key={num} value={num.toString()}>
+                        {num}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? (
@@ -192,10 +221,10 @@ export default function RhymeGenerator() {
                   </>
                 ) : 'Generate Rhymes'}
               </Button>
-              {error && (
+              {errors.submit && (
                 <p className="mt-2 text-sm text-red-600 flex items-center justify-center">
                   <AlertCircle className="h-4 w-4 mr-1" />
-                  Failed to generate rhymes. Please try again.
+                  {errors.submit}
                 </p>
               )}
             </form>
@@ -207,10 +236,14 @@ export default function RhymeGenerator() {
             <CardTitle>Generated Rhymes</CardTitle>
           </CardHeader>
           <CardContent>
-            {completion ? (
+            {generatedRhymes.length > 0 ? (
               <>
                 <div className="bg-gray-100 p-4 rounded-md mb-4 max-h-96 overflow-y-auto">
-                  <p className="whitespace-pre-wrap">{completion}</p>
+                  <ol className="list-decimal list-inside">
+                    {generatedRhymes.map((rhyme, index) => (
+                      <li key={index} className="mb-2">{rhyme}</li>
+                    ))}
+                  </ol>
                 </div>
                 <Button onClick={handleCopy} variant="outline" className="w-full">
                   {copied ? (
