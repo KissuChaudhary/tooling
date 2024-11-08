@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import { Fragment } from 'react';
 
 const WebSiteSchema: React.FC = () => {
   const schema = {
@@ -11,8 +11,13 @@ const WebSiteSchema: React.FC = () => {
       "@type": "SearchAction",
       "target": "https://sazeai.com/search?q={search_term_string}",
       "query-input": "required name=search_term_string"
-    },
-    "siteNavigationElement": [
+    }
+  };
+
+  const navigationSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "itemListElement": [
       {
         "@type": "SiteNavigationElement",
         "name": "Writing Tools",
@@ -64,7 +69,7 @@ const WebSiteSchema: React.FC = () => {
         "url": "https://sazeai.com/tools"
       }
     ]
-  }
+  };
 
   return (
     <Fragment>
@@ -72,8 +77,13 @@ const WebSiteSchema: React.FC = () => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(navigationSchema) }}
+      />
     </Fragment>
-  )
+  );
 }
 
-export default WebSiteSchema
+export default WebSiteSchema;
+      
