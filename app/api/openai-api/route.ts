@@ -261,6 +261,13 @@ const LoveLetterWriterSchema = z.object({
   relationshipDuration: z.string(),
 });
 
+const RizzGeneratorSchema = z.object({
+  context: z.string(),
+  style: z.string(),
+  targetAudience: z.string(),
+  intensity: z.string(),
+});
+
 const RequestSchema = z.object({
   tool: z.enum([
     'aiReviewGenerator',
@@ -278,7 +285,7 @@ const RequestSchema = z.object({
     'aiPlotGenerator', 'aiQuotesGenerator', 'aiRhymeGenerator', 'aiSEOTitleGenerator',
     'aiParaphrasingTool', 'aiEmailResponseGenerator', 'aiBookTitleGenerator',
     'aiBackstoryGenerator', 'aiCoverLetterWriter', 'aiLinkedInSummaryGenerator',
-    'aiProductDescriptionGenerator', 'aiPunctuationChecker'
+    'aiProductDescriptionGenerator', 'aiPunctuationChecker', 'rizzGenerator'
   ]),
   model: z.enum(['gpt4o', 'gemini']),
   data: z.union([
@@ -319,7 +326,8 @@ const RequestSchema = z.object({
     RealisticInfluencerImagePromptsSchema,
     CaptionGeneratorSchema,
     BirthdayWishGeneratorSchema,
-    LoveLetterWriterSchema
+    LoveLetterWriterSchema,
+    RizzGeneratorSchema
   ]),
 });
 
@@ -497,6 +505,9 @@ export async function POST(request: NextRequest) {
     case 'aiLoveLetterWriter':
       messages = createLoveLetterWriterMessages(data);
       break;
+      case 'rizzGenerator':
+      messages = createRizzGeneratorMessages(data);
+      break;
     default:
       return NextResponse.json({ error: "Invalid tool specified" }, { status: 400 });
   }
@@ -599,6 +610,8 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ birthdayWish: content });
       case 'aiLoveLetterWriter':
         return NextResponse.json({ loveLetter: content });
+      case 'rizzGenerator':
+        return NextResponse.json({ rizz: content });
       default:
         throw new Error(`Unsupported tool: ${tool}`);
     }
@@ -1058,5 +1071,13 @@ function createLoveLetterWriterMessages(data: z.infer<typeof LoveLetterWriterSch
   return [
     { role: "system", content: "You are a romantic writer skilled in expressing deep emotions." },
     { role: "user", content: `Write a love letter to ${partnerName} for the occasion: ${occasion}. Relationship duration: ${relationshipDuration}. The letter should be heartfelt, personal, and express genuine feelings.` }
+  ];
+}
+
+function createRizzGeneratorMessages(data: z.infer<typeof RizzGeneratorSchema>) {
+  const { context, style, targetAudience, intensity} = data;
+  return [
+    { role: "system", content: "You are an expert in writing rizz lines" },
+    { role: "user", content: `Write a rizz line based on this context ${context} in ${style} syle, target audience for the rizz is ${targetAudience}. Intensity of the rizz is ${intensity}` }
   ];
 }
