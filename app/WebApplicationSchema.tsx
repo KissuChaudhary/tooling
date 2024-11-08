@@ -3,20 +3,47 @@ import { Fragment } from 'react'
 const WebApplicationSchema: React.FC = () => {
   const schema = {
     "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "Saze AI",
-    "applicationCategory": "UtilitiesApplication",
-    "description": "Saze AI is a free AI platform designed to make your work and learning easier with unlimited access to our free AI tools.",
-    "operatingSystem": "All",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    },
-    "featureList": [
-      "40+ AI Tools",
-      "Boost Productivity",
-      "Enhance Content Quality"
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "Saze AI",
+        "applicationCategory": "UtilitiesApplication",
+        "description": "Saze AI is a free AI platform designed to make your work and learning easier with unlimited access to our free AI tools.",
+        "operatingSystem": "All",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "featureList": [
+          "40+ AI Tools",
+          "Boost Productivity",
+          "Enhance Content Quality"
+        ]
+      },
+      {
+        "@type": "WebPage",
+        "name": "Saze AI: Free AI Writing, Image Generation, and Creative Tools Hub",
+        "description": "Saze AI is an AI-powered content generating tool to help you quickly create high-quality content that requires minimal effort, time, and cost.",
+        "isPartOf": {
+          "@type": "WebSite",
+          "name": "Saze AI",
+          "url": "https://sazeai.com/"
+        },
+        "url": "https://sazeai.com/",
+        "about": {
+          "@type": "Thing",
+          "name": "AI Writing and Creative Tools"
+        },
+        "mainEntity": {
+          "@type": "WebApplication",
+          "name": "Saze AI"
+        },
+        "speakable": {
+          "@type": "SpeakableSpecification",
+          "cssSelector": [".speakable"]
+        }
+      }
     ]
   }
 
