@@ -73,6 +73,9 @@ export default function PlotGenerator() {
     if (!validateForm()) return;
   
     setIsLoading(true);
+    setErrors({});
+    setGeneratedPlot('');
+
     try {
       const response = await fetch('/api/openai-api', {
         method: 'POST',
@@ -85,14 +88,17 @@ export default function PlotGenerator() {
           data: formData,
         }),
       });
-      if (!response.ok) {
-        throw new Error('Failed to generate plot');
-      }
+      
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'An error occurred while generating the plot');
+      }
+
       setGeneratedPlot(data.plot);
     } catch (error) {
       console.error('Error:', error);
-      setErrors({ submit: 'Failed to generate plot. Please try again.' });
+      setErrors({ submit: error instanceof Error ? error.message : 'An unexpected error occurred' });
     } finally {
       setIsLoading(false);
     }
@@ -109,10 +115,10 @@ export default function PlotGenerator() {
       <h1 className="text-4xl font-extrabold mb-8 text-center tracking-tight">AI Plot Generator</h1>
       <p className="text-xl text-center mb-12 max-w-3xl mx-auto">Create Captivating Story Plots with Saze AI – Bring Your Narrative Ideas to Life.</p>
       <AdUnit 
-  client="ca-pub-7915372771416695"
-  slot="8441706260"
-  style={{ marginBottom: '20px' }}
-/>
+        client="ca-pub-7915372771416695"
+        slot="8441706260"
+        style={{ marginBottom: '20px' }}
+      />
       <div className="flex justify-center items-center space-x-4 mb-8">
         <div className="flex items-center space-x-2">
           <svg
@@ -255,7 +261,7 @@ export default function PlotGenerator() {
                 ) : 'Generate Plot'}
               </Button>
               {errors.submit && (
-                <p className="mt-2 text-sm  text-red-600 flex items-center justify-center">
+                <p className="mt-2 text-sm text-red-600 flex items-center justify-center">
                   <AlertCircle className="h-4 w-4 mr-1" />
                   {errors.submit}
                 </p>
