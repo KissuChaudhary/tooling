@@ -214,7 +214,7 @@ export default function ImageGenerator() {
               <Alert variant="destructive" className="mb-4">
                 <AlertTitle>Daily Limit Reached</AlertTitle>
                 <AlertDescription>
-                  Congrats! You've officially hit your image generation limit for today. No more magic for you. Try again tomorrow, if you can wait that long!
+                  Congrats! You have officially hit your image generation limit for today. No more magic for you. Try again tomorrow, if you can wait that long!
                 </AlertDescription>
               </Alert>
             )}
