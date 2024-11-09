@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { fal } from "@fal-ai/client"
 import OpenAI from 'openai'
+import { cookies } from 'next/headers'
 
 fal.config({
   credentials: process.env.FAL_KEY
@@ -10,6 +11,8 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 })
 
+const MAX_USES_PER_DAY = 3
+
 async function moderateContent(prompt: string) {
   const moderation = await openai.moderations.create({ input: prompt })
   return moderation.results[0].flagged
@@ -17,6 +20,14 @@ async function moderateContent(prompt: string) {
 
 export async function POST(req: Request) {
   try {
+    // Check user limit
+    const cookieStore = cookies()
+    const usageCount = parseInt(cookieStore.get('image_generator_usage')?.value || '0')
+    
+    if (usageCount >= MAX_USES_PER_DAY) {
+      return NextResponse.json({ error: "You've reached your image generation limit for today. Please try again tomorrow!" }, { status: 429 })
+    }
+
     const body = await req.json()
 
     // Check if the prompt contains inappropriate content
@@ -44,6 +55,12 @@ export async function POST(req: Request) {
           console.log(update.logs.map((log) => log.message))
         }
       },
+    })
+
+    // Increment usage count
+    cookieStore.set('image_generator_usage', (usageCount + 1).toString(), {
+      expires: new Date(new Date().setHours(24, 0, 0, 0)), // Set to expire at midnight
+      path: '/',
     })
 
     return NextResponse.json(result.data)
