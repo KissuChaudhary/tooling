@@ -75,7 +75,6 @@ export default function ImageGenerator() {
     setFlaggedError(null)
     setImageUrls([])
     setLoadingProgress(0)
-    setIsLimitReached(false)
 
     try {
       const apiParams = {
@@ -96,7 +95,7 @@ export default function ImageGenerator() {
       if (!response.ok) {
         if (response.status === 429) {
           setIsLimitReached(true)
-          throw new Error(data.error || 'You have reached the daily limit for image generation.')
+          throw new Error(data.error || 'You've reached the daily limit for image generation.')
         } else if (response.status === 400 && data.error.includes('inappropriate content')) {
           setFlaggedError(data.error)
         } else {
@@ -211,12 +210,11 @@ export default function ImageGenerator() {
               <Label htmlFor="enable_safety_checker">Enable Safety Checker</Label>
             </div>
 
-
             {isLimitReached && (
-              <Alert variant="warning" className="mb-4">
+              <Alert variant="destructive" className="mb-4">
                 <AlertTitle>Daily Limit Reached</AlertTitle>
                 <AlertDescription>
-                  Congrats! You've officially hit your background removal limit for today. No more magic for you. Try again tomorrow, if you can wait that long!
+                  Congrats! You've officially hit your image generation limit for today. No more magic for you. Try again tomorrow, if you can wait that long!
                 </AlertDescription>
               </Alert>
             )}
