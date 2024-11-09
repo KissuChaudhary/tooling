@@ -25,7 +25,7 @@ export async function POST(req: Request) {
     const usageCount = parseInt(cookieStore.get('image_generator_usage')?.value || '0')
     
     if (usageCount >= MAX_USES_PER_DAY) {
-      return NextResponse.json({ error: "You've reached your image generation limit for today. Please try again tomorrow!" }, { status: 429 })
+      return NextResponse.json({ error: "Congrats! You've officially hit your limit for today. Let others also use this free service. Try again tomorrow, if you can wait that long!" }, { status: 429 })
     }
 
     const body = await req.json()
