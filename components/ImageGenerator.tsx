@@ -35,6 +35,7 @@ const initialParams: GenerationParams = {
 export default function ImageGenerator() {
   const [params, setParams] = useState<GenerationParams>(initialParams)
   const [isGenerating, setIsGenerating] = useState(false)
+  const [isImageLoading, setIsImageLoading] = useState(false)
   const [hasGenerated, setHasGenerated] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [flaggedError, setFlaggedError] = useState<string | null>(null)
@@ -46,17 +47,24 @@ export default function ImageGenerator() {
   const [loadingProgress, setLoadingProgress] = useState(0)
   const [isLimitReached, setIsLimitReached] = useState(false)
 
-  useEffect(() => {
-    let interval: NodeJS.Timeout
-    if (isGenerating) {
-      interval = setInterval(() => {
-        setLoadingProgress((prev) => (prev < 100 ? prev + 1 : 100))
-      }, 100)
-    } else {
-      setLoadingProgress(0)
-    }
-    return () => clearInterval(interval)
-  }, [isGenerating])
+useEffect(() => {
+  let interval: NodeJS.Timeout
+  if (isGenerating || isImageLoading) {
+    interval = setInterval(() => {
+      setLoadingProgress((prev) => {
+        if (isGenerating && prev < 90) {
+          return prev + 1
+        } else if (isImageLoading && prev < 99) {
+          return prev + 0.2
+        }
+        return prev
+      })
+    }, 100)
+  } else {
+    setLoadingProgress(0)
+  }
+  return () => clearInterval(interval)
+}, [isGenerating, isImageLoading])
 
   useEffect(() => {
     if (flaggedError) {
@@ -104,29 +112,35 @@ export default function ImageGenerator() {
         return
       }
 
-      if (!data.images || !Array.isArray(data.images)) {
+     if (!data.images || !Array.isArray(data.images)) {
         throw new Error('Invalid response format from API')
       }
 
       setImageUrls(data.images.map((image: { url: string }) => image.url))
-      setLoadingImages(new Array(data.images.length).fill(true))
+      setIsGenerating(false)
+      setIsImageLoading(true)
       setHasGenerated(true)
     } catch (err) {
       console.error('Error:', err)
       setError(err instanceof Error ? err.message : 'An unexpected error occurred')
-    } finally {
       setIsGenerating(false)
     }
   }
+  const handleImageLoad = () => {
+  setIsImageLoading(false)
+  setLoadingProgress(100)
+}
 
-  const handleReset = () => {
+   const handleReset = () => {
     setParams(initialParams)
     setImageUrls([])
     setError(null)
     setFlaggedError(null)
     setHasGenerated(false)
     setLoadingProgress(0)
-    setIsLimitReached(false)
+    setCanGenerate(true)
+    setIsGenerating(false)
+    setIsImageLoading(false)
   }
 
   const handleDownload = (imageUrl: string) => {
@@ -227,9 +241,13 @@ export default function ImageGenerator() {
             )}
 
             <div className="flex space-x-2">
-              <Button type="submit" className="w-full" disabled={isGenerating || hasGenerated || isLimitReached}>
-                {isGenerating ? 'Generating...' : isLimitReached ? 'Daily Limit Reached' : 'Generate Image'}
-              </Button>
+              <Button
+  onClick={handleSubmit}
+  disabled={isGenerating || isImageLoading || !canGenerate}
+  className="flex-1 text-white py-2 rounded-lg transition-all duration-300"
+>
+  {isGenerating || isImageLoading ? 'Processing...' : canGenerate ? 'Generate Image' : 'Daily Limit Reached'}
+</Button>
               <Button type="button" variant="outline" className="w-full" onClick={handleReset}>
                 Reset
               </Button>
@@ -248,6 +266,15 @@ export default function ImageGenerator() {
             </Alert>
           )}
         </CardContent>
+         {(isGenerating || isImageLoading) && (
+                <div className="space-y-2">
+                  <Progress value={loadingProgress} className="w-full" />
+                  <p className="text-center text-sm text-gray-500">
+                    {isGenerating ? 'Generating image...' : 'Loading image...'}
+                    {' '}This may take a few moments.
+                  </p>
+                </div>
+              )}
       </Card>
 
       <div className="w-full md:w-[70%] md:h-screen dotted-bg flex flex-col flex justify-center items-center p-4">
@@ -257,15 +284,17 @@ export default function ImageGenerator() {
           style={{ marginBottom: '20px' }}
         />
         <div className={`bg-white rounded-lg shadow flex items-center justify-center ${getImagePreviewStyle()} relative overflow-hidden`}>
-          {isGenerating && (
-            <div className="absolute inset-0 bg-gray-200 z-10">
-              <div 
-                className="h-1 bg-blue-500 transition-all duration-300 ease-out"
-                style={{ width: `${loadingProgress}%` }}
-              ></div>
-              <p className="text-center mt-4">Generating: {loadingProgress}%</p>
-            </div>
-          )}
+         {(isGenerating || isImageLoading) && (
+                  <div className="absolute inset-0 bg-gray-200 z-10">
+                    <div 
+                      className="h-1 bg-blue-500 transition-all duration-300 ease-out"
+                      style={{ width: `${loadingProgress}%` }}
+                    ></div>
+                    <p className="text-center mt-4">
+                      {isGenerating ? 'Generating' : 'Loading'}: {Math.round(loadingProgress)}%
+                    </p>
+                  </div>
+                )}
           {imageUrls.length > 0 ? (
             <div className="relative w-full h-full transition-opacity duration-500 ease-in-out opacity-0" style={{ opacity: isGenerating ? 0 : 1 }}>
               <Image
