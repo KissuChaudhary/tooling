@@ -37,7 +37,6 @@ export default function ImageGenerator() {
   const [params, setParams] = useState<GenerationParams>(initialParams)
   const [isGenerating, setIsGenerating] = useState(false)
   const [isImageLoading, setIsImageLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
   const [flaggedError, setFlaggedError] = useState<string | null>(null)
   const [showFlaggedError, setShowFlaggedError] = useState(false)
   const [imageUrls, setImageUrls] = useState<string[]>([])
@@ -79,7 +78,6 @@ export default function ImageGenerator() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsGenerating(true)
-    setError(null)
     setFlaggedError(null)
     setImageUrls([])
     setLoadingProgress(0)
@@ -121,7 +119,6 @@ export default function ImageGenerator() {
       setIsImageLoading(true)
     } catch (err) {
       console.error('Error:', err)
-      setError(err instanceof Error ? err.message : 'An unexpected error occurred')
       setIsGenerating(false)
     }
   }
@@ -134,7 +131,6 @@ export default function ImageGenerator() {
   const handleReset = () => {
     setParams(initialParams)
     setImageUrls([])
-    setError(null)
     setFlaggedError(null)
     setLoadingProgress(0)
     setCanGenerate(true)
@@ -239,11 +235,11 @@ export default function ImageGenerator() {
               </Alert>
             )}
 
-            <div className="flex space-x-2">
+            <div className="grid grid-cols-2 gap-2">
               <Button
                 onClick={handleSubmit}
                 disabled={isGenerating || isImageLoading || !canGenerate}
-                className="flex-1 text-white py-2 rounded-lg transition-all duration-300"
+                className="w-full text-white py-2 rounded-lg transition-all duration-300"
               >
                 {isGenerating || isImageLoading ? 'Processing...' : canGenerate ? 'Generate Image' : 'Daily Limit Reached'}
               </Button>
@@ -258,7 +254,6 @@ export default function ImageGenerator() {
             />
           </form>
 
-       
         </CardContent>
         {(isGenerating || isImageLoading) && (
           <div className="space-y-2">
