@@ -277,24 +277,21 @@ useEffect(() => {
               )}
       </Card>
 
-      <div className="w-full md:w-[70%] md:h-screen dotted-bg flex flex-col flex justify-center items-center p-4">
+     <div className="w-full md:w-[70%] md:h-screen dotted-bg flex flex-col flex justify-center items-center p-4">
         <AdUnit 
           client="ca-pub-7915372771416695"
           slot="2181958821"
           style={{ marginBottom: '20px' }}
         />
         <div className={`bg-white rounded-lg shadow flex items-center justify-center ${getImagePreviewStyle()} relative overflow-hidden`}>
-         {(isGenerating || isImageLoading) && (
-                  <div className="absolute inset-0 bg-gray-200 z-10">
-                    <div 
-                      className="h-1 bg-blue-500 transition-all duration-300 ease-out"
-                      style={{ width: `${loadingProgress}%` }}
-                    ></div>
-                    <p className="text-center mt-4">
-                      {isGenerating ? 'Generating' : 'Loading'}: {Math.round(loadingProgress)}%
-                    </p>
-                  </div>
-                )}
+          {(isGenerating || isImageLoading) && (
+            <div className="absolute inset-0 bg-gray-200 z-10">
+              <Progress value={loadingProgress} className="w-full" />
+              <p className="text-center mt-4">
+                {isGenerating ? 'Generating' : 'Loading'}: {Math.round(loadingProgress)}%
+              </p>
+            </div>
+          )}
           {imageUrls.length > 0 ? (
             <div className="relative w-full h-full transition-opacity duration-500 ease-in-out opacity-0" style={{ opacity: isGenerating ? 0 : 1 }}>
               <Image
@@ -302,9 +299,9 @@ useEffect(() => {
                 alt="Generated image"
                 fill
                 className="object-contain rounded-lg"
-                onLoad={() => setLoadingImages([false])}
+                onLoad={handleImageLoad} // Use the handleImageLoad function here
               />
-              {!loadingImages[0] && (
+              {!isImageLoading && (
                 <Button
                   className="absolute bottom-2 right-2"
                   onClick={() => handleDownload(imageUrls[0])}
