@@ -44,6 +44,7 @@ export default function ImageGenerator() {
   const [showAdOverlay, setShowAdOverlay] = useState(false)
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null)
   const [loadingProgress, setLoadingProgress] = useState(0)
+  const [remainingUses, setRemainingUses] = useState(3)
 
   useEffect(() => {
     let interval: NodeJS.Timeout
@@ -69,6 +70,10 @@ export default function ImageGenerator() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (remainingUses <= 0) {
+      setError("You've reached your image generation limit for today. Please try again tomorrow!")
+      return
+    }
     setIsGenerating(true)
     setError(null)
     setFlaggedError(null)
@@ -92,7 +97,10 @@ export default function ImageGenerator() {
       const data = await response.json()
 
       if (!response.ok) {
-        if (response.status === 400 && data.error.includes('inappropriate content')) {
+        if (response.status === 429) {
+          setRemainingUses(0)
+          throw new Error(data.error || 'You've reached the daily limit for image generation.')
+        } else if (response.status === 400 && data.error.includes('inappropriate content')) {
           setFlaggedError(data.error)
         } else {
           throw new Error(data.error || 'Failed to generate image')
@@ -107,6 +115,7 @@ export default function ImageGenerator() {
       setImageUrls(data.images.map((image: { url: string }) => image.url))
       setLoadingImages(new Array(data.images.length).fill(true))
       setHasGenerated(true)
+      setRemainingUses(prev => prev - 1)
     } catch (err) {
       console.error('Error:', err)
       setError(err instanceof Error ? err.message : 'An unexpected error occurred')
@@ -205,6 +214,10 @@ export default function ImageGenerator() {
               <Label htmlFor="enable_safety_checker">Enable Safety Checker</Label>
             </div>
 
+            <div className="mt-4 text-sm text-gray-600">
+              Remaining uses today: {remainingUses}
+            </div>
+
             {showFlaggedError && flaggedError && (
               <Alert variant="destructive" className="transition-opacity duration-300 ease-in-out">
                 <AlertTitle>Content Flagged</AlertTitle>
@@ -213,8 +226,8 @@ export default function ImageGenerator() {
             )}
 
             <div className="flex space-x-2">
-              <Button type="submit" className="w-full" disabled={isGenerating || hasGenerated}>
-                {isGenerating ? 'Generating...' : 'Generate Image'}
+              <Button type="submit" className="w-full" disabled={isGenerating || hasGenerated || remainingUses <= 0}>
+                {isGenerating ? 'Generating...' : remainingUses > 0 ? 'Generate Image' : 'Daily Limit Reached'}
               </Button>
               <Button type="button" variant="outline" className="w-full" onClick={handleReset}>
                 Reset
