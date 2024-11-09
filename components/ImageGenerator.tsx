@@ -45,6 +45,7 @@ export default function ImageGenerator() {
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null)
   const [loadingProgress, setLoadingProgress] = useState(0)
   const [remainingUses, setRemainingUses] = useState(3)
+  const [isLimitReached, setIsLimitReached] = useState(false)
 
   useEffect(() => {
     let interval: NodeJS.Timeout
@@ -71,7 +72,7 @@ export default function ImageGenerator() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (remainingUses <= 0) {
-      setError("You've reached your image generation limit for today. Please try again tomorrow!")
+      setError("Congrats! You've officially hit your limit for today, Let others also use this free service. Try again tomorrow, if you can wait that long!")
       return
     }
     setIsGenerating(true)
@@ -99,6 +100,7 @@ export default function ImageGenerator() {
       if (!response.ok) {
         if (response.status === 429) {
           setRemainingUses(0)
+          setIsLimitReached(true)
           throw new Error(data.error || 'You've reached the daily limit for image generation.')
         } else if (response.status === 400 && data.error.includes('inappropriate content')) {
           setFlaggedError(data.error)
@@ -131,6 +133,7 @@ export default function ImageGenerator() {
     setFlaggedError(null)
     setHasGenerated(false)
     setLoadingProgress(0)
+    setIsLimitReached(false)
   }
 
   const handleDownload = (imageUrl: string) => {
@@ -217,6 +220,15 @@ export default function ImageGenerator() {
             <div className="mt-4 text-sm text-gray-600">
               Remaining uses today: {remainingUses}
             </div>
+
+            {isLimitReached && (
+              <Alert variant="warning" className="mb-4">
+                <AlertTitle>Daily Limit Reached</AlertTitle>
+                <AlertDescription>
+                  Congrats! You've officially hit your background removal limit for today. No more magic for you. Try again tomorrow, if you can wait that long!
+                </AlertDescription>
+              </Alert>
+            )}
 
             {showFlaggedError && flaggedError && (
               <Alert variant="destructive" className="transition-opacity duration-300 ease-in-out">
