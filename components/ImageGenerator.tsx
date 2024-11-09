@@ -95,7 +95,7 @@ export default function ImageGenerator() {
       if (!response.ok) {
         if (response.status === 429) {
           setIsLimitReached(true)
-          throw new Error(data.error || 'You've reached the daily limit for image generation.')
+          throw new Error(data.error || 'You have reached the daily limit for image generation.')
         } else if (response.status === 400 && data.error.includes('inappropriate content')) {
           setFlaggedError(data.error)
         } else {
