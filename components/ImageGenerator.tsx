@@ -9,6 +9,7 @@ import { Switch } from "@/components/ui/switch"
 import { Card, CardContent } from "@/components/ui/card"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Textarea } from "@/components/ui/textarea"
+import { Progress } from "@/components/ui/progress"
 import Image from 'next/image'
 import AdOverlay from './AdOverlay'
 import AdUnit from '../components/AdUnit'
@@ -36,35 +37,34 @@ export default function ImageGenerator() {
   const [params, setParams] = useState<GenerationParams>(initialParams)
   const [isGenerating, setIsGenerating] = useState(false)
   const [isImageLoading, setIsImageLoading] = useState(false)
-  const [hasGenerated, setHasGenerated] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [flaggedError, setFlaggedError] = useState<string | null>(null)
   const [showFlaggedError, setShowFlaggedError] = useState(false)
   const [imageUrls, setImageUrls] = useState<string[]>([])
-  const [loadingImages, setLoadingImages] = useState<boolean[]>([])
   const [showAdOverlay, setShowAdOverlay] = useState(false)
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null)
   const [loadingProgress, setLoadingProgress] = useState(0)
   const [isLimitReached, setIsLimitReached] = useState(false)
+  const [canGenerate, setCanGenerate] = useState(true)
 
-useEffect(() => {
-  let interval: NodeJS.Timeout
-  if (isGenerating || isImageLoading) {
-    interval = setInterval(() => {
-      setLoadingProgress((prev) => {
-        if (isGenerating && prev < 90) {
-          return prev + 1
-        } else if (isImageLoading && prev < 99) {
-          return prev + 0.2
-        }
-        return prev
-      })
-    }, 100)
-  } else {
-    setLoadingProgress(0)
-  }
-  return () => clearInterval(interval)
-}, [isGenerating, isImageLoading])
+  useEffect(() => {
+    let interval: NodeJS.Timeout
+    if (isGenerating || isImageLoading) {
+      interval = setInterval(() => {
+        setLoadingProgress((prev) => {
+          if (isGenerating && prev < 90) {
+            return prev + 1
+          } else if (isImageLoading && prev < 99) {
+            return prev + 0.2
+          }
+          return prev
+        })
+      }, 100)
+    } else {
+      setLoadingProgress(0)
+    }
+    return () => clearInterval(interval)
+  }, [isGenerating, isImageLoading])
 
   useEffect(() => {
     if (flaggedError) {
@@ -112,31 +112,30 @@ useEffect(() => {
         return
       }
 
-     if (!data.images || !Array.isArray(data.images)) {
+      if (!data.images || !Array.isArray(data.images)) {
         throw new Error('Invalid response format from API')
       }
 
       setImageUrls(data.images.map((image: { url: string }) => image.url))
       setIsGenerating(false)
       setIsImageLoading(true)
-      setHasGenerated(true)
     } catch (err) {
       console.error('Error:', err)
       setError(err instanceof Error ? err.message : 'An unexpected error occurred')
       setIsGenerating(false)
     }
   }
-  const handleImageLoad = () => {
-  setIsImageLoading(false)
-  setLoadingProgress(100)
-}
 
-   const handleReset = () => {
+  const handleImageLoad = () => {
+    setIsImageLoading(false)
+    setLoadingProgress(100)
+  }
+
+  const handleReset = () => {
     setParams(initialParams)
     setImageUrls([])
     setError(null)
     setFlaggedError(null)
-    setHasGenerated(false)
     setLoadingProgress(0)
     setCanGenerate(true)
     setIsGenerating(false)
@@ -242,12 +241,12 @@ useEffect(() => {
 
             <div className="flex space-x-2">
               <Button
-  onClick={handleSubmit}
-  disabled={isGenerating || isImageLoading || !canGenerate}
-  className="flex-1 text-white py-2 rounded-lg transition-all duration-300"
->
-  {isGenerating || isImageLoading ? 'Processing...' : canGenerate ? 'Generate Image' : 'Daily Limit Reached'}
-</Button>
+                onClick={handleSubmit}
+                disabled={isGenerating || isImageLoading || !canGenerate}
+                className="flex-1 text-white py-2 rounded-lg transition-all duration-300"
+              >
+                {isGenerating || isImageLoading ? 'Processing...' : canGenerate ? 'Generate Image' : 'Daily Limit Reached'}
+              </Button>
               <Button type="button" variant="outline" className="w-full" onClick={handleReset}>
                 Reset
               </Button>
@@ -259,20 +258,25 @@ useEffect(() => {
             />
           </form>
 
-       
+          {error && (
+            <Alert variant="destructive" className="mt-4">
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
         </CardContent>
-         {(isGenerating || isImageLoading) && (
-                <div className="space-y-2">
-                  <Progress value={loadingProgress} className="w-full" />
-                  <p className="text-center text-sm text-gray-500">
-                    {isGenerating ? 'Generating image...' : 'Loading image...'}
-                    {' '}This may take a few moments.
-                  </p>
-                </div>
-              )}
+        {(isGenerating || isImageLoading) && (
+          <div className="space-y-2">
+            <Progress value={loadingProgress} className="w-full" />
+            <p className="text-center text-sm text-gray-500">
+              {isGenerating ? 'Generating image...' : 'Loading image...'}
+              {' '}This may take a few moments.
+            </p>
+          </div>
+        )}
       </Card>
 
-     <div className="w-full md:w-[70%] md:h-screen dotted-bg flex flex-col flex justify-center items-center p-4">
+      <div className="w-full md:w-[70%] md:h-screen dotted-bg flex flex-col flex justify-center items-center p-4">
         <AdUnit 
           client="ca-pub-7915372771416695"
           slot="2181958821"
@@ -294,7 +298,7 @@ useEffect(() => {
                 alt="Generated image"
                 fill
                 className="object-contain rounded-lg"
-                onLoad={handleImageLoad} // Use the handleImageLoad function here
+                onLoad={handleImageLoad}
               />
               {!isImageLoading && (
                 <Button
