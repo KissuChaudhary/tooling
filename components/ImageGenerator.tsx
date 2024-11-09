@@ -44,7 +44,6 @@ export default function ImageGenerator() {
   const [showAdOverlay, setShowAdOverlay] = useState(false)
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null)
   const [loadingProgress, setLoadingProgress] = useState(0)
-  const [remainingUses, setRemainingUses] = useState(3)
   const [isLimitReached, setIsLimitReached] = useState(false)
 
   useEffect(() => {
@@ -71,15 +70,12 @@ export default function ImageGenerator() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (remainingUses <= 0) {
-      setError("Congrats! You've officially hit your limit for today, Let others also use this free service. Try again tomorrow, if you can wait that long!")
-      return
-    }
     setIsGenerating(true)
     setError(null)
     setFlaggedError(null)
     setImageUrls([])
     setLoadingProgress(0)
+    setIsLimitReached(false)
 
     try {
       const apiParams = {
@@ -99,9 +95,8 @@ export default function ImageGenerator() {
 
       if (!response.ok) {
         if (response.status === 429) {
-          setRemainingUses(0)
           setIsLimitReached(true)
-          throw new Error(data.error || 'You've reached the daily limit for image generation.')
+          throw new Error(data.error || 'You have reached the daily limit for image generation.')
         } else if (response.status === 400 && data.error.includes('inappropriate content')) {
           setFlaggedError(data.error)
         } else {
@@ -117,7 +112,6 @@ export default function ImageGenerator() {
       setImageUrls(data.images.map((image: { url: string }) => image.url))
       setLoadingImages(new Array(data.images.length).fill(true))
       setHasGenerated(true)
-      setRemainingUses(prev => prev - 1)
     } catch (err) {
       console.error('Error:', err)
       setError(err instanceof Error ? err.message : 'An unexpected error occurred')
@@ -217,9 +211,6 @@ export default function ImageGenerator() {
               <Label htmlFor="enable_safety_checker">Enable Safety Checker</Label>
             </div>
 
-            <div className="mt-4 text-sm text-gray-600">
-              Remaining uses today: {remainingUses}
-            </div>
 
             {isLimitReached && (
               <Alert variant="warning" className="mb-4">
@@ -238,8 +229,8 @@ export default function ImageGenerator() {
             )}
 
             <div className="flex space-x-2">
-              <Button type="submit" className="w-full" disabled={isGenerating || hasGenerated || remainingUses <= 0}>
-                {isGenerating ? 'Generating...' : remainingUses > 0 ? 'Generate Image' : 'Daily Limit Reached'}
+              <Button type="submit" className="w-full" disabled={isGenerating || hasGenerated || isLimitReached}>
+                {isGenerating ? 'Generating...' : isLimitReached ? 'Daily Limit Reached' : 'Generate Image'}
               </Button>
               <Button type="button" variant="outline" className="w-full" onClick={handleReset}>
                 Reset
