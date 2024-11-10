@@ -9,6 +9,7 @@ import { Switch } from "@/components/ui/switch"
 import { Card, CardContent } from "@/components/ui/card"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Textarea } from "@/components/ui/textarea"
+import { Progress } from "@/components/ui/progress"
 import Image from 'next/image'
 import AdOverlay from './AdOverlay'
 import AdUnit from '../components/AdUnit'
@@ -35,27 +36,34 @@ const initialParams: GenerationParams = {
 export default function ImageGenerator() {
   const [params, setParams] = useState<GenerationParams>(initialParams)
   const [isGenerating, setIsGenerating] = useState(false)
-  const [hasGenerated, setHasGenerated] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [isImageLoading, setIsImageLoading] = useState(false)
   const [flaggedError, setFlaggedError] = useState<string | null>(null)
   const [showFlaggedError, setShowFlaggedError] = useState(false)
   const [imageUrls, setImageUrls] = useState<string[]>([])
-  const [loadingImages, setLoadingImages] = useState<boolean[]>([])
   const [showAdOverlay, setShowAdOverlay] = useState(false)
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null)
   const [loadingProgress, setLoadingProgress] = useState(0)
+  const [isLimitReached, setIsLimitReached] = useState(false)
+  const [canGenerate, setCanGenerate] = useState(true)
 
   useEffect(() => {
     let interval: NodeJS.Timeout
-    if (isGenerating) {
+    if (isGenerating || isImageLoading) {
       interval = setInterval(() => {
-        setLoadingProgress((prev) => (prev < 100 ? prev + 1 : 100))
+        setLoadingProgress((prev) => {
+          if (isGenerating && prev < 90) {
+            return prev + 1
+          } else if (isImageLoading && prev < 99) {
+            return prev + 0.2
+          }
+          return prev
+        })
       }, 100)
     } else {
       setLoadingProgress(0)
     }
     return () => clearInterval(interval)
-  }, [isGenerating])
+  }, [isGenerating, isImageLoading])
 
   useEffect(() => {
     if (flaggedError) {
@@ -70,7 +78,6 @@ export default function ImageGenerator() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsGenerating(true)
-    setError(null)
     setFlaggedError(null)
     setImageUrls([])
     setLoadingProgress(0)
@@ -92,7 +99,10 @@ export default function ImageGenerator() {
       const data = await response.json()
 
       if (!response.ok) {
-        if (response.status === 400 && data.error.includes('inappropriate content')) {
+        if (response.status === 429) {
+          setIsLimitReached(true)
+          throw new Error(data.error || 'You have reached the daily limit for image generation.')
+        } else if (response.status === 400 && data.error.includes('inappropriate content')) {
           setFlaggedError(data.error)
         } else {
           throw new Error(data.error || 'Failed to generate image')
@@ -105,23 +115,27 @@ export default function ImageGenerator() {
       }
 
       setImageUrls(data.images.map((image: { url: string }) => image.url))
-      setLoadingImages(new Array(data.images.length).fill(true))
-      setHasGenerated(true)
+      setIsGenerating(false)
+      setIsImageLoading(true)
     } catch (err) {
       console.error('Error:', err)
-      setError(err instanceof Error ? err.message : 'An unexpected error occurred')
-    } finally {
       setIsGenerating(false)
     }
+  }
+
+  const handleImageLoad = () => {
+    setIsImageLoading(false)
+    setLoadingProgress(100)
   }
 
   const handleReset = () => {
     setParams(initialParams)
     setImageUrls([])
-    setError(null)
     setFlaggedError(null)
-    setHasGenerated(false)
     setLoadingProgress(0)
+    setCanGenerate(true)
+    setIsGenerating(false)
+    setIsImageLoading(false)
   }
 
   const handleDownload = (imageUrl: string) => {
@@ -205,6 +219,15 @@ export default function ImageGenerator() {
               <Label htmlFor="enable_safety_checker">Enable Safety Checker</Label>
             </div>
 
+            {isLimitReached && (
+              <Alert variant="destructive" className="mb-4">
+                <AlertTitle>Daily Limit Reached</AlertTitle>
+                <AlertDescription>
+                  Congrats! You have officially hit your image generation limit for today. No more magic for you. Try again tomorrow, if you can wait that long!
+                </AlertDescription>
+              </Alert>
+            )}
+
             {showFlaggedError && flaggedError && (
               <Alert variant="destructive" className="transition-opacity duration-300 ease-in-out">
                 <AlertTitle>Content Flagged</AlertTitle>
@@ -212,9 +235,13 @@ export default function ImageGenerator() {
               </Alert>
             )}
 
-            <div className="flex space-x-2">
-              <Button type="submit" className="w-full" disabled={isGenerating || hasGenerated}>
-                {isGenerating ? 'Generating...' : 'Generate Image'}
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                onClick={handleSubmit}
+                disabled={isGenerating || isImageLoading || !canGenerate}
+                className="w-full text-white py-2 rounded-lg transition-all duration-300"
+              >
+                {isGenerating || isImageLoading ? 'Processing...' : canGenerate ? 'Generate Image' : 'Daily Limit Reached'}
               </Button>
               <Button type="button" variant="outline" className="w-full" onClick={handleReset}>
                 Reset
@@ -227,13 +254,16 @@ export default function ImageGenerator() {
             />
           </form>
 
-          {error && (
-            <Alert variant="destructive" className="mt-4">
-              <AlertTitle>Error</AlertTitle>
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
         </CardContent>
+        {(isGenerating || isImageLoading) && (
+          <div className="space-y-2">
+            <Progress value={loadingProgress} className="w-full" />
+            <p className="text-center text-sm text-gray-500">
+              {isGenerating ? 'Generating image...' : 'Loading image...'}
+              {' '}This may take a few moments.
+            </p>
+          </div>
+        )}
       </Card>
 
       <div className="w-full md:w-[70%] md:h-screen dotted-bg flex flex-col flex justify-center items-center p-4">
@@ -243,13 +273,12 @@ export default function ImageGenerator() {
           style={{ marginBottom: '20px' }}
         />
         <div className={`bg-white rounded-lg shadow flex items-center justify-center ${getImagePreviewStyle()} relative overflow-hidden`}>
-          {isGenerating && (
+          {(isGenerating || isImageLoading) && (
             <div className="absolute inset-0 bg-gray-200 z-10">
-              <div 
-                className="h-1 bg-blue-500 transition-all duration-300 ease-out"
-                style={{ width: `${loadingProgress}%` }}
-              ></div>
-              <p className="text-center mt-4">Generating: {loadingProgress}%</p>
+              <Progress value={loadingProgress} className="w-full" />
+              <p className="text-center mt-4">
+                {isGenerating ? 'Generating' : 'Loading'}: {Math.round(loadingProgress)}%
+              </p>
             </div>
           )}
           {imageUrls.length > 0 ? (
@@ -259,9 +288,9 @@ export default function ImageGenerator() {
                 alt="Generated image"
                 fill
                 className="object-contain rounded-lg"
-                onLoad={() => setLoadingImages([false])}
+                onLoad={handleImageLoad}
               />
-              {!loadingImages[0] && (
+              {!isImageLoading && (
                 <Button
                   className="absolute bottom-2 right-2"
                   onClick={() => handleDownload(imageUrls[0])}
