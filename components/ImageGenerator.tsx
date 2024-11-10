@@ -255,15 +255,7 @@ export default function ImageGenerator() {
           </form>
 
         </CardContent>
-        {(isGenerating || isImageLoading) && (
-          <div className="space-y-2">
-            <Progress value={loadingProgress} className="w-full" />
-            <p className="text-center text-sm text-gray-500">
-              {isGenerating ? 'Generating image...' : 'Loading image...'}
-              {' '}This may take a few moments.
-            </p>
-          </div>
-        )}
+       
       </Card>
 
       <div className="w-full md:w-[70%] md:h-screen dotted-bg flex flex-col flex justify-center items-center p-4">
