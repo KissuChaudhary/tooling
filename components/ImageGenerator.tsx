@@ -44,7 +44,6 @@ export default function ImageGenerator() {
   const [showAdOverlay, setShowAdOverlay] = useState(false)
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null)
   const [loadingProgress, setLoadingProgress] = useState(0)
-  const [isLimitReached, setIsLimitReached] = useState(false)
 
   useEffect(() => {
     let interval: NodeJS.Timeout
@@ -93,10 +92,7 @@ export default function ImageGenerator() {
       const data = await response.json()
 
       if (!response.ok) {
-        if (response.status === 429) {
-          setIsLimitReached(true)
-          throw new Error(data.error || 'You have reached the daily limit for image generation.')
-        } else if (response.status === 400 && data.error.includes('inappropriate content')) {
+        if (response.status === 400 && data.error.includes('inappropriate content')) {
           setFlaggedError(data.error)
         } else {
           throw new Error(data.error || 'Failed to generate image')
@@ -126,7 +122,6 @@ export default function ImageGenerator() {
     setFlaggedError(null)
     setHasGenerated(false)
     setLoadingProgress(0)
-    setIsLimitReached(false)
   }
 
   const handleDownload = (imageUrl: string) => {
@@ -210,15 +205,6 @@ export default function ImageGenerator() {
               <Label htmlFor="enable_safety_checker">Enable Safety Checker</Label>
             </div>
 
-            {isLimitReached && (
-              <Alert variant="destructive" className="mb-4">
-                <AlertTitle>Daily Limit Reached</AlertTitle>
-                <AlertDescription>
-                  Congrats! You have officially hit your image generation limit for today. No more magic for you. Try again tomorrow, if you can wait that long!
-                </AlertDescription>
-              </Alert>
-            )}
-
             {showFlaggedError && flaggedError && (
               <Alert variant="destructive" className="transition-opacity duration-300 ease-in-out">
                 <AlertTitle>Content Flagged</AlertTitle>
@@ -227,8 +213,8 @@ export default function ImageGenerator() {
             )}
 
             <div className="flex space-x-2">
-              <Button type="submit" className="w-full" disabled={isGenerating || hasGenerated || isLimitReached}>
-                {isGenerating ? 'Generating...' : isLimitReached ? 'Daily Limit Reached' : 'Generate Image'}
+              <Button type="submit" className="w-full" disabled={isGenerating || hasGenerated}>
+                {isGenerating ? 'Generating...' : 'Generate Image'}
               </Button>
               <Button type="button" variant="outline" className="w-full" onClick={handleReset}>
                 Reset
