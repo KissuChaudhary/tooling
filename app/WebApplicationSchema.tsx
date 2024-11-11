@@ -50,6 +50,11 @@ const WebApplicationSchema: React.FC = () => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
+      <title>Saze AI: Free AI Writing, Image Generation, and Creative Tools Hub</title>
+      <meta
+        name="description"
+        content="Saze AI is an AI-powered content generating tool to help you quickly create high-quality content that requires minimal effort, time, and cost."
+      />
     </Fragment>
   );
 };
