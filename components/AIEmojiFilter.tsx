@@ -8,7 +8,6 @@ import { Card, CardContent} from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
 import { AlertCircle, Download, Upload, RefreshCw } from 'lucide-react'
-import { Slider } from "@/components/ui/slider"
 import Image from 'next/image'
 import AdOverlay from '@/components/Adover'
 import AdUnit from '@/components/AdUnit'
