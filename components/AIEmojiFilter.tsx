@@ -28,10 +28,7 @@ export default function EmojiFaceTransform() {
   const [prompt, setPrompt] = useState('')
   const [loraScale, setLoraScale] = useState(1)
   const [negativePrompt, setNegativePrompt] = useState('')
-  const [promptStrength, setPromptStrength] = useState(4.5)
-  const [denoisingStrength, setDenoisingStrength] = useState(0.65)
-  const [instantIdStrength, setInstantIdStrength] = useState(0.8)
-  const [controlDepthStrength, setControlDepthStrength] = useState(0.8)
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -54,10 +51,10 @@ export default function EmojiFaceTransform() {
     formData.append('prompt', prompt)
     formData.append('loraScale', loraScale.toString())
     formData.append('negativePrompt', negativePrompt)
-    formData.append('promptStrength', promptStrength.toString())
-    formData.append('denoisingStrength', denoisingStrength.toString())
-    formData.append('instantIdStrength', instantIdStrength.toString())
-    formData.append('controlDepthStrength', controlDepthStrength.toString())
+    formData.append('promptStrength', '4.5')
+    formData.append('denoisingStrength', '0.65')
+    formData.append('instantIdStrength', '0.8')
+    formData.append('controlDepthStrength', '0.8')
 
     try {
       const response = await fetch('/api/face-transform', {
@@ -172,10 +169,6 @@ export default function EmojiFaceTransform() {
     setPrompt('')
     setLoraScale(1)
     setNegativePrompt('')
-    setPromptStrength(4.5)
-    setDenoisingStrength(0.65)
-    setInstantIdStrength(0.8)
-    setControlDepthStrength(0.8)
   }
 
   const downloadImage = () => {
@@ -194,7 +187,7 @@ export default function EmojiFaceTransform() {
           slot="2181958821"
           style={{ marginBottom: '20px' }}
         />
-       
+        
         <CardContent className="p-6">
             <div className="flex flex-col lg:flex-row gap-6">
               {/* Form Section */}
@@ -272,54 +265,6 @@ export default function EmojiFaceTransform() {
                       placeholder="Describe what to avoid"
                     />
                   </div>
-
-                  <div>
-                    <Label htmlFor="promptStrength">Prompt Strength: {promptStrength}</Label>
-                    <Slider
-                      id="promptStrength"
-                      min={0}
-                      max={10}
-                      step={0.1}
-                      value={[promptStrength]}
-                      onValueChange={(value) => setPromptStrength(value[0])}
-                    />
-                  </div>
-
-                  <div>
-                    <Label htmlFor="denoisingStrength">Denoising Strength: {denoisingStrength}</Label>
-                    <Slider
-                      id="denoisingStrength"
-                      min={0}
-                      max={1}
-                      step={0.05}
-                      value={[denoisingStrength]}
-                      onValueChange={(value) => setDenoisingStrength(value[0])}
-                    />
-                  </div>
-
-                  <div>
-                    <Label htmlFor="instantIdStrength">Instant ID Strength: {instantIdStrength}</Label>
-                    <Slider
-                      id="instantIdStrength"
-                      min={0}
-                      max={1}
-                      step={0.05}
-                      value={[instantIdStrength]}
-                      onValueChange={(value) => setInstantIdStrength(value[0])}
-                    />
-                  </div>
-
-                  <div>
-                    <Label htmlFor="controlDepthStrength">Control Depth Strength: {controlDepthStrength}</Label>
-                    <Slider
-                      id="controlDepthStrength"
-                      min={0}
-                      max={1}
-                      step={0.05}
-                      value={[controlDepthStrength]}
-                      onValueChange={(value) => setControlDepthStrength(value[0])}
-                    />
-                  </div>
                 </div>
 
                 <div className="flex space-x-4">
@@ -328,7 +273,7 @@ export default function EmojiFaceTransform() {
                     disabled={loading}
                     className="flex-1 py-2 rounded-lg hover:from-purple-600 hover:to-indigo-600 transition-all duration-300"
                   >
-                    {loading ? 'Processing...' : 'Create Personalized Emoji'}
+                    {loading ? 'Processing...' : 'Create AI Emoji'}
                   </Button>
                   <Button
                     onClick={handleReset}
@@ -415,4 +360,4 @@ export default function EmojiFaceTransform() {
       />
     </div>
   )
-}
+        }
