@@ -12,6 +12,7 @@ const nextConfig = {
       },
     ],
     domains: ['fal.media', 'replicate.delivery'],
+    unoptimized: true,
   },
   async redirects() {
     return [
