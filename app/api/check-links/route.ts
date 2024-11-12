@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import axios from 'axios'
-import cheerio from 'cheerio'
-import { URL } from 'url'
+import * as cheerio from 'cheerio'
+  import { URL } from 'url'
 
 type BrokenLink = {
   url: string
