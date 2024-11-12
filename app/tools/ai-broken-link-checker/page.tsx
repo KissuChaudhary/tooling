@@ -12,7 +12,7 @@ type BrokenLink = {
   status: number | string
 }
 
-export default function Home() {
+export default function AIBrokenLinkChecker() {
   const [url, setUrl] = useState('')
   const [loading, setLoading] = useState(false)
   const [results, setResults] = useState<{
@@ -41,7 +41,7 @@ export default function Home() {
 
       const data = await response.json()
       setResults(data)
-    } catch (err) {
+    } catch (_) {
       setError('An error occurred while checking links')
     } finally {
       setLoading(false)
