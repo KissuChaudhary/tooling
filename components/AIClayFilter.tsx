@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
 import { AlertCircle, Download, Upload, RefreshCw } from 'lucide-react'
@@ -24,6 +24,9 @@ export default function ClayFaceTransform() {
   const [activeTab, setActiveTab] = useState('original')
   const [showAdOverlay, setShowAdOverlay] = useState(false)
 
+  const [prompt, setPrompt] = useState('')
+  const [negativePrompt, setNegativePrompt] = useState('')
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!originalImage) {
@@ -41,7 +44,13 @@ export default function ClayFaceTransform() {
     } else if (imageUrl) {
       formData.append('imageUrl', imageUrl)
     }
-    formData.append('style', 'Clay') // Always set to Clay
+    formData.append('style', 'Clay')
+    formData.append('prompt', prompt)
+    formData.append('negativePrompt', negativePrompt)
+    formData.append('promptStrength', '4.5')
+    formData.append('denoisingStrength', '0.65')
+    formData.append('instantIdStrength', '0.8')
+    formData.append('controlDepthStrength', '0.8')
 
     try {
       const response = await fetch('/api/face-transform', {
@@ -52,7 +61,7 @@ export default function ClayFaceTransform() {
       if (!response.ok) {
         const errorData = await response.json()
         if (response.status === 429) {
-          setError("Congrats! You've officially hit your transformation limit for today. No more magic for you. Try again tomorrow, if you can wait that long!")
+          setError("You've reached your transformation limit for today. Please try again tomorrow.")
           setLoading(false)
           return
         }
@@ -153,6 +162,8 @@ export default function ClayFaceTransform() {
     setPredictionId(null)
     setProgress(0)
     setActiveTab('original')
+    setPrompt('')
+    setNegativePrompt('')
   }
 
   const downloadImage = () => {
@@ -171,7 +182,9 @@ export default function ClayFaceTransform() {
           slot="2181958821"
           style={{ marginBottom: '20px' }}
         />
-        
+        <CardHeader className="text-foreground">
+          <CardTitle className="text-3xl font-bold text-center">AI Clay Filter - Transform Your Image into Clay Art</CardTitle>
+        </CardHeader>
         <CardContent className="p-6">
           <div className="flex flex-col lg:flex-row gap-6">
             {/* Form Section */}
@@ -228,6 +241,28 @@ export default function ClayFaceTransform() {
                   </form>
                 </TabsContent>
               </Tabs>
+
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="prompt">Prompt</Label>
+                  <Input
+                    id="prompt"
+                    value={prompt}
+                    onChange={(e) => setPrompt(e.target.value)}
+                    placeholder="Describe the desired outcome"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="negativePrompt">Negative Prompt</Label>
+                  <Input
+                    id="negativePrompt"
+                    value={negativePrompt}
+                    onChange={(e) => setNegativePrompt(e.target.value)}
+                    placeholder="Describe what to avoid"
+                  />
+                </div>
+              </div>
 
               <div className="flex space-x-4">
                 <Button
@@ -318,7 +353,7 @@ export default function ClayFaceTransform() {
       <AdUnit 
         client="ca-pub-7915372771416695"
         slot="2181958821"
-        style={{ marginBottom: '20px' }}
+        style={{ marginBottom: '20px'}}
       />
     </div>
   )
