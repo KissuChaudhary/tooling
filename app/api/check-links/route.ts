@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import axios from 'axios'
 import * as cheerio from 'cheerio'
-  import { URL } from 'url'
+import { URL } from 'url'
 
 type BrokenLink = {
   url: string
@@ -38,7 +38,13 @@ export async function POST(req: Request) {
         }
       }
     } catch (error) {
-      brokenLinks.push({ url, status: error.message })
+      if (error instanceof Error) {
+        brokenLinks.push({ url, status: error.message })
+      } else if (typeof error === 'string') {
+        brokenLinks.push({ url, status: error })
+      } else {
+        brokenLinks.push({ url, status: 'Unknown error occurred' })
+      }
     }
   }
 
