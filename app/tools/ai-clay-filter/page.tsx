@@ -33,6 +33,11 @@ Transform your face into cute and funny clay art using our free AI tool. Fun, fr
 <ToolEngagement 
           toolName="AI Clay Filter"
         />
+           <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
           <section className="bg-muted py-12">
    <div className="container mx-auto px-4">
       <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">Transform Your Photos with AI Clay Filter</h2>
@@ -79,6 +84,11 @@ Transform your face into cute and funny clay art using our free AI tool. Fun, fr
       </div>
    </div>
 </section>
+           <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
 <section className="bg-muted py-12">
    <div className="container mx-auto px-4">
       <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center">How It Works</h2>
@@ -116,7 +126,11 @@ Transform your face into cute and funny clay art using our free AI tool. Fun, fr
       </Button>
    </div>
 </section>
-
+ <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
         </div>
       </div>
     </div>
