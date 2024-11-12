@@ -33,6 +33,7 @@
     "@vercel/speed-insights": "^1.0.14",
     "express-rate-limit": "^7.1.5",
     "isomorphic-dompurify": "^1.9.0",
+    "axios": "^1.4.0",
     "cheerio": "^1.0.0-rc.12",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
