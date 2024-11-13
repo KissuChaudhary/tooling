@@ -41,8 +41,8 @@ export default function AIBrokenLinkChecker() {
 
       const data = await response.json()
       setResults(data)
-    } catch (_) {
-      setError('An error occurred while checking links')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An unknown error occurred while checking links')
     } finally {
       setLoading(false)
     }
