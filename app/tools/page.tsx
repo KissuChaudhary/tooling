@@ -6,7 +6,7 @@ import { Metadata } from 'next'
 import AdUnit from '../../components/AdUnit'
 
 
-export const tools = [
+const tools = [
 {
     icon: <Image className="h-8 w-8 text-blue-500" />,
     title: "AI Influencer Generator",
