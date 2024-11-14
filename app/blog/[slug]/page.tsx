@@ -61,7 +61,7 @@ const createMDXComponents = () => {
       paragraphCount++;
       const paragraph = <p {...props} className="mb-4 text-foreground">{children}</p>;
       
-      if (paragraphCount % 4 === 0) {
+      if (paragraphCount % 6 === 0) {
         return (
           <>
             {paragraph}
