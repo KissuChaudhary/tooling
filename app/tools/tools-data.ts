@@ -1,5 +1,3 @@
-import { ProportionsIcon as IconProps } from 'lucide-react'
-
 export type Tool = {
   icon: keyof typeof import('lucide-react')
   title: string
@@ -8,7 +6,7 @@ export type Tool = {
   badge?: { text: string; color: string }
 }
 
-export const tools: Tool[] = [ 
+export const tools: Tool[] = [
  {
     icon: 'Image',
     title: "AI Influencer Generator",
