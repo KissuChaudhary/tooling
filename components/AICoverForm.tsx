@@ -80,6 +80,9 @@ export default function CoverLetterWriter() {
     if (!validateForm()) return;
 
     setIsLoading(true);
+    setErrors({});
+    setGeneratedCoverLetter('');
+
     try {
       const response = await fetch('/api/openai-api', {
         method: 'POST',
@@ -92,14 +95,17 @@ export default function CoverLetterWriter() {
           data: formData,
         }),
       });
-      if (!response.ok) {
-        throw new Error('Failed to generate cover letter');
-      }
+      
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'An error occurred while generating the cover letter');
+      }
+
       setGeneratedCoverLetter(data.coverLetter);
     } catch (error) {
       console.error('Error:', error);
-      setErrors({ submit: 'Failed to generate cover letter. Please try again.' });
+      setErrors({ submit: error instanceof Error ? error.message : 'An unexpected error occurred' });
     } finally {
       setIsLoading(false);
     }
@@ -116,10 +122,10 @@ export default function CoverLetterWriter() {
       <h1 className="text-4xl font-extrabold mb-8 text-center tracking-tight">AI Cover Letter Writer</h1>
       <p className="text-xl text-center mb-12 max-w-3xl mx-auto">Create Compelling Cover Letters with Saze AI – Impress Potential Employers.</p>
       <AdUnit 
-  client="ca-pub-7915372771416695"
-  slot="8441706260"
-  style={{ marginBottom: '20px' }}
-/>
+        client="ca-pub-7915372771416695"
+        slot="8441706260"
+        style={{ marginBottom: '20px' }}
+      />
       <div className="flex justify-center items-center space-x-4 mb-8">
         <div className="flex items-center space-x-2">
           <svg
