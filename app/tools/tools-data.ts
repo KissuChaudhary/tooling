@@ -1,4 +1,3 @@
-import { LucideIcon } from 'lucide-react'
 
 export type Tool = {
   icon: keyof typeof import('lucide-react')
