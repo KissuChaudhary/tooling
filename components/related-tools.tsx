@@ -16,7 +16,7 @@ export default function RelatedTools({ currentToolLink, maxTools = 6 }: { curren
       <h2 className="text-2xl font-bold mb-6">Related Tools</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {relatedTools.map((tool: Tool) => {
-          const IconComponent = Icons[tool.icon]
+          const IconComponent = Icons[tool.icon as keyof typeof Icons]
           return (
             <Link key={tool.title} href={tool.link} passHref>
               <Card className="group transition-all duration-300 hover:shadow-xl hover:scale-105">
