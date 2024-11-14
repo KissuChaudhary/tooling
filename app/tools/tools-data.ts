@@ -1,7 +1,7 @@
-import { LightbulbIcon as LucideProps } from 'lucide-react'
+import { LucideIcon } from 'lucide-react'
 
 export type Tool = {
-  icon: React.ForwardRefExoticComponent<LucideProps>
+  icon: LucideIcon
   title: string
   description: string
   link: string
