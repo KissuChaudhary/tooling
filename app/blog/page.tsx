@@ -5,7 +5,7 @@ import AdUnit from '../../components/AdUnit'
 
 
 export const metadata: Metadata = {
-  title: 'AI Tools Blog - Latest Insights and Updates',
+  title: 'Saze AI Tools Blog - Latest Insights and Updates',
   description: 'Explore the latest articles on AI tools, machine learning, and productivity enhancements.',
 }
 
@@ -19,7 +19,7 @@ export default async function BlogPage() {
   slot="8441706260"
   style={{ marginBottom: '20px' }}
 />
-      <h1 className="text-4xl font-bold mb-8">AI Tools Blog</h1>
+      <h1 className="text-4xl font-bold mb-8">Saze AI Blog</h1>
       <div className="grid gap-8 text-foreground md:grid-cols-2 lg:grid-cols-3">
         {posts.map((post) => (
           <BlogCard key={post.slug} post={post} />
