@@ -22,7 +22,7 @@ export default function RelatedTools({ currentToolLink, maxTools = 6 }: { curren
               <Card className="group transition-all duration-300 hover:shadow-xl hover:scale-105">
                 <CardHeader className="relative pb-0">
                   <div className="absolute top-4 left-4 bg-gray-100 rounded-full p-3 transition-all duration-300 group-hover:scale-110">
-                    <IconComponent className="h-8 w-8" />
+                    {IconComponent && React.createElement(IconComponent, { className: "h-8 w-8" })}
                   </div>
                   {tool.badge && (
                     <Badge 
