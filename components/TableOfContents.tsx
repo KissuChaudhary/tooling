@@ -16,7 +16,7 @@ interface Heading {
 export default function TableOfContents({ content }: TableOfContentsProps) {
   const [headings, setHeadings] = useState<Heading[]>([])
   const [activeId, setActiveId] = useState<string>('')
-  const [isCollapsed, setIsCollapsed] = useState(false)
+  const [isCollapsed, setIsCollapsed] = useState(true)
   const [showCongrats, setShowCongrats] = useState(false)
   const tocRef = useRef<HTMLDivElement>(null)
 
@@ -84,36 +84,41 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
   return (
     <div ref={tocRef} className="sticky top-24">
       <nav className="rounded-lg shadow-md p-4 mb-4">
-        <div className="flex justify-between items-center">
-          <h2 className="text-lg font-semibold">Table of contents</h2>
-          <button onClick={toggleCollapse} className="text-gray-400 hover:text-primary">
+        <button 
+          onClick={toggleCollapse} 
+          className="w-full flex justify-between items-center text-lg font-semibold"
+        >
+          <span>Table of contents</span>
+          <span className="text-gray-400 hover:text-primary">
             {isCollapsed ? <ChevronDown size={20} /> : <ChevronUp size={20} />}
-          </button>
-        </div>
-        <div className={`space-y-2 ${isCollapsed ? 'h-0 overflow-hidden' : 'h-auto'}`}>
-          <ul className="space-y-2 relative">
-            <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-primary"></div>
-            {headings.map(({ id, text, level }) => (
-              <li key={id} className={`${level === 3 ? 'ml-4' : ''} relative`}>
-                <a
-                  href={`#${id}`}
-                  onClick={(e) => handleClick(e, id)}
-                  className={`block py-1 pl-4 ${
-                    activeId === id
-                      ? 'text-primary font-medium'
-                      : 'text-gray-400 hover:text-primary'
-                  }`}
-                >
-                  {activeId === id && (
-                    <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-primary"></div>
-                  )}
-                  {text}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-        {showCongrats && (
+          </span>
+        </button>
+        {!isCollapsed && (
+          <div className="mt-4 space-y-2">
+            <ul className="space-y-2 relative">
+              <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-primary"></div>
+              {headings.map(({ id, text, level }) => (
+                <li key={id} className={`${level === 3 ? 'ml-4' : ''} relative`}>
+                  <a
+                    href={`#${id}`}
+                    onClick={(e) => handleClick(e, id)}
+                    className={`block py-1 pl-4 ${
+                      activeId === id
+                        ? 'text-primary font-medium'
+                        : 'text-gray-400 hover:text-primary'
+                    }`}
+                  >
+                    {activeId === id && (
+                      <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-primary"></div>
+                    )}
+                    {text}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {showCongrats && !isCollapsed && (
           <div className="mt-4 flex items-center text-sm text-gray-600">
             <Lock size={16} className="text-primary mr-2" />
             <p>
