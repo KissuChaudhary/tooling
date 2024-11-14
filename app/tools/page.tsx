@@ -281,6 +281,12 @@ const tools = [
     title: "Realistic Influencer Image Prompts",
     description: "Generate realistic image prompts for influencer content.",
     link: "/tools/ai-influencer-prompt-generator"
+  },
+    {
+    icon: <PenTool className="h-8 w-8 text-indigo-500" />,
+    title: "Free AI Rizz Generator",
+    description: "Get the cheesy, clever, flirty lines to impress your someone.",
+    link: "/tools/ai-rizz-generator"
   }
 ]
 
