@@ -617,7 +617,8 @@ export async function POST(request: NextRequest) {
       default:
         throw new Error(`Unsupported tool: ${tool}`);
     }
-  } catch (error) {
+    
+} catch (error) {
     console.error('Error details:', {
       message: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,
@@ -625,12 +626,22 @@ export async function POST(request: NextRequest) {
       model
     });
     
+    // Return a user-friendly error message
+    let userErrorMessage = 'Uhhh... Something went wrong. Please try again later.';
+    
+    // Customize the message based on the error type or known error patterns
+    if (error instanceof Error && error.message.includes('SAFETY')) {
+      userErrorMessage = 'Content flagged for abusive or explicit material. Please revise to meet our guidelines.';
+    }
+    
     return NextResponse.json({ 
-      error: `An error occurred while generating the ${tool}. ${error instanceof Error ? error.message : ''}` 
+      error: userErrorMessage 
     }, { 
       status: 500 
     });
-  }
+}
+
+  
 }
 
 async function handleOpenAIRequest(messages: any[]) {
