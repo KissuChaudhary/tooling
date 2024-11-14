@@ -47,7 +47,7 @@ export default function RelatedTools({ currentToolLink, maxTools = 6 }: { curren
 
   return (
     <div className="py-12 px-4 mx-auto max-w-7xl">
-       <h2 className="text-2xl font-bold mb-6">Related Tools</h2>
+       <h2 className="text-2xl font-bold mb-6">You May Also Like:</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {relatedTools.map((tool: Tool) => {
           const IconComponent = tool.icon
