@@ -262,10 +262,12 @@ const LoveLetterWriterSchema = z.object({
 });
 
 const RizzGeneratorSchema = z.object({
+  target: z.string(),
+  tone: z.string(),
   context: z.string(),
-  style: z.string(),
-  targetAudience: z.string(),
-  intensity: z.string(),
+  personalDetails: z.string(),
+  language: z.string(),
+  specificCompliments: z.string(),
 });
 
 const RequestSchema = z.object({
@@ -285,7 +287,7 @@ const RequestSchema = z.object({
     'aiPlotGenerator', 'aiQuotesGenerator', 'aiRhymeGenerator', 'aiSEOTitleGenerator',
     'aiParaphrasingTool', 'aiEmailResponseGenerator', 'aiBookTitleGenerator',
     'aiBackstoryGenerator', 'aiCoverLetterWriter', 'aiLinkedInSummaryGenerator',
-    'aiProductDescriptionGenerator', 'aiPunctuationChecker', 'rizzGenerator'
+    'aiProductDescriptionGenerator', 'aiPunctuationChecker', 'aiRizzGenerator'
   ]),
   model: z.enum(['gpt4o', 'gemini']),
   data: z.union([
@@ -505,7 +507,7 @@ export async function POST(request: NextRequest) {
     case 'aiLoveLetterWriter':
       messages = createLoveLetterWriterMessages(data);
       break;
-      case 'rizzGenerator':
+      case 'aiRizzGenerator':
       messages = createRizzGeneratorMessages(data);
       break;
     default:
@@ -610,7 +612,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ birthdayWish: content });
       case 'aiLoveLetterWriter':
         return NextResponse.json({ loveLetter: content });
-      case 'rizzGenerator':
+      case 'aiRizzGenerator':
         return NextResponse.json({ rizz: content });
       default:
         throw new Error(`Unsupported tool: ${tool}`);
@@ -1075,9 +1077,16 @@ function createLoveLetterWriterMessages(data: z.infer<typeof LoveLetterWriterSch
 }
 
 function createRizzGeneratorMessages(data: z.infer<typeof RizzGeneratorSchema>) {
-  const { context, style, targetAudience, intensity} = data;
+  const { target, tone, context, personalDetails, language, specificCompliments } = data;
   return [
-    { role: "system", content: "You are an expert in writing rizz lines" },
-    { role: "user", content: `Write a rizz line based on this context ${context} in ${style} syle, target audience for the rizz is ${targetAudience}. Intensity of the rizz is ${intensity}` }
+    { 
+      role: "system", 
+      content: "You are an expert in crafting creative, engaging, and personalized rizz lines." 
+    },
+    { 
+      role: "user", 
+      content: `Write a rizz line based on this context: ${context}. Use the tone of ${tone}. The rizz is targeted for: ${target}. The output should be in ${language}. Include personal details like: ${personalDetails}, and specific compliments such as: ${specificCompliments}.`
+    }
   ];
 }
+
