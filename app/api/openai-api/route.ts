@@ -1081,11 +1081,18 @@ function createRizzGeneratorMessages(data: z.infer<typeof RizzGeneratorSchema>) 
   return [
     { 
       role: "system", 
-      content: "You are an expert in crafting creative, engaging, and personalized rizz lines." 
+      content: "You are an expert in writing short, direct, and engaging rizz lines based on the user's input." 
     },
     { 
       role: "user", 
-      content: `Write a rizz line based on this context: ${context}. Use the tone of ${tone}. The rizz is targeted for: ${target}. The output should be in ${language}. Include personal details like: ${personalDetails}, and specific compliments such as: ${specificCompliments}.`
+      content: `write 5 short rizz line based on the following:
+        - Context: ${context}
+        - Tone: ${tone}
+        - Target: ${target}
+        - Language: ${language}
+        - Personal Details: ${personalDetails}
+        - Compliments: ${specificCompliments}
+        Keep them under 200 characters and make them catchy, and to the point.`
     }
   ];
 }
