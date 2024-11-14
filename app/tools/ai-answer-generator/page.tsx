@@ -7,7 +7,7 @@ import AdUnit from '@/components/AdUnit'
 import { Book, Lightbulb, Clock, Target, Sparkles } from 'lucide-react';
 
 export const metadata = {
-  title: "AI Answer Generator | Instant Answers for Any Question - USaze AI",
+  title: "AI Answer Generator | Instant Answers for Any Question",
   description: "Get instant, accurate answers with our AI Answer Generator. Ideal for students, professionals, and anyone seeking quick information.",
 };
 
