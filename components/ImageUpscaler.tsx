@@ -253,7 +253,8 @@ export default function ImageUpscaler() {
                   <span className="text-sm font-medium">{error}</span>
                 </div>
               )}
-
+                  <p>The tool is under maintenance. See you, may be Tomorrow.</p>
+              
               <div className="flex space-x-4">
                                   <p>The tool is under maintenance. See you, may be Tomorrow.</p>
                 <Button
