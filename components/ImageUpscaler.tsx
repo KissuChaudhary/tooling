@@ -256,7 +256,6 @@ export default function ImageUpscaler() {
                   <p>The tool is under maintenance. See you, may be Tomorrow.</p>
               
               <div className="flex space-x-4">
-                                  <p>The tool is under maintenance. See you, may be Tomorrow.</p>
                 <Button
                   onClick={handleSubmit}
                   disabled={loading}
