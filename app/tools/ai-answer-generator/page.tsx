@@ -72,6 +72,7 @@ export default function AIAnswerGeneratorPage() {
   slot="8441706260"
   style={{ marginBottom: '20px' }}
 />
+<RelatedTools currentToolLink="/tools/ai-answer-generator" />
         {/* Benefits Section */}
         <section className="py-12 bg-white bg-gradient-to-b dark:from-gray-900 dark:to-gray-800">
           <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
