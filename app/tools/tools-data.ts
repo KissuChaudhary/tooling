@@ -1,6 +1,14 @@
-import { Zap, Sparkles, Brain, Lightbulb, PenTool, Feather, MessageSquare, User, BookOpen, Sunrise, Music, Puzzle, Search, Repeat, Quote, Mail, Book, History, FileText, Linkedin, ShoppingBag, Edit, Image, Instagram, Heart, Cake, Star, Volume2, Youtube } from 'lucide-react'
+import { ProportionsIcon as IconProps } from 'lucide-react'
 
-export const tools = [
+export type Tool = {
+  icon: keyof typeof import('lucide-react')
+  title: string
+  description: string
+  link: string
+  badge?: { text: string; color: string }
+}
+
+export const tools: Tool[] = [ 
  {
     icon: <Image className="h-8 w-8 text-blue-500" />,
     title: "AI Influencer Generator",
