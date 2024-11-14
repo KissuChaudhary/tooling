@@ -74,6 +74,9 @@ export default function BirthdayWishGenerator() {
     if (!validateForm()) return;
 
     setIsLoading(true);
+    setErrors({});
+    setGeneratedWish('');
+
     try {
       const response = await fetch('/api/openai-api', {
         method: 'POST',
@@ -86,14 +89,14 @@ export default function BirthdayWishGenerator() {
           data: formData,
         }),
       });
-      if (!response.ok) {
-        throw new Error('Failed to generate birthday wish');
-      }
       const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'An error occurred while generating the birthday wish');
+      }
       setGeneratedWish(data.birthdayWish);
     } catch (error) {
       console.error('Error:', error);
-      setErrors({ submit: 'Failed to generate birthday wish. Please try again.' });
+      setErrors({ submit: error instanceof Error ? error.message : 'An unexpected error occurred' });
     } finally {
       setIsLoading(false);
     }
@@ -110,10 +113,10 @@ export default function BirthdayWishGenerator() {
       <h1 className="text-4xl font-extrabold mb-8 text-center tracking-tight">AI Birthday Wish Generator</h1>
       <p className="text-xl text-center mb-12 max-w-3xl mx-auto">Create Personalized Birthday Wishes with Saze AI – Make Someone's Special Day Even More Memorable.</p>
       <AdUnit 
-  client="ca-pub-7915372771416695"
-  slot="8441706260"
-  style={{ marginBottom: '20px' }}
-/>
+        client="ca-pub-7915372771416695"
+        slot="8441706260"
+        style={{ marginBottom: '20px' }}
+      />
       <div className="flex justify-center items-center space-x-4 mb-8">
         <div className="flex items-center space-x-2">
           <svg
@@ -258,7 +261,6 @@ export default function BirthdayWishGenerator() {
                 </p>
               )}
             </form>
-          
           </CardContent>
         </Card>
 
