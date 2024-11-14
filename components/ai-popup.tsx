@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
-import { X, Sparkles } from "lucide-react"
+import { X} from "lucide-react"
 
 export default function AIPopup() {
   const [isVisible, setIsVisible] = useState(false)
@@ -51,15 +51,11 @@ export default function AIPopup() {
               <X className="h-3 w-3 sm:h-4 sm:w-4" />
             </button>
             <h2 className="font-bold text-base sm:text-lg text-white flex items-center gap-1.5">
-              <Sparkles className="h-4 w-4 sm:h-5 sm:w-5" />
              Look Professional Instantly!
             </h2>
           </div>
           
           <div className="p-2 sm:p-3 space-y-2 sm:space-y-3">
-            <p className="text-indigo-800 dark:text-indigo-200 font-medium text-xs sm:text-sm">
-              Let UnrealShot AI Turn You into a Professional (At Least on Paper)
-            </p>
             <div className="relative w-full aspect-[512/728] rounded-lg overflow-hidden">
               <Image
                 src="/images/headshots1.webp"
@@ -76,7 +72,7 @@ export default function AIPopup() {
 
            <Link href="/login" passHref>
               <Button 
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-1 px-2 sm:px-3 rounded-lg text-xs sm:text-sm"
+                className="w-full bg-indigo-600 mt-4 hover:bg-indigo-700 text-white font-semibold py-1 px-2 sm:px-3 rounded-lg text-xs sm:text-sm"
               >
                 🎯 Get Your AI Headshot Now
               </Button>
