@@ -86,7 +86,7 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
       <nav className="rounded-lg shadow-md p-4 mb-4">
         <button 
           onClick={toggleCollapse} 
-          className="w-full flex justify-between items-center text-lg font-semibold"
+          className="w-full flex justify-between items-center text-base font-semibold"
         >
           <span>Table of contents</span>
           <span className="text-gray-400 hover:text-primary">
@@ -95,14 +95,14 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
         </button>
         {!isCollapsed && (
           <div className="mt-4 space-y-2">
-            <ul className="space-y-2 relative">
+            <ul className="space-y-1 relative leading-tight">
               <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-primary"></div>
               {headings.map(({ id, text, level }) => (
                 <li key={id} className={`${level === 3 ? 'ml-4' : ''} relative`}>
                   <a
                     href={`#${id}`}
                     onClick={(e) => handleClick(e, id)}
-                    className={`block py-1 pl-4 ${
+                    className={`block py-0.5 pl-3 text-sm ${
                       activeId === id
                         ? 'text-primary font-medium'
                         : 'text-gray-400 hover:text-primary'
