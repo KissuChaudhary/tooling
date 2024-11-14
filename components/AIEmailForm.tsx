@@ -72,6 +72,9 @@ export default function EmailResponseGenerator() {
     if (!validateForm()) return;
   
     setIsLoading(true);
+    setErrors({});
+    setGeneratedResponse('');
+
     try {
       const response = await fetch('/api/openai-api', {
         method: 'POST',
@@ -84,14 +87,17 @@ export default function EmailResponseGenerator() {
           data: formData,
         }),
       });
-      if (!response.ok) {
-        throw new Error('Failed to generate email response');
-      }
+      
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'An error occurred while generating the email response');
+      }
+
       setGeneratedResponse(data.emailResponse);
     } catch (error) {
       console.error('Error:', error);
-      setErrors({ submit: 'Failed to generate email response. Please try again.' });
+      setErrors({ submit: error instanceof Error ? error.message : 'An unexpected error occurred' });
     } finally {
       setIsLoading(false);
     }
@@ -108,11 +114,11 @@ export default function EmailResponseGenerator() {
       <h1 className="text-4xl font-extrabold mb-8 text-center tracking-tight">AI Email Response Generator</h1>
       <p className="text-xl text-center mb-12 max-w-3xl mx-auto">Generate Professional Email Responses with Saze AI – Craft the Perfect Reply.</p>
       <AdUnit 
-  client="ca-pub-7915372771416695"
-  slot="8441706260"
-  style={{ marginBottom: '20px' }}
-/>
-     <div className="flex justify-center items-center space-x-4 mb-8">
+        client="ca-pub-7915372771416695"
+        slot="8441706260"
+        style={{ marginBottom: '20px' }}
+      />
+      <div className="flex justify-center items-center space-x-4 mb-8">
         <div className="flex items-center space-x-2">
           <svg
             className="w-6 h-6"
@@ -253,7 +259,6 @@ export default function EmailResponseGenerator() {
                 </p>
               )}
             </form>
-          
           </CardContent>
         </Card>
 
