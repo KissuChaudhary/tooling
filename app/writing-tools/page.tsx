@@ -147,6 +147,12 @@ const tools = [
     description: "Generate compelling thesis statements for your essays.",
     link: "/tools/ai-thesis-statement-generator"
   },
+   {
+    icon: <Brain className="h-8 w-8 text-indigo-500" />,
+    title: "Free AI Rizz Generator",
+    description: "Get the cheesy, clever, flirty lines to impress your someone.",
+    link: "/tools/ai-rizz-generator"
+  }
 ]
 
 export function generateMetadata(): Metadata {
