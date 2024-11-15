@@ -3,12 +3,24 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 import { z } from 'zod'
 import DOMPurify from 'isomorphic-dompurify'
 import { applyRateLimit } from '../middleware/rateLimiter'
+import { HarmBlockThreshold, HarmCategory } from '@google/generative-ai'
+
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
-
+const safetySettings = [
+  {
+    category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+    threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+    threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+  },
+];
 const inputSchema = z.object({
   text: z.string().min(1).max(1000),
 })
+
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,7 +34,7 @@ export async function POST(request: NextRequest) {
     // Sanitize input
     const sanitizedText = DOMPurify.sanitize(text)
 
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" })
+    const model = genAI.getGenerativeModel({ model: "gemini-pro", safetySettings: safetySettings })
 
     const prompt = `
       As an expert in natural language and human communication, your task is to transform the following AI-generated text into a more natural, human-like style. Follow these detailed guidelines: Create content strictly adhering to an NLP-friendly format, emphasizing clarity and simplicity in structure and language. Ensure sentences follow a straightforward subject-verb-object order, selecting words for their precision and avoiding any ambiguity. Exclude filler content, focusing on delivering information succinctly. Do not use complex or abstract terms such as 'meticulous,' 'navigating,' 'complexities,' 'realm,' 'bespoke,' 'tailored,' 'towards,' 'underpins,' 'ever-changing,' 'ever-evolving,' 'the world of,' 'not only,' 'seeking more than just,' 'designed to enhance,' 'it’s not merely,' 'our suite,' 'it is advisable,' 'daunting,' 'in the heart of,' 'when it comes to,' 'in the realm of,' 'amongst,' 'unlock the secrets,' 'unveil the secrets,' 'it's not just a,' 'in today's digital world,' 'let's dive in,' 'here comes xxxxxxxx,' and 'robust.' This approach aims to streamline content production for enhanced NLP algorithm comprehension, ensuring the output is direct, accessible, and easily interpretable.
