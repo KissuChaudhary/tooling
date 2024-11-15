@@ -14,43 +14,52 @@ const inputSchema = z.object({
   readabilityLevel: z.enum(['simple', 'medium', 'complex']).default('medium'),
   phraseRandomization: z.boolean().default(false),
   variation: z.boolean().default(false),
+  formalityLevel: z.number().min(0).max(100).default(50),
 })
 
 export async function POST(request: NextRequest) {
   try {
-    // Apply rate limiting
     const rateLimitResult = await applyRateLimit(request)
     if (rateLimitResult) return rateLimitResult
 
     const body = await request.json()
-    const { text, level, spellingVariations, contextualAwareness, readabilityLevel, phraseRandomization, variation } = inputSchema.parse(body)
+    const { 
+      text, 
+      level, 
+      spellingVariations, 
+      contextualAwareness, 
+      readabilityLevel, 
+      phraseRandomization, 
+      variation,
+      formalityLevel 
+    } = inputSchema.parse(body)
     
-    // Sanitize input
     const sanitizedText = DOMPurify.sanitize(text)
 
     const model = genAI.getGenerativeModel({ model: "gemini-pro" })
 
     const prompt = `
-      As an expert in natural language and human communication, your task is to transform the following AI-generated text into a more natural, human-like style. Follow these detailed guidelines:
+      As an expert in natural language and human communication, transform the following AI-generated text into a more natural, human-like style. Follow these guidelines:
 
       1. Adjust the level of humanization based on this percentage: ${level}%. At 0%, make minimal changes. At 100%, apply all humanization techniques aggressively.
-      2. Use contractions liberally (e.g., "it's" instead of "it is", "we're" instead of "we are").
-      3. Incorporate casual language and colloquialisms where appropriate.
-      4. Add filler words and phrases occasionally (e.g., "you know", "like", "actually", "to be honest").
-      5. Vary sentence structure and length. Mix short, punchy sentences with longer, more complex ones.
-      6. Include some mild self-corrections or hesitations (e.g., "Well, actually...", "No, wait, what I mean is...").
-      7. Use more personal pronouns and active voice (e.g., "We think" instead of "It is thought").
-      8. Incorporate idiomatic expressions and metaphors where they fit naturally.
-      9. Add some mild emphasis words (e.g., "really", "absolutely", "totally").
-      10. Use more emotive language to convey feelings and opinions.
-      11. Maintain the original meaning and key information while making the tone more conversational.
-      12. Avoid overly formal or technical language unless it's absolutely necessary.
-      13. Do not lengthen the content provided unnecessarily.
-      ${spellingVariations ? '14. Introduce occasional, minor spelling or grammar mistakes that a human might make.' : ''}
-      ${contextualAwareness ? '15. Analyze the context of the input text and ensure the humanized version maintains appropriate context and relevance.' : ''}
-      16. Adjust the readability level to ${readabilityLevel}. For 'simple', use shorter sentences and simpler vocabulary. For 'complex', use more sophisticated language and sentence structures.
-      ${phraseRandomization ? '17. Randomly insert common phrases and idioms where appropriate to add more human-like variety to the text.' : ''}
-      ${variation ? '18. Generate a unique variation of the humanized text, different from previous versions.' : ''}
+      2. Set the formality level to ${formalityLevel}%. At 0%, use very formal language. At 100%, use casual, conversational language. Avoid extreme informality or slang unless the formality level is very high.
+      3. Use contractions based on the formality level.
+      4. Incorporate casual language and colloquialisms where appropriate, based on the formality level.
+      5. Add filler words and phrases occasionally, but sparingly at lower formality levels.
+      6. Vary sentence structure and length. Mix short, punchy sentences with longer, more complex ones.
+      7. Include mild self-corrections or hesitations only at higher formality levels.
+      8. Use personal pronouns and active voice more often at higher formality levels.
+      9. Incorporate idiomatic expressions and metaphors where they fit naturally, more frequently at higher formality levels.
+      10. Add mild emphasis words based on the formality level.
+      11. Use emotive language to convey feelings and opinions, adjusted for formality.
+      12. Maintain the original meaning and key information while adjusting the tone based on formality.
+      13. Adjust the level of formal or technical language based on the formality level and readability setting.
+      14. Do not lengthen the content unnecessarily.
+      ${spellingVariations ? '15. Introduce occasional, minor spelling or grammar mistakes that a human might make, more frequently at higher formality levels.' : ''}
+      ${contextualAwareness ? '16. Analyze the context of the input text and ensure the humanized version maintains appropriate context and relevance.' : ''}
+      17. Adjust the readability level to ${readabilityLevel}. For 'simple', use shorter sentences and simpler vocabulary. For 'complex', use more sophisticated language and sentence structures.
+      ${phraseRandomization ? '18. Randomly insert common phrases and idioms where appropriate to add more human-like variety to the text, adjusted for the formality level.' : ''}
+      ${variation ? '19. Generate a unique variation of the humanized text, different from previous versions.' : ''}
 
       Here's the text to humanize:
       "${sanitizedText}"
@@ -62,7 +71,6 @@ export async function POST(request: NextRequest) {
     const response = await result.response
     const humanizedText = response.text()
 
-    // Sanitize output
     const sanitizedOutput = DOMPurify.sanitize(humanizedText)
 
     return NextResponse.json({ humanizedText: sanitizedOutput })
