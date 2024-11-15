@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { GoogleGenerativeAI } from '@google/generative-ai'
-} from '@google/generative-ai'
 import { z } from 'zod'
 import DOMPurify from 'isomorphic-dompurify'
 import { applyRateLimit } from '../middleware/rateLimiter'
@@ -52,9 +51,12 @@ export async function POST(request: NextRequest) {
       16. Adjust the readability level to ${readabilityLevel}. For 'simple', use shorter sentences and simpler vocabulary. For 'complex', use more sophisticated language and sentence structures.
       ${phraseRandomization ? '17. Randomly insert common phrases and idioms where appropriate to add more human-like variety to the text.' : ''}
       ${variation ? '18. Generate a unique variation of the humanized text, different from previous versions.' : ''}
+
       Here's the text to humanize:
       "${sanitizedText}"
-      Rewrite the text following these guidelines. Provide only the humanized version without any additional explanations or meta-commentary.`
+
+      Rewrite the text following these guidelines. Provide only the humanized version without any additional explanations or meta-commentary.
+    `
 
     const result = await model.generateContent(prompt)
     const response = await result.response
