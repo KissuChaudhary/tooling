@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Loader2, Copy, Share2, Edit2, RotateCcw, Wand2, Shuffle } from 'lucide-react'
+import { Loader2, Copy, Share2, Edit2, RotateCcw, Wand2, Shuffle, Check } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 import { Slider } from "@/components/ui/slider"
 import { Switch } from "@/components/ui/switch"
@@ -29,6 +29,7 @@ export default function AITextHumanizer() {
   const [contextualAwareness, setContextualAwareness] = useState(false)
   const [readabilityLevel, setReadabilityLevel] = useState('medium')
   const [usePhraseRandomization, setUsePhraseRandomization] = useState(false)
+  const [copied, setCopied] = useState(false)
 
   useEffect(() => {
     setEditableOutput(variations[selectedVariation] || outputText)
@@ -94,8 +95,13 @@ export default function AITextHumanizer() {
   }
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(editableOutput)
-    toast.success('Copied to clipboard!')
+    navigator.clipboard.writeText(editableOutput).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    }).catch((error) => {
+      console.error('Error copying text:', error)
+      toast.error('Failed to copy text')
+    })
   }
 
   const handleShare = () => {
@@ -286,8 +292,8 @@ export default function AITextHumanizer() {
                 <h3 className="text-xl font-semibold text-gray-800">Humanized Output:</h3>
                 <div className="flex flex-wrap gap-2">
                   <Button onClick={handleCopy} variant="outline" size="sm" className="border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors">
-                    <Copy className="h-4 w-4 mr-2" />
-                    Copy
+                    {copied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
+                    {copied ? 'Copied!' : 'Copy'}
                   </Button>
                   <Button onClick={handleShare} variant="outline" size="sm" className="border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors">
                     <Share2 className="h-4 w-4 mr-2" />
