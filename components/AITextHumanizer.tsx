@@ -22,6 +22,7 @@ export default function AITextHumanizer() {
   const [error, setError] = useState<string | null>(null)
   const [isEditing, setIsEditing] = useState(false)
   const [humanizationLevel, setHumanizationLevel] = useState(50)
+  const [formalityLevel, setFormalityLevel] = useState(50)
   const [variations, setVariations] = useState<string[]>([])
   const [selectedVariation, setSelectedVariation] = useState(0)
   const [useSpellingVariations, setUseSpellingVariations] = useState(false)
@@ -50,6 +51,7 @@ export default function AITextHumanizer() {
         body: JSON.stringify({
           text: inputText,
           level: humanizationLevel,
+          formalityLevel,
           spellingVariations: useSpellingVariations,
           contextualAwareness,
           readabilityLevel,
@@ -69,7 +71,7 @@ export default function AITextHumanizer() {
     } finally {
       setIsLoading(false)
     }
-  }, [inputText, humanizationLevel, useSpellingVariations, contextualAwareness, readabilityLevel, usePhraseRandomization])
+  }, [inputText, humanizationLevel, formalityLevel, useSpellingVariations, contextualAwareness, readabilityLevel, usePhraseRandomization])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -84,6 +86,7 @@ export default function AITextHumanizer() {
     setVariations([])
     setSelectedVariation(0)
     setHumanizationLevel(50)
+    setFormalityLevel(50)
     setUseSpellingVariations(false)
     setContextualAwareness(false)
     setReadabilityLevel('medium')
@@ -120,6 +123,7 @@ export default function AITextHumanizer() {
         body: JSON.stringify({
           text: inputText,
           level: humanizationLevel,
+          formalityLevel,
           spellingVariations: useSpellingVariations,
           contextualAwareness,
           readabilityLevel,
@@ -184,6 +188,20 @@ export default function AITextHumanizer() {
                 step={1}
                 value={[humanizationLevel]}
                 onValueChange={(value) => setHumanizationLevel(value[0])}
+                className="w-full"
+              />
+            </div>
+            <div>
+              <label htmlFor="formality-level" className="block text-sm font-medium text-gray-700 mb-1">
+                Formality Level: {formalityLevel}%
+              </label>
+              <Slider
+                id="formality-level"
+                min={0}
+                max={100}
+                step={1}
+                value={[formalityLevel]}
+                onValueChange={(value) => setFormalityLevel(value[0])}
                 className="w-full"
               />
             </div>
