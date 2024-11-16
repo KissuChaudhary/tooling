@@ -7,7 +7,7 @@ import AdUnit from '@/components/AdUnit'
 import ToolEngagement from '@/components/tool-engagement'
 
 export const metadata = {
-    title: "AI Birthday Wish Generator | Personalized Birthday Messages - Saze AI",
+    title: "100% Free AI Birthday Wish Generator | Write Personalized Birthday Messages with AI",
     description: "Create heartwarming birthday wishes instantly with our AI-powered birthday wish generator. Perfect for sending personalized messages to friends, family, and loved ones.",
 };
 
