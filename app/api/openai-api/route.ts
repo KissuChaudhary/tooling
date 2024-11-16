@@ -5,7 +5,7 @@ import { LRUCache } from 'lru-cache';
 
 // Rate limiting setup
 const rateLimit = new LRUCache<string, number>({
-  max: 500,
+  max: 5000,
   ttl: 1200,
 });
 
@@ -13,10 +13,10 @@ const getIP = (request: NextRequest) => {
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0]
     || request.headers.get('x-real-ip')
     || request.headers.get('cf-connecting-ip')
+    || request.ip  // This line is causing the error
     || '0.0.0.0';
   return isValidIP(ip) ? ip : '0.0.0.0';
 };
-
 const isValidIP = (ip: string): boolean => {
   const ipv4Regex = /^(\d{1,3}\.){3}\d{1,3}$/;
   const ipv6Regex = /^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$/;
