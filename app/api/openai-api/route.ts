@@ -5,8 +5,8 @@ import { LRUCache } from 'lru-cache';
 
 // Rate limiting setup
 const rateLimit = new LRUCache<string, number>({
-  max: 500,
-  ttl: 1200,
+  max: 5000,
+  ttl: 12000,
 });
 
 const getIP = (request: NextRequest) => {
