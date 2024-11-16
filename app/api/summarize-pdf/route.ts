@@ -28,6 +28,33 @@ function isRateLimited(ip: string): boolean {
   return false;
 }
 
+async function generateContentWithRetry(model: any, prompt: string, fileContent: string, maxRetries = 3, initialDelay = 1000) {
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      const result = await model.generateContent([
+        { text: prompt },
+        {
+          inlineData: {
+            mimeType: "application/pdf",
+            data: fileContent
+          }
+        }
+      ]);
+      return result;
+    } catch (error: any) {
+      console.error(`Attempt ${attempt + 1} failed:`, error);
+      if (error.status === 503 && attempt < maxRetries - 1) {
+        const delay = initialDelay * Math.pow(2, attempt);
+        console.log(`Retrying in ${delay}ms...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+        continue;
+      }
+      throw error;
+    }
+  }
+  throw new Error('Max retries reached');
+}
+
 export async function POST(req: NextRequest) {
   try {
     // Rate limiting
@@ -66,26 +93,43 @@ export async function POST(req: NextRequest) {
 
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-    const summaryPrompt = `Please summarize the contents of this PDF document in approximately ${summaryLength} words.`;
-    const keyHighlightsPrompt = "Please provide a list of the 5-7 most important key highlights from this PDF document.";
-
-    const result = await model.generateContent([
+    const prompt = `
+      Analyze the contents of this PDF document and provide a structured response in the following JSON format:
       {
-        text: `${summaryPrompt}\n\n${keyHighlightsPrompt}`
-      },
-      {
-        inlineData: {
-          mimeType: "application/pdf",
-          data: fileContent
-        }
+        "summary": "A concise summary of the document in approximately ${summaryLength} words.",
+        "keyHighlights": [
+          "Key highlight 1",
+          "Key highlight 2",
+          "Key highlight 3",
+          "Key highlight 4",
+          "Key highlight 5"
+        ]
       }
-    ]);
+      Ensure that the response is valid JSON and can be parsed directly. Do not include any markdown formatting or code block indicators.
+    `;
 
+    const result = await generateContentWithRetry(model, prompt, fileContent);
     const response = await result.response;
-    const fullText = response.text();
+    let generatedText = response.text();
 
-    // Split the response into summary and key highlights
-    const [summary, keyHighlights] = fullText.split('\n\nKey Highlights:').map(text => text.trim());
+    // Remove any markdown formatting or code block indicators
+    generatedText = generatedText.replace(/```json\s*/, '').replace(/```\s*$/, '').trim();
+
+    // Parse the JSON response
+    let parsedResponse;
+    try {
+      parsedResponse = JSON.parse(generatedText);
+    } catch (error) {
+      console.error('Error parsing AI response:', error);
+      console.error('Generated text:', generatedText);
+      return NextResponse.json({ error: 'Invalid response from AI model' }, { status: 500 });
+    }
+
+    // Validate the parsed response
+    if (!parsedResponse.summary || !Array.isArray(parsedResponse.keyHighlights)) {
+      console.error('Unexpected response format:', parsedResponse);
+      return NextResponse.json({ error: 'Unexpected response format from AI model' }, { status: 500 });
+    }
 
     // Sanitize output (remove any potential HTML or script tags)
     const sanitizeOutput = (text: string) => {
@@ -93,11 +137,14 @@ export async function POST(req: NextRequest) {
     };
 
     return NextResponse.json({
-      summary: sanitizeOutput(summary),
-      keyHighlights: sanitizeOutput(keyHighlights)
+      summary: sanitizeOutput(parsedResponse.summary),
+      keyHighlights: parsedResponse.keyHighlights.map(sanitizeOutput)
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error in API route:', error);
+    if (error.status === 503) {
+      return NextResponse.json({ error: 'The AI service is currently overloaded. Please try again later.' }, { status: 503 });
+    }
     return NextResponse.json({ error: 'An error occurred while processing the PDF.' }, { status: 500 });
   }
 }
