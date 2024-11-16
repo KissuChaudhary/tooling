@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid file type. Only PDF files are allowed' }, { status: 415 });
     }
 
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
     const summaryPrompt = `Please summarize the contents of this PDF document in approximately ${summaryLength} words.`;
     const keyHighlightsPrompt = "Please provide a list of the 5-7 most important key highlights from this PDF document.";
