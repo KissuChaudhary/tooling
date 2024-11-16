@@ -7,7 +7,7 @@ import AdUnit from '@/components/AdUnit'
 import ToolEngagement from '@/components/tool-engagement'
 
 export const metadata = {
-  title: "AI Essay Writer | Generate Quality Essays in Minutes - Saze AI",
+  title: "AI Essay Writer | Generate Quality Essays in Minutes",
   description: "Craft high-quality essays in minutes with the AI Essay Writer by Saze AI. Generate essays tailored to your topic, tone, audience, and purpose.",
 };
 
