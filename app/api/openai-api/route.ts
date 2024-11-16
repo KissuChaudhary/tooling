@@ -627,7 +627,7 @@ export async function POST(request: NextRequest) {
     });
     
     // Return a user-friendly error message
-    let userErrorMessage = 'Uhhh... Something went wrong. Please try again later.';
+    let userErrorMessage = 'Uhhh... Something went wrong. Please try switching the model at top.';
     
     // Customize the message based on the error type or known error patterns
     if (error instanceof Error && error.message.includes('SAFETY')) {
