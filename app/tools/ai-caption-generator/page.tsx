@@ -7,7 +7,7 @@ import AdUnit from '@/components/AdUnit'
 import ToolEngagement from '@/components/tool-engagement'
 
 export const metadata = {
-  title: "AI Caption Generator | Create Engaging Captions Effortlessly - Saze AI", 
+  title: "Free AI Caption Generator | Create Engaging Captions to match your style", 
   description: "Generate catchy and creative captions with our AI Caption Generator. Perfect for social media posts, marketing campaigns, and more.",
 };
 
