@@ -7,7 +7,7 @@ import AdUnit from '@/components/AdUnit'
 import ToolEngagement from '@/components/tool-engagement'
 
 export const metadata = {
-  title: "AI Email Response Generator | Create Professional Email Replies - Saze AI",
+  title: "AI Email Response Generator | Create tailored & Professional Email Replies",
   description: "Quickly generate personalized email responses using our AI Email Response Generator. Craft professional, friendly, or formal replies with ease.",
 };
 
