@@ -7,7 +7,7 @@ import AdUnit from '@/components/AdUnit'
 import ToolEngagement from '@/components/tool-engagement'
 
 export const metadata = {
-  title: "AI Haiku Generator | Create Beautiful Haikus Instantly - Saze AI",
+  title: "[Free] AI Haiku Generator | Create Beautiful Haikus Instantly",
   description: "Generate beautiful haikus with the AI Haiku Generator by Saze AI. Enter a theme and receive a creative, elegant haiku instantly.",
 };
 
