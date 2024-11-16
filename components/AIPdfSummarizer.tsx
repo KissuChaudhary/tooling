@@ -13,6 +13,7 @@ import { AlertCircle, FileText, Copy, Share2, RotateCcw } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { toast } from '@/hooks/use-toast'
 
+
 export default function PdfSummarizer() {
   const [file, setFile] = useState<File | null>(null)
   const [summary, setSummary] = useState<string>('')
@@ -88,8 +89,8 @@ export default function PdfSummarizer() {
       const resultText = new TextDecoder().decode(new Uint8Array(chunks.flatMap(chunk => Array.from(chunk))))
       const data = JSON.parse(resultText)
       
-      setSummary(data.summary || '')
-      setKeyHighlights(data.keyHighlights || '')
+      setSummary(data.summary)
+      setKeyHighlights(data.keyHighlights)
     } catch (error) {
       console.error('Error processing PDF:', error)
       setError('An error occurred while processing the PDF. Please try again.')
