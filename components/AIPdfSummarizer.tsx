@@ -13,7 +13,7 @@ import { AlertCircle, FileText, Copy, Share2, RotateCcw } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { toast } from '@/hooks/use-toast'
 
-export default function FixedPdfSummarizer() {
+export default function PdfSummarizer() {
   const [file, setFile] = useState<File | null>(null)
   const [summary, setSummary] = useState<string>('')
   const [keyHighlights, setKeyHighlights] = useState<string>('')
@@ -205,7 +205,7 @@ export default function FixedPdfSummarizer() {
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
-          {summary && keyHighlights && (
+          {(summary || keyHighlights) && (
             <Tabs defaultValue="summary" className="mt-6">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="summary">Summary</TabsTrigger>
