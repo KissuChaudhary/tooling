@@ -3,7 +3,7 @@ import InstagramBioForm from '@/components/InstagramBioForm';
 import Script from 'next/script';
 import React from 'react';
 import AdUnit from '@/components/AdUnit'
-
+import ToolEngagement from '@/components/tool-engagement'
 import { User, Heart, Lightbulb, Smile, CheckCircle } from 'lucide-react';
 
 export const metadata = {
@@ -84,6 +84,9 @@ export default function AIInstagramBioGeneratorPage() {
 
       <div className="min-h-screen bg-background text-foreground" style={{ paddingBottom: '3rem' }}>
         <InstagramBioForm />
+        <ToolEngagement 
+          toolName="AI Instagram Bio Generator"
+        />
         <AdUnit 
   client="ca-pub-7915372771416695"
   slot="8441706260"
