@@ -7,7 +7,7 @@ import AdUnit from '@/components/AdUnit'
 import ToolEngagement from '@/components/tool-engagement'
 
 export const metadata = {
-  title: "AI Character Generator | Create Unique Characters - Saze AI",
+  title: "AI Character Generator | Create Unique Characters",
   description: "Effortlessly create unique and detailed characters with our AI Character Generator. Ideal for writers, game developers, and storytellers.",
 };
 
