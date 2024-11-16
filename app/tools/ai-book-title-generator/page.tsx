@@ -7,7 +7,7 @@ import AdUnit from '@/components/AdUnit'
 import ToolEngagement from '@/components/tool-engagement'
 
 export const metadata = {
-  title: "AI Book Title Generator | Create Unique Book Titles - Saze AI",
+  title: "Free AI Book Title Generator | Create Unique Book Titles",
   description: "Effortlessly create unique and engaging book titles with our AI Book Title Generator. Perfect for authors, writers, and publishers.",
 };
 
