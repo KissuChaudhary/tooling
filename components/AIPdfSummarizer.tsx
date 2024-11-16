@@ -1,4 +1,5 @@
 'use client'
+
 import { useState, useRef } from 'react'
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
@@ -12,11 +13,10 @@ import { AlertCircle, FileText, Copy, Share2, RotateCcw } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { toast } from '@/hooks/use-toast'
 
-
 export default function PdfSummarizer() {
   const [file, setFile] = useState<File | null>(null)
   const [summary, setSummary] = useState<string>('')
-  const [keyHighlights, setKeyHighlights] = useState<string>('')
+  const [keyHighlights, setKeyHighlights] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [progress, setProgress] = useState<number>(0)
   const [summaryLength, setSummaryLength] = useState<number>(150)
@@ -39,6 +39,15 @@ export default function PdfSummarizer() {
     }
   }
 
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => resolve(reader.result as string)
+      reader.onerror = (error) => reject(error)
+    })
+  }
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (!file) {
@@ -49,7 +58,7 @@ export default function PdfSummarizer() {
     setIsLoading(true)
     setProgress(0)
     setSummary('')
-    setKeyHighlights('')
+    setKeyHighlights([])
     setError(null)
 
     try {
@@ -99,28 +108,21 @@ export default function PdfSummarizer() {
     }
   }
 
-  const fileToBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader()
-      reader.readAsDataURL(file)
-      reader.onload = () => resolve(reader.result as string)
-      reader.onerror = (error) => reject(error)
-    })
-  }
-
-  const handleCopy = (text: string) => {
-    navigator.clipboard.writeText(text)
+  const handleCopy = (text: string | string[]) => {
+    const textToCopy = Array.isArray(text) ? text.map(t => `• ${t}`).join('\n') : text
+    navigator.clipboard.writeText(textToCopy)
     toast({
       title: "Copied to clipboard",
       description: "The content has been copied to your clipboard.",
     })
   }
 
-  const handleShare = (text: string) => {
+  const handleShare = (text: string | string[]) => {
+    const textToShare = Array.isArray(text) ? text.map(t => `• ${t}`).join('\n') : text
     if (navigator.share) {
       navigator.share({
         title: 'AI PDF Summary',
-        text: text,
+        text: textToShare,
       }).then(() => {
         console.log('Shared successfully')
       }).catch((error) => {
@@ -138,7 +140,7 @@ export default function PdfSummarizer() {
   const handleReset = () => {
     setFile(null)
     setSummary('')
-    setKeyHighlights('')
+    setKeyHighlights([])
     setError(null)
     setProgress(0)
     setSummaryLength(150)
@@ -205,7 +207,7 @@ export default function PdfSummarizer() {
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
-          {(summary || keyHighlights) && (
+          {(summary || keyHighlights.length > 0) && (
             <Tabs defaultValue="summary" className="mt-6">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="summary">Summary</TabsTrigger>
@@ -225,7 +227,13 @@ export default function PdfSummarizer() {
                 </div>
               </TabsContent>
               <TabsContent value="highlights" className="space-y-4">
-                <Textarea value={keyHighlights} readOnly className="h-[300px] resize-none" />
+                <div className="h-[300px] overflow-y-auto border rounded-md p-4 bg-background">
+                  <ul className="space-y-2 list-disc pl-4">
+                    {keyHighlights.map((highlight, index) => (
+                      <li key={index} className="text-base">{highlight}</li>
+                    ))}
+                  </ul>
+                </div>
                 <div className="flex justify-end space-x-2">
                   <Button variant="outline" size="sm" onClick={() => handleCopy(keyHighlights)}>
                     <Copy className="h-4 w-4 mr-2" />
