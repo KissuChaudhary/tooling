@@ -205,7 +205,7 @@ export default function FixedPdfSummarizer() {
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
-          {(summary || keyHighlights) && (
+          {summary && keyHighlights && (
             <Tabs defaultValue="summary" className="mt-6">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="summary">Summary</TabsTrigger>
