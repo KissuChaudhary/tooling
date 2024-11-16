@@ -5,15 +5,14 @@ import { LRUCache } from 'lru-cache';
 
 // Rate limiting setup
 const rateLimit = new LRUCache<string, number>({
-  max: 5000,
-  ttl: 12000,
+  max: 500,
+  ttl: 1200,
 });
 
 const getIP = (request: NextRequest) => {
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0]
     || request.headers.get('x-real-ip')
     || request.headers.get('cf-connecting-ip')
-    || request.ip
     || '0.0.0.0';
   return isValidIP(ip) ? ip : '0.0.0.0';
 };
