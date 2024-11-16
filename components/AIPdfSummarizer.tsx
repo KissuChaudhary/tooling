@@ -13,7 +13,7 @@ import { AlertCircle, FileText, Copy, Share2, RotateCcw } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { toast } from '@/hooks/use-toast'
 
-export default function PdfSummarizer() {
+export default function FixedPdfSummarizer() {
   const [file, setFile] = useState<File | null>(null)
   const [summary, setSummary] = useState<string>('')
   const [keyHighlights, setKeyHighlights] = useState<string>('')
@@ -69,7 +69,24 @@ export default function PdfSummarizer() {
         throw new Error('API request failed')
       }
 
-      const data = await response.json()
+      const reader = response.body?.getReader()
+      if (!reader) throw new Error('Failed to read response')
+
+      let receivedLength = 0
+      const chunks = []
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+
+        chunks.push(value)
+        receivedLength += value.length
+
+        setProgress(Math.min(100, Math.round((receivedLength / 102400) * 100)))
+      }
+
+      const resultText = new TextDecoder().decode(new Uint8Array(chunks.flatMap(chunk => Array.from(chunk))))
+      const data = JSON.parse(resultText)
       
       setSummary(data.summary || '')
       setKeyHighlights(data.keyHighlights || '')
