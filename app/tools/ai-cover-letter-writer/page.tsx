@@ -7,7 +7,7 @@ import AdUnit from '@/components/AdUnit'
 import ToolEngagement from '@/components/tool-engagement'
 
 export const metadata = {
-  title: "AI Cover Letter Writer | Create Professional Cover Letters - Saze AI",
+  title: "AI Cover Letter Writer | Create Professional Cover Letters using AI",
   description: "Generate tailored cover letters for your job applications with our AI Cover Letter Writer. Save time and increase your chances of landing an interview.",
 };
 
