@@ -7,8 +7,8 @@ import AdUnit from '@/components/AdUnit'
 import ToolEngagement from '@/components/tool-engagement'
 
 export const metadata = {
-  title: "AI Conclusion Generator | Create Effective Conclusions - Saze AI",
-  description: "Generate concise and impactful conclusions for essays, reports, or any writing projects with our AI Conclusion Generator. Save time and enhance your writing.",
+  title: "Free AI Conclusion Generator | Create Effective Conclusions for your articles",
+  description: "Generate concise and impactful conclusions for blogs, reports, or any writing projects with our AI Conclusion Generator. Save time and enhance your writing.",
 };
 
 interface BenefitCardProps {
