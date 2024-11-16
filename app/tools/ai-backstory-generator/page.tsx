@@ -7,7 +7,7 @@ import AdUnit from '@/components/AdUnit'
 import ToolEngagement from '@/components/tool-engagement'
 
 export const metadata = {
-  title: "AI Backstory Generator | Create Unique Character Backstories - Saze AI", 
+  title: "AI Backstory Generator | Create Unique Character Backstories", 
   description: "Create unique, compelling character backstories effortlessly with our AI Backstory Generator. Ideal for writers, game developers, and storytellers.",
 };
 
