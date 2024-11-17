@@ -80,8 +80,8 @@ export default function Header() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/ai-image-tools" className="text-muted-foreground font-semibold hover:text-foreground transition-colors duration-200">
-                    AI Image Tools
+                  <Link href="/ai-productivity-tools" className="text-muted-foreground font-semibold hover:text-foreground transition-colors duration-200">
+                    AI Productivity Tools
                   </Link>
                 </li>
                 <li>
@@ -172,11 +172,11 @@ export default function Header() {
             </li>
             <li>
               <Link 
-                href="/ai-image-tools" 
+                href="/ai-productivity-tools" 
                 className="text-2xl font-bold text-foreground hover:text-primary transition-colors duration-200" 
                 onClick={toggleMenu}
               >
-                AI Image Tools
+                AI Productivity Tools
               </Link>
             </li>
             <li>
