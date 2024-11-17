@@ -12,7 +12,7 @@ const nextConfig = {
         hostname: 'api.stability.ai',
       },
     ],
-    domains: ['fal.media', 'replicate.delivery'],
+    domains: ['fal.media', 'replicate.delivery', 'www.googleapis.com', 'youtube.com', 'youtu.be'],
     unoptimized: true,
   },
   async redirects() {
