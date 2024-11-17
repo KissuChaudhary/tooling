@@ -18,7 +18,7 @@ function parseDuration(duration: string): number {
   const match = duration.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
   if (!match) return 0;
   
-  const [_, hours, minutes, seconds] = match;
+  const [, hours, minutes, seconds] = match;
   return (
     (parseInt(hours) || 0) * 3600 +
     (parseInt(minutes) || 0) * 60 +
