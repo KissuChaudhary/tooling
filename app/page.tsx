@@ -15,7 +15,6 @@ import {
   Cpu, Database, Award,
   Lightbulb,
   MessageSquare,
-  Feather,
   Star,
   Volume2,
   Sunrise,
@@ -115,23 +114,16 @@ const steps: Step[] = [
   },
 {
     icon: <Zap className="h-8 w-8 text-yellow-500" />,
-    title: "AI Face Transform",
-    description: "Redefine Your Look with AI – Transform Faces into Stunning Creations!",
-    link: "/tools/ai-face-transform",
+    title: "AI PDF Summarizer",
+    description: "Upload PDF and get an AI-generated summary!",
+    link: "/tools/ai-pdf-summarizer",
     badge: { text: "Popular", color: "bg-pink-500" }
   },
   {
-    icon: <Feather className="h-8 w-8 text-pink-500" />,
-    title: "AI Image Upscaler",
-    description: "Transform Low-Res into High-Def – Upscale Your Images with AI!",
-    link: "/tools/ai-image-upscaler",
-    badge: { text: "Hot", color: "bg-red-500" }
-  },
-  {
     icon: <Star className="h-8 w-8 text-yellow-500" />,
-    title: "AI Background Remover",
-    description: "Effortless Background Removal for Flawless Photos – Instantly!",
-    link: "/tools/ai-background-remover",
+    title: "AI Text Humanizer",
+    description: "Transform AI-generated text into more human-like language!",
+    link: "/tools/ai-text-humanizer",
     badge: { text: "Popular", color: "bg-pink-500" }
   },
     {
