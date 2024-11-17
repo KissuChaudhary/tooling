@@ -8,7 +8,7 @@ export type Tool = {
   badge?: { text: string; color: string }
 }
 
-import { Image, Zap, MessageSquare, Volume2, History, Cake, Book, User, BookOpen, FileText, Mail, Sunrise, Instagram, PenTool, Linkedin, Heart, Music, Repeat, Lightbulb, Puzzle, Edit, ShoppingBag, Star, Search, Youtube } from 'lucide-react'
+import { Image, Zap, Feather, MessageSquare, Volume2, History, Cake, Book, User, BookOpen, FileText, Mail, Sunrise, Instagram, PenTool, Linkedin, Heart, Music, Repeat, Lightbulb, Puzzle, Edit, ShoppingBag, Star, Search, Youtube } from 'lucide-react'
 
 export const tools: Tool[] = [
   {
