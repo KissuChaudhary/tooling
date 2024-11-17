@@ -16,21 +16,18 @@ export const tools: Tool[] = [
     title: "AI Influencer Generator",
     description: "Create Realistic Social Media AI Influencer",
     link: "/tools/ai-influencer-generator",
-    badge: { text: "Popular", color: "bg-green-500" }
   },
  {
-    icon: <Zap className="h-8 w-8 text-yellow-500" />,
+    icon: Zap,
     title: "AI PDF Summarizer",
     description: "Upload PDF and get an AI-generated summary!",
     link: "/tools/ai-pdf-summarizer",
-    badge: { text: "Popular", color: "bg-pink-500" }
   },
   {
-    icon: <Star className="h-8 w-8 text-yellow-500" />,
+    icon: Star,
     title: "AI Text Humanizer",
     description: "Transform AI-generated text into more human-like language!",
     link: "/tools/ai-text-humanizer",
-    badge: { text: "Popular", color: "bg-pink-500" }
   },
 
   {
