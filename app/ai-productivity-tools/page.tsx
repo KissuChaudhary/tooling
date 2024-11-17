@@ -39,8 +39,8 @@ const tools = [
 ]
 
 export function generateMetadata(): Metadata {
-  const pageTitle = 'Explore All Free AI Image Editing Tools | Saze AI'
-  const pageDescription = 'Discover a wide range of free AI-powered image editing tools designed to enhance your creativity and simplify your workflow.'
+  const pageTitle = 'Explore All Free AI Productivity Tools'
+  const pageDescription = 'Discover a wide range of free AI-powered productivity tools designed to enhance your creativity and simplify your workflow.'
 
   return {
     title: pageTitle,
