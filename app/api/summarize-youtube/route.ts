@@ -101,13 +101,37 @@ export async function POST(req: NextRequest) {
       };
     }
 
-    return NextResponse.json({
-      transcript: formattedTranscript,
-      summary,
-      metadata: {
-        duration: videoDuration,
-        language: 'en'
-      }
+   // Modify your return statement
+  return new NextResponse(JSON.stringify({
+    transcript: formattedTranscript,
+    summary,
+    metadata: {
+      duration: videoDuration,
+      language: 'en'
+    }
+  }), {
+    status: 200,
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': origin || '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    },
+  });
+}
+  // Add this function for handling OPTIONS requests
+export async function OPTIONS(req: NextRequest) {
+  const origin = req.headers.get('origin')
+  
+  return new NextResponse(null, {
+    status: 204,
+    headers: {
+      'Access-Control-Allow-Origin': origin || '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    },
+  })
+}
     });
   } catch (error) {
     console.error("Error:", error);
