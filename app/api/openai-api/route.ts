@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { HarmBlockThreshold, HarmCategory } from "@google/generative-ai";
 import { z } from 'zod';
 import { LRUCache } from 'lru-cache';
 
@@ -30,6 +31,16 @@ const rateLimiter = (ip: string) => {
   return true;
 };
 
+const safetySettings = [
+  {
+    category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+    threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+  },
+  {
+    category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+    threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+  },
+];
 // Zod schemas for request validation
 const BioRequestSchema = z.object({
   name: z.string(),
@@ -679,7 +690,7 @@ async function handleGeminiRequest(messages: any[]) {
   }
 
   const genAI = new GoogleGenerativeAI(geminiApiKey);
-  const geminiModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const geminiModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash", safetySettings: safetySettings });
 
   const prompt = messages[1].content;
   console.log('Sending prompt to Gemini:', prompt);
