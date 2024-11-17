@@ -2,7 +2,6 @@ import Head from 'next/head';
 import YouTubeSummarizer from '@/components/AIYoutubeSummary';
 import Script from 'next/script';
 import React from 'react';
-import { PlayCircle, Clock, Sparkles, Video, FileText } from 'lucide-react';
 import AdUnit from '@/components/AdUnit';
 import ToolEngagement from '@/components/tool-engagement';
 import EnhancedContent from '@/components/EnhancedYoutube';
