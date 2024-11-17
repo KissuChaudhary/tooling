@@ -22,13 +22,6 @@ const tools = [
     badge: { text: "Popular", color: "bg-pink-500" }
   },
   {
-    icon: <Feather className="h-8 w-8 text-pink-500" />,
-    title: "AI Youtube Video Summarizer ",
-    description: "Summarize any youtube video with Saze AI for free!",
-    link: "/tools/ai-youtube-video-summarizer",
-    badge: { text: "Hot", color: "bg-red-500" }
-  },
-  {
     icon: <Star className="h-8 w-8 text-yellow-500" />,
     title: "AI Text Humanizer",
     description: "Transform AI-generated text into more human-like language!",
