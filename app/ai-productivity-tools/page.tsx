@@ -60,10 +60,10 @@ export default function ToolsPage() {
           style={{ marginBottom: '20px' }}
         />
         <h1 className="text-5xl md:text-6xl font-extrabold mb-6 text-center animate-fade-in-down">
-          Explore All Free AI Image Tools
+          Explore All Free AI Productivity Tools
         </h1>
         <p className="text-xl md:text-2xl mb-16 text-center max-w-3xl mx-auto animate-fade-in-up">
-          Discover a wide range of free AI-powered image editing tools designed to enhance your creativity and simplify your workflow. 
+          Discover a wide range of free AI-powered productivity tools designed to enhance your creativity and simplify your workflow. 
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {tools.map((tool, index) => (
