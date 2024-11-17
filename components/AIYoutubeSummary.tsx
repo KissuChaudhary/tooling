@@ -25,6 +25,25 @@ interface VideoMetadata {
   language: string
 }
 
+const decodeHtmlEntities = (text: string): string => {
+  const entities: { [key: string]: string } = {
+    '&amp;': '&',
+    '&lt;': '<',
+    '&gt;': '>',
+    '&#39;': "'",
+    '&quot;': '"',
+    '&#x2F;': '/',
+    '&#x60;': '`',
+    '&#x3D;': '=',
+    '&#x3B;': ';',
+    '&#x23;': '#'
+  };
+  return text.replace(/&amp;#39;/g, "'").replace(/&amp;#\d+;/g, (match) => {
+    const dec = match.match(/\d+/)?.[0];
+    return dec ? String.fromCharCode(parseInt(dec, 10)) : match;
+  }).replace(/&[#\w]+;/g, (match) => entities[match] || match);
+};
+
 export default function YouTubeSummarizer() {
   const [url, setUrl] = useState('')
   const [videoId, setVideoId] = useState('')
@@ -83,7 +102,10 @@ export default function YouTubeSummarizer() {
         throw new Error(data.error)
       }
 
-      setTranscript(data.transcript)
+      setTranscript(data.transcript.map((entry: Transcript) => ({
+        ...entry,
+        text: decodeHtmlEntities(entry.text)
+      })))
       setSummary(data.summary)
       setMetadata(data.metadata)
     } catch (err) {
