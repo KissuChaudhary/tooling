@@ -5,6 +5,7 @@ import React from 'react';
 import { Book, Lightbulb, Clock, Target, Sparkles } from 'lucide-react';
 import AdUnit from '@/components/AdUnit';
 import ToolEngagement from '@/components/tool-engagement';
+import EnhancedContent from '@/components/EnhancedPdfContent';
 
 export const metadata = {
   title: "AI PDF Summarizer | Summarize long PDFs for free",
@@ -158,6 +159,7 @@ export default function AIPdfSummarizerPage() {
           </div>
         </section>
         <AdUnit client="ca-pub-7915372771416695" slot="8441706260" style={{ marginBottom: '20px' }} />
+       <EnhancedContent />
       </div>
     </>
   );
