@@ -85,7 +85,7 @@ export default function YouTubeSummarizer() {
       if (!extractedVideoId) throw new Error('Invalid YouTube URL')
       setVideoId(extractedVideoId)
 
-      const response = await fetch('/api/summarize', {
+      const response = await fetch('/api/summarize-youtube', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
