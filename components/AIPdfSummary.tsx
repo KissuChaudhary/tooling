@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react'
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardFooter, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardFooter, CardDescription, CardHeader } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Slider } from "@/components/ui/slider"
@@ -153,8 +153,8 @@ export default function PdfSummarizer() {
     <div className="container mx-auto px-4 py-8">
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader className="text-center">
-          <CardTitle className="text-3xl font-bold">AI PDF Summarizer</CardTitle>
-          <CardDescription>Upload a PDF file to get an AI-generated summary and key highlights in English using Google's Gemini 1.5 Pro model.</CardDescription>
+          <h1 className="text-3xl font-bold">Free AI PDF Summarizer</h1>
+          <CardDescription>Upload a PDF file to get an AI-generated summary and key highlights.</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -249,7 +249,7 @@ export default function PdfSummarizer() {
           )}
         </CardContent>
         <CardFooter className="flex justify-between items-center text-sm text-muted-foreground">
-          <span>Powered by Google's Gemini 1.5 Pro model</span>
+          <span>Powered by Saze AI</span>
         </CardFooter>
       </Card>
     </div>
