@@ -63,7 +63,7 @@ export default function RiddleGenerator() {
     setGeneratedRiddle('');
 
     try {
-      const response = await fetch('/api/riddle', {
+      const response = await fetch('/api/openai-new', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
