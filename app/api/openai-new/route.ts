@@ -52,10 +52,16 @@ const RiddleGeneratorRequestSchema = z.object({
   difficulty: z.enum(['easy', 'medium', 'hard']).optional(),
 });
 
+const NameCombinerRequestSchema = z.object({
+  numberOfPeople: z.string(),
+  names: z.array(z.string()),
+  numberOfNames: z.string(),
+});
+
 const RequestSchema = z.object({
-  tool: z.enum(['aiRiddleSolver', 'aiRiddleGenerator']),
+  tool: z.enum(['aiRiddleSolver', 'aiRiddleGenerator', 'aiNameCombiner']),
   model: z.enum(['gpt4o', 'gemini']).default('gemini'),
-  data: z.union([RiddleSolverRequestSchema, RiddleGeneratorRequestSchema]),
+  data: z.union([RiddleSolverRequestSchema, RiddleGeneratorRequestSchema, NameCombinerRequestSchema]),
 });
 
 // Content moderation function
@@ -102,7 +108,9 @@ export async function POST(request: NextRequest) {
   const { tool, model, data } = body;
 
   // Combine all user inputs into a single string for moderation
-  const userInput = tool === 'aiRiddleSolver' ? data.riddle : `${data.topic || ''} ${data.difficulty || ''}`;
+  const userInput = tool === 'aiRiddleSolver' ? data.riddle :
+                    tool === 'aiRiddleGenerator' ? `${data.topic || ''} ${data.difficulty || ''}` :
+                    data.names.join(' ');
 
   // Check content moderation
   try {
@@ -115,9 +123,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Failed to moderate content" }, { status: 500 });
   }
 
-  const messages = tool === 'aiRiddleSolver' 
-    ? createRiddleSolverMessages(data as z.infer<typeof RiddleSolverRequestSchema>)
-    : createRiddleGeneratorMessages(data as z.infer<typeof RiddleGeneratorRequestSchema>);
+  const messages = tool === 'aiRiddleSolver' ? createRiddleSolverMessages(data as z.infer<typeof RiddleSolverRequestSchema>) :
+                   tool === 'aiRiddleGenerator' ? createRiddleGeneratorMessages(data as z.infer<typeof RiddleGeneratorRequestSchema>) :
+                   createNameCombinerMessages(data as z.infer<typeof NameCombinerRequestSchema>);
 
   try {
     let content;
@@ -143,8 +151,21 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Failed to moderate generated content" }, { status: 500 });
     }
 
+    let response;
+    switch (tool) {
+      case 'aiRiddleSolver':
+        response = { solution: content };
+        break;
+      case 'aiRiddleGenerator':
+        response = { riddle: content };
+        break;
+      case 'aiNameCombiner':
+        response = { combinedNames: content.split('\n').filter(Boolean) };
+        break;
+    }
+
     return NextResponse.json({ 
-      [tool === 'aiRiddleSolver' ? 'solution' : 'riddle']: content,
+      ...response,
       model: model
     });
   } catch (error) {
@@ -155,7 +176,7 @@ export async function POST(request: NextRequest) {
       model
     });
     
-    const userErrorMessage = `An error occurred while ${tool === 'aiRiddleSolver' ? 'solving the riddle' : 'generating a riddle'} using the ${model} model. Please try again or switch to a different model.`;
+    const userErrorMessage = `An error occurred while using the ${tool} with the ${model} model. Please try again or switch to a different model.`;
     
     return NextResponse.json({ 
       error: userErrorMessage 
@@ -205,19 +226,19 @@ async function handleGeminiRequest(messages: any[]) {
 
   const prompt = messages[1].content;
   console.log('Sending prompt to Gemini:', prompt);
-  
+
   const result = await geminiModel.generateContent(prompt);
   if (!result) {
     throw new Error('No response from Gemini');
   }
-  
+
   const response = await result.response;
   const content = response.text().trim();
 
   if (!content) {
     throw new Error('Empty response from Gemini');
   }
-  
+
   console.log('Received response from Gemini:', content);
   return content;
 }
@@ -239,5 +260,15 @@ function createRiddleGeneratorMessages(data: z.infer<typeof RiddleGeneratorReque
     { role: "user", content: `Generate a ${difficulty || 'medium'} difficulty riddle${topic ? ` about ${topic}` : ''}.
       The riddle should be clever, engaging, and appropriate for all ages.
       Provide the riddle followed by its solution.` }
+  ];
+}
+
+function createNameCombinerMessages(data: z.infer<typeof NameCombinerRequestSchema>) {
+  const { names, numberOfNames } = data;
+  return [
+    { role: "system", content: "You are an expert name combiner, capable of creating unique and creative name combinations." },
+    { role: "user", content: `Combine the following names in creative ways to create ${numberOfNames} unique name combinations:
+      "${names.join(', ')}"
+      Provide a list of ${numberOfNames} combined names, one per line.` }
   ];
 }
