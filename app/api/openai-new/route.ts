@@ -42,18 +42,23 @@ const safetySettings = [
   },
 ];
 
-// Zod schema for request validation
+// Zod schemas for request validation
 const RiddleSolverRequestSchema = z.object({
   riddle: z.string(),
 });
 
-const RequestSchema = z.object({
-  tool: z.literal('aiRiddleSolver'),
-  model: z.enum(['gpt4o', 'gemini']).default('gemini'),
-  data: RiddleSolverRequestSchema,
+const RiddleGeneratorRequestSchema = z.object({
+  topic: z.string().optional(),
+  difficulty: z.enum(['easy', 'medium', 'hard']).optional(),
 });
 
-// New function to check content using OpenAI's moderation API
+const RequestSchema = z.object({
+  tool: z.enum(['aiRiddleSolver', 'aiRiddleGenerator']),
+  model: z.enum(['gpt4o', 'gemini']).default('gemini'),
+  data: z.union([RiddleSolverRequestSchema, RiddleGeneratorRequestSchema]),
+});
+
+// Content moderation function
 async function moderateContent(content: string) {
   const openaiApiKey = process.env.OPENAI_API_KEY;
   if (!openaiApiKey) {
@@ -97,7 +102,7 @@ export async function POST(request: NextRequest) {
   const { tool, model, data } = body;
 
   // Combine all user inputs into a single string for moderation
-  const userInput = data.riddle;
+  const userInput = tool === 'aiRiddleSolver' ? data.riddle : `${data.topic || ''} ${data.difficulty || ''}`;
 
   // Check content moderation
   try {
@@ -110,7 +115,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Failed to moderate content" }, { status: 500 });
   }
 
-  const messages = createRiddleSolverMessages(data);
+  const messages = tool === 'aiRiddleSolver' 
+    ? createRiddleSolverMessages(data as z.infer<typeof RiddleSolverRequestSchema>)
+    : createRiddleGeneratorMessages(data as z.infer<typeof RiddleGeneratorRequestSchema>);
 
   try {
     let content;
@@ -125,11 +132,11 @@ export async function POST(request: NextRequest) {
         throw new Error(`Unsupported model: ${model}`);
     }
 
-    // Moderate the generated content as well
+    // Moderate the generated content
     try {
       const generatedContentModerationResult = await moderateContent(content);
       if (generatedContentModerationResult.flagged) {
-        return NextResponse.json({ error: "Generated content flagged for abusive or explicit material. Please try again or rephrase your riddle." }, { status: 400 });
+        return NextResponse.json({ error: "Generated content flagged for abusive or explicit material. Please try again or rephrase your request." }, { status: 400 });
       }
     } catch (error) {
       console.error('Generated content moderation API error:', error);
@@ -137,8 +144,8 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ 
-      solution: content,
-      model: model // Include the used model in the response
+      [tool === 'aiRiddleSolver' ? 'solution' : 'riddle']: content,
+      model: model
     });
   } catch (error) {
     console.error('Error details:', {
@@ -148,7 +155,7 @@ export async function POST(request: NextRequest) {
       model
     });
     
-    const userErrorMessage = `An error occurred while solving the riddle using the ${model} model. Please try again or switch to a different model.`;
+    const userErrorMessage = `An error occurred while ${tool === 'aiRiddleSolver' ? 'solving the riddle' : 'generating a riddle'} using the ${model} model. Please try again or switch to a different model.`;
     
     return NextResponse.json({ 
       error: userErrorMessage 
@@ -222,5 +229,15 @@ function createRiddleSolverMessages(data: z.infer<typeof RiddleSolverRequestSche
     { role: "user", content: `Solve the following riddle and explain your reasoning:
       "${riddle}"
       Provide a clear solution and explain how you arrived at it.` }
+  ];
+}
+
+function createRiddleGeneratorMessages(data: z.infer<typeof RiddleGeneratorRequestSchema>) {
+  const { topic, difficulty } = data;
+  return [
+    { role: "system", content: "You are an expert riddle creator, capable of generating engaging and clever riddles." },
+    { role: "user", content: `Generate a ${difficulty || 'medium'} difficulty riddle${topic ? ` about ${topic}` : ''}.
+      The riddle should be clever, engaging, and appropriate for all ages.
+      Provide the riddle followed by its solution.` }
   ];
 }
