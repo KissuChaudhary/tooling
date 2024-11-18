@@ -6,7 +6,7 @@ import { LRUCache } from 'lru-cache';
 
 // Rate limiting setup
 const rateLimit = new LRUCache<string, number>({
-  max: 500,
+  max: 5000,
   ttl: 1200,
 });
 
@@ -49,9 +49,33 @@ const RiddleSolverRequestSchema = z.object({
 
 const RequestSchema = z.object({
   tool: z.literal('aiRiddleSolver'),
-  model: z.enum(['gpt4o', 'gemini']),
+  model: z.enum(['gpt4o', 'gemini']).default('gemini'),
   data: RiddleSolverRequestSchema,
 });
+
+// New function to check content using OpenAI's moderation API
+async function moderateContent(content: string) {
+  const openaiApiKey = process.env.OPENAI_API_KEY;
+  if (!openaiApiKey) {
+    throw new Error('OpenAI API key is not set');
+  }
+
+  const response = await fetch('https://api.openai.com/v1/moderations', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${openaiApiKey}`
+    },
+    body: JSON.stringify({ input: content })
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to check content moderation');
+  }
+
+  const result = await response.json();
+  return result.results[0];
+}
 
 export async function POST(request: NextRequest) {
   // Rate limiting
@@ -72,22 +96,50 @@ export async function POST(request: NextRequest) {
 
   const { tool, model, data } = body;
 
-  // Content moderation (simplified for this example)
+  // Combine all user inputs into a single string for moderation
   const userInput = data.riddle;
 
-  let messages = createRiddleSolverMessages(data);
+  // Check content moderation
+  try {
+    const moderationResult = await moderateContent(userInput);
+    if (moderationResult.flagged) {
+      return NextResponse.json({ error: "Content flagged for abusive or explicit material. Please revise to meet our guidelines." }, { status: 400 });
+    }
+  } catch (error) {
+    console.error('Moderation API error:', error);
+    return NextResponse.json({ error: "Failed to moderate content" }, { status: 500 });
+  }
+
+  const messages = createRiddleSolverMessages(data);
 
   try {
     let content;
-    if (model === 'gpt4o') {
-      content = await handleOpenAIRequest(messages);
-    } else if (model === 'gemini') {
-      content = await handleGeminiRequest(messages);
-    } else {
-      throw new Error('Invalid model specified');
+    switch (model) {
+      case 'gpt4o':
+        content = await handleOpenAIRequest(messages);
+        break;
+      case 'gemini':
+        content = await handleGeminiRequest(messages);
+        break;
+      default:
+        throw new Error(`Unsupported model: ${model}`);
     }
 
-    return NextResponse.json({ solution: content });
+    // Moderate the generated content as well
+    try {
+      const generatedContentModerationResult = await moderateContent(content);
+      if (generatedContentModerationResult.flagged) {
+        return NextResponse.json({ error: "Generated content flagged for abusive or explicit material. Please try again or rephrase your riddle." }, { status: 400 });
+      }
+    } catch (error) {
+      console.error('Generated content moderation API error:', error);
+      return NextResponse.json({ error: "Failed to moderate generated content" }, { status: 500 });
+    }
+
+    return NextResponse.json({ 
+      solution: content,
+      model: model // Include the used model in the response
+    });
   } catch (error) {
     console.error('Error details:', {
       message: error instanceof Error ? error.message : 'Unknown error',
@@ -96,7 +148,7 @@ export async function POST(request: NextRequest) {
       model
     });
     
-    let userErrorMessage = 'An error occurred while solving the riddle. Please try again or switch the model.';
+    const userErrorMessage = `An error occurred while solving the riddle using the ${model} model. Please try again or switch to a different model.`;
     
     return NextResponse.json({ 
       error: userErrorMessage 
