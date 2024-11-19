@@ -58,10 +58,16 @@ const NameCombinerRequestSchema = z.object({
   numberOfNames: z.string(),
 });
 
+const UsernameGeneratorRequestSchema = z.object({
+  interests: z.array(z.string()),
+  style: z.enum(['fun', 'professional', 'creative', 'gaming']),
+  numberOfUsernames: z.string(),
+});
+
 const RequestSchema = z.object({
-  tool: z.enum(['aiRiddleSolver', 'aiRiddleGenerator', 'aiNameCombiner']),
+  tool: z.enum(['aiRiddleSolver', 'aiRiddleGenerator', 'aiNameCombiner', 'aiUsernameGenerator']),
   model: z.enum(['gpt4o', 'gemini']).default('gemini'),
-  data: z.union([RiddleSolverRequestSchema, RiddleGeneratorRequestSchema, NameCombinerRequestSchema]),
+  data: z.union([RiddleSolverRequestSchema, RiddleGeneratorRequestSchema, NameCombinerRequestSchema, UsernameGeneratorRequestSchema]),
 });
 
 // Content moderation function
@@ -110,7 +116,8 @@ export async function POST(request: NextRequest) {
   // Combine all user inputs into a single string for moderation
   const userInput = tool === 'aiRiddleSolver' ? data.riddle :
                     tool === 'aiRiddleGenerator' ? `${data.topic || ''} ${data.difficulty || ''}` :
-                    data.names.join(' ');
+                    tool === 'aiNameCombiner' ? data.names.join(' ') :
+                    data.interests.join(' ') + ' ' + data.style;
 
   // Check content moderation
   try {
@@ -125,7 +132,8 @@ export async function POST(request: NextRequest) {
 
   const messages = tool === 'aiRiddleSolver' ? createRiddleSolverMessages(data as z.infer<typeof RiddleSolverRequestSchema>) :
                    tool === 'aiRiddleGenerator' ? createRiddleGeneratorMessages(data as z.infer<typeof RiddleGeneratorRequestSchema>) :
-                   createNameCombinerMessages(data as z.infer<typeof NameCombinerRequestSchema>);
+                   tool === 'aiNameCombiner' ? createNameCombinerMessages(data as z.infer<typeof NameCombinerRequestSchema>) :
+                   createUsernameGeneratorMessages(data as z.infer<typeof UsernameGeneratorRequestSchema>);
 
   try {
     let content;
@@ -161,6 +169,9 @@ export async function POST(request: NextRequest) {
         break;
       case 'aiNameCombiner':
         response = { combinedNames: content.split('\n').filter(Boolean) };
+        break;
+      case 'aiUsernameGenerator':
+        response = { usernames: content.split('\n').filter(Boolean) };
         break;
     }
 
@@ -270,5 +281,15 @@ function createNameCombinerMessages(data: z.infer<typeof NameCombinerRequestSche
     { role: "user", content: `Combine the following names in creative ways to create ${numberOfNames} unique name combinations:
       "${names.join(', ')}"
       Provide a list of ${numberOfNames} combined names, one per line.` }
+  ];
+}
+
+function createUsernameGeneratorMessages(data: z.infer<typeof UsernameGeneratorRequestSchema>) {
+  const { interests, style, numberOfUsernames } = data;
+  return [
+    { role: "system", content: "You are an expert username generator, capable of creating unique and appealing usernames based on interests and style preferences." },
+    { role: "user", content: `Generate ${numberOfUsernames} unique usernames based on the following interests: "${interests.join(', ')}"
+      The usernames should reflect a ${style} style.
+      Provide a list of ${numberOfUsernames} usernames, one per line.` }
   ];
 }
