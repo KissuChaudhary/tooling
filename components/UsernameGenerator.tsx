@@ -64,7 +64,7 @@ export default function UsernameGenerator() {
     setGeneratedUsernames([]);
 
     try {
-      const response = await fetch('/api/ai-tools', {
+      const response = await fetch('/api/openai-new', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
