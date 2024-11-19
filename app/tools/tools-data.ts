@@ -281,5 +281,17 @@ export const tools: Tool[] = [
     title: "AI Rizz Generator",
     description: "Get the cheesy, clever, flirty lines to impress your someone.",
     link: "/tools/ai-rizz-generator"
-  }
+  },
+   {
+    icon: Image,
+    title: "AI Riddle Generator",
+    description: "Create awesome Riddle for fun and learning",
+    link: "/tools/ai-riddle-generator",
+  },
+ {
+    icon: Zap,
+    title: "AI Riddle Solver",
+    description: "Solve anytype of riddle in seconds with ai!",
+    link: "/tools/ai-riddle-solver",
+  },
 ]
