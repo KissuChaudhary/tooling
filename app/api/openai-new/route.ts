@@ -64,10 +64,16 @@ const UsernameGeneratorRequestSchema = z.object({
   numberOfUsernames: z.string(),
 });
 
+const WizardNameGeneratorRequestSchema = z.object({
+  magicType: z.enum(['elemental', 'necromancy', 'illusion', 'enchantment', 'divination']),
+  personality: z.string(),
+  numberOfNames: z.string(),
+});
+
 const RequestSchema = z.object({
-  tool: z.enum(['aiRiddleSolver', 'aiRiddleGenerator', 'aiNameCombiner', 'aiUsernameGenerator']),
+  tool: z.enum(['aiRiddleSolver', 'aiRiddleGenerator', 'aiNameCombiner', 'aiUsernameGenerator', 'aiWizardNameGenerator']),
   model: z.enum(['gpt4o', 'gemini']).default('gemini'),
-  data: z.union([RiddleSolverRequestSchema, RiddleGeneratorRequestSchema, NameCombinerRequestSchema, UsernameGeneratorRequestSchema]),
+  data: z.union([RiddleSolverRequestSchema, RiddleGeneratorRequestSchema, NameCombinerRequestSchema, UsernameGeneratorRequestSchema, WizardNameGeneratorRequestSchema]),
 });
 
 // Content moderation function
@@ -117,7 +123,8 @@ export async function POST(request: NextRequest) {
   const userInput = tool === 'aiRiddleSolver' ? data.riddle :
                     tool === 'aiRiddleGenerator' ? `${data.topic || ''} ${data.difficulty || ''}` :
                     tool === 'aiNameCombiner' ? data.names.join(' ') :
-                    data.interests.join(' ') + ' ' + data.style;
+                    tool === 'aiUsernameGenerator' ? data.interests.join(' ') + ' ' + data.style :
+                    `${data.magicType} ${data.personality}`;
 
   // Check content moderation
   try {
@@ -133,7 +140,8 @@ export async function POST(request: NextRequest) {
   const messages = tool === 'aiRiddleSolver' ? createRiddleSolverMessages(data as z.infer<typeof RiddleSolverRequestSchema>) :
                    tool === 'aiRiddleGenerator' ? createRiddleGeneratorMessages(data as z.infer<typeof RiddleGeneratorRequestSchema>) :
                    tool === 'aiNameCombiner' ? createNameCombinerMessages(data as z.infer<typeof NameCombinerRequestSchema>) :
-                   createUsernameGeneratorMessages(data as z.infer<typeof UsernameGeneratorRequestSchema>);
+                   tool === 'aiUsernameGenerator' ? createUsernameGeneratorMessages(data as z.infer<typeof UsernameGeneratorRequestSchema>) :
+                   createWizardNameGeneratorMessages(data as z.infer<typeof WizardNameGeneratorRequestSchema>);
 
   try {
     let content;
@@ -172,6 +180,9 @@ export async function POST(request: NextRequest) {
         break;
       case 'aiUsernameGenerator':
         response = { usernames: content.split('\n').filter(Boolean) };
+        break;
+      case 'aiWizardNameGenerator':
+        response = { wizardNames: content.split('\n').filter(Boolean) };
         break;
     }
 
@@ -291,5 +302,16 @@ function createUsernameGeneratorMessages(data: z.infer<typeof UsernameGeneratorR
     { role: "user", content: `Generate ${numberOfUsernames} unique usernames based on the following interests: "${interests.join(', ')}"
       The usernames should reflect a ${style} style.
       Provide a list of ${numberOfUsernames} usernames, one per line.` }
+  ];
+}
+
+function createWizardNameGeneratorMessages(data: z.infer<typeof WizardNameGeneratorRequestSchema>) {
+  const { magicType, personality, numberOfNames } = data;
+  return [
+    { role: "system", content: "You are an expert wizard name generator, capable of creating unique and magical names for wizards." },
+    { role: "user", content: `Generate ${numberOfNames} unique wizard names based on the following criteria:
+      Magic Type: ${magicType}
+      Personality: ${personality}
+      Provide a list of ${numberOfNames} wizard names, one per line.` }
   ];
 }
