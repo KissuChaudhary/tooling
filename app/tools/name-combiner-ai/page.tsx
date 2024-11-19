@@ -4,7 +4,7 @@ import Head from 'next/head';
 import Script from 'next/script';
 import RelatedTools from '@/components/related-tools';
 import AdUnit from '@/components/AdUnit';
-import { People, Shuffle, Smile, MagicWand, Star } from 'lucide-react';
+import { Check, Shuffle, Clipboard, Smile, Star } from 'lucide-react';
 
 export const metadata = {
   title: "Name Combiner AI | Create Unique Name Ideas Instantly",
@@ -89,7 +89,7 @@ export default function NameCombinerAIPage() {
                 description="Generate unique and innovative name combinations effortlessly."
               />
               <BenefitCard
-                icon={<People size={24} />}
+                icon={<Check size={24} />}
                 title="Multi-Name Support"
                 description="Combine up to four names for diverse and meaningful results."
               />
