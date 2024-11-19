@@ -94,7 +94,7 @@ export default function NameCombinerAIPage() {
                 description="Combine up to four names for diverse and meaningful results."
               />
               <BenefitCard
-                icon={<MagicWand size={24} />}
+                icon={<Clipboard size={24} />}
                 title="Customizable Options"
                 description="Choose how many combined names you want, from shortlists to longlists."
               />
