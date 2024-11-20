@@ -70,7 +70,7 @@ export default function AIPopup() {
               </div>
             </div>
 
-           <Link href="/login" passHref>
+           <Link href="https://www.unrealshot.com/login" passHref>
               <Button 
                 className="w-full bg-indigo-600 mt-4 hover:bg-indigo-700 text-white font-semibold py-1 px-2 sm:px-3 rounded-lg text-xs sm:text-sm"
               >
