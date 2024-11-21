@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash", safetySettings });
 
     const result = await model.generateContent([
-      "Describe this image in detail, focusing on the main elements, colors, and overall composition. Provide a concise caption that captures the essence of the image.",
+      "Describe this image in detail, focusing on the main elements, objects, scene, environment and overall composition. Provide a readable caption or alt tag that captures the essence of the image.",
       ...imageParts,
     ]);
 
