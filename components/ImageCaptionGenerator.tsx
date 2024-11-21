@@ -40,8 +40,10 @@ export default function ImageCaptionGenerator() {
           reader.readAsDataURL(file);
         });
         requestBody = { imageData, mimeType: file.type };
-      } else {
+      } else if (imageUrl) {
         requestBody = { imageUrl };
+      } else {
+        throw new Error('No image source provided');
       }
 
       const response = await fetch('/api/image-caption', {
@@ -53,14 +55,11 @@ export default function ImageCaptionGenerator() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to generate caption');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to generate caption');
       }
 
       const data = await response.json();
-      if (data.error) {
-        throw new Error(data.error);
-      }
-
       setCaption(data.caption);
     } catch (error) {
       setError(error instanceof Error ? error.message : 'An unexpected error occurred');
@@ -81,8 +80,15 @@ export default function ImageCaptionGenerator() {
         return;
       }
       setFile(selectedFile);
+      setImageUrl(''); // Clear the URL when a file is selected
       setError(null);
     }
+  };
+
+  const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setImageUrl(e.target.value);
+    setFile(null); // Clear the file when a URL is entered
+    setError(null);
   };
 
   return (
@@ -110,7 +116,7 @@ export default function ImageCaptionGenerator() {
                     id="imageUrl"
                     type="url"
                     value={imageUrl}
-                    onChange={(e) => setImageUrl(e.target.value)}
+                    onChange={handleUrlChange}
                     placeholder="https://example.com/image.jpg"
                     className="mt-1"
                   />
