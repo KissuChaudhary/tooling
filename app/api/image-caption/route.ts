@@ -15,23 +15,58 @@ const safetySettings = [
 ];
 
 const RequestSchema = z.object({
-  imageUrl: z.string().url(),
+  imageData: z.string(),
+  mimeType: z.string(),
+  imageUrl: z.string().url().optional(),
 });
 
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+
 export async function POST(request: NextRequest) {
-  // Input validation
-  let body;
   try {
-    body = await request.json();
-    RequestSchema.parse(body);
-  } catch (error) {
-    console.error('Validation error:', error);
-    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
-  }
+    const body = await request.json();
+    const { imageData, mimeType, imageUrl } = RequestSchema.parse(body);
 
-  const { imageUrl } = body;
+    let imageParts;
 
-  try {
+    if (imageUrl) {
+      // Handle URL-based image
+      const imageResponse = await fetch(imageUrl);
+      if (!imageResponse.ok) {
+        throw new Error('Failed to fetch image from URL');
+      }
+      const imageBuffer = await imageResponse.arrayBuffer();
+      imageParts = [
+        {
+          inlineData: {
+            data: Buffer.from(imageBuffer).toString('base64'),
+            mimeType: imageResponse.headers.get('content-type') || 'image/jpeg',
+          },
+        },
+      ];
+    } else {
+      // Handle uploaded image
+      if (!ALLOWED_MIME_TYPES.includes(mimeType)) {
+        return NextResponse.json({ error: "Invalid file type. Only JPEG, PNG, and WebP are allowed" }, { status: 400 });
+      }
+
+      // Validate file size
+      const sizeInBytes = Buffer.from(imageData.split(',')[1], 'base64').length;
+      if (sizeInBytes > MAX_FILE_SIZE) {
+        return NextResponse.json({ error: "File size exceeds the 5MB limit" }, { status: 400 });
+      }
+
+      imageParts = [
+        {
+          inlineData: {
+            data: imageData.split(',')[1],
+            mimeType: mimeType,
+          },
+        },
+      ];
+    }
+
     const geminiApiKey = process.env.GEMINI_API_KEY;
     if (!geminiApiKey) {
       throw new Error('Gemini API key is not set');
@@ -39,20 +74,6 @@ export async function POST(request: NextRequest) {
 
     const genAI = new GoogleGenerativeAI(geminiApiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash", safetySettings });
-
-    const imageResponse = await fetch(imageUrl);
-    if (!imageResponse.ok) {
-      throw new Error('Failed to fetch image');
-    }
-    const imageData = await imageResponse.arrayBuffer();
-    const imageParts = [
-      {
-        inlineData: {
-          data: Buffer.from(imageData).toString('base64'),
-          mimeType: imageResponse.headers.get('content-type') || 'image/jpeg',
-        },
-      },
-    ];
 
     const result = await model.generateContent([
       "Describe this image in detail, focusing on the main elements, colors, and overall composition. Provide a concise caption that captures the essence of the image.",
