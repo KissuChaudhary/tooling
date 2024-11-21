@@ -15,8 +15,8 @@ const safetySettings = [
 ];
 
 const RequestSchema = z.object({
-  imageData: z.string(),
-  mimeType: z.string(),
+  imageData: z.string().optional(),
+  mimeType: z.string().optional(),
   imageUrl: z.string().url().optional(),
 });
 
@@ -28,6 +28,10 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { imageData, mimeType, imageUrl } = RequestSchema.parse(body);
 
+    if (!imageData && !imageUrl) {
+      return NextResponse.json({ error: "Either imageData or imageUrl must be provided" }, { status: 400 });
+    }
+
     let imageParts;
 
     if (imageUrl) {
@@ -37,15 +41,19 @@ export async function POST(request: NextRequest) {
         throw new Error('Failed to fetch image from URL');
       }
       const imageBuffer = await imageResponse.arrayBuffer();
+      const contentType = imageResponse.headers.get('content-type');
+      if (!contentType || !ALLOWED_MIME_TYPES.includes(contentType)) {
+        return NextResponse.json({ error: "Invalid file type from URL. Only JPEG, PNG, and WebP are allowed" }, { status: 400 });
+      }
       imageParts = [
         {
           inlineData: {
             data: Buffer.from(imageBuffer).toString('base64'),
-            mimeType: imageResponse.headers.get('content-type') || 'image/jpeg',
+            mimeType: contentType,
           },
         },
       ];
-    } else {
+    } else if (imageData && mimeType) {
       // Handle uploaded image
       if (!ALLOWED_MIME_TYPES.includes(mimeType)) {
         return NextResponse.json({ error: "Invalid file type. Only JPEG, PNG, and WebP are allowed" }, { status: 400 });
@@ -65,6 +73,8 @@ export async function POST(request: NextRequest) {
           },
         },
       ];
+    } else {
+      return NextResponse.json({ error: "Invalid request format" }, { status: 400 });
     }
 
     const geminiApiKey = process.env.GEMINI_API_KEY;
@@ -73,10 +83,10 @@ export async function POST(request: NextRequest) {
     }
 
     const genAI = new GoogleGenerativeAI(geminiApiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash", safetySettings });
+    const model = genAI.getGenerativeModel({ model: "gemini-pro-vision", safetySettings });
 
     const result = await model.generateContent([
-      "Describe this image in detail, focusing on the main elements, objects, scene, environment and overall composition. Provide a readable caption or alt tag that captures the essence of the image.",
+      "Describe this image in detail, focusing on the main elements, colors, and overall composition. Provide a concise caption that captures the essence of the image.",
       ...imageParts,
     ]);
 
