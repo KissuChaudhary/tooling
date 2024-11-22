@@ -180,11 +180,11 @@ footer a{
 
 }
 
-  a {
-  color: blue;
-  text-decoration: none; /* Optional: Removes underline */
+  .blue-link {
+  color: #2563eb; /* You can adjust this color code to your preferred shade of blue */
+  text-decoration: none;
 }
 
-a:hover {
-  text-decoration: underline; /* Optional: Adds underline on hover */
+.blue-link:hover {
+  text-decoration: underline;
 }
