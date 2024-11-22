@@ -80,7 +80,7 @@ const createMDXComponents = () => {
     ol: ({ children, ...props }: MDXProps) => <ol {...props} className="list-decimal pl-6 mb-4 text-foreground">{children}</ol>,
     li: ({ children, ...props }: MDXProps) => <li {...props} className="mb-2 text-foreground">{children}</li>,
     a: ({ href, children, ...props }: MDXProps & { href?: string }) => (
-      <a href={href} {...props} className="text-primary hover:underline">{children}</a>
+      <a href={href} {...props} className="text-blue-600 hover:underline">{children}</a>
     ),
     blockquote: ({ children, ...props }: MDXProps) => (
       <blockquote {...props} className="border-l-4 border-primary/30 pl-4 italic my-4 text-foreground">{children}</blockquote>
@@ -164,3 +164,4 @@ export async function generateStaticParams() {
     slug: post.slug,
   }))
 }
+
