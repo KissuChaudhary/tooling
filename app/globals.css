@@ -179,3 +179,12 @@ footer a{
   background-size: 10px 10px;
 
 }
+
+  a {
+  color: blue;
+  text-decoration: none; /* Optional: Removes underline */
+}
+
+a:hover {
+  text-decoration: underline; /* Optional: Adds underline on hover */
+}
