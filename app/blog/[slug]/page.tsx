@@ -9,6 +9,7 @@ import AuthorBio from '@/components/AuthorBio'
 import { formatDate } from '@/lib/utils'
 import AdUnit from '@/components/AdUnit'
 import { MDXRemoteProps } from 'next-mdx-remote/rsc'
+import { BlogPostSchema } from '@/components/BlogPostSchema'
 
 interface BlogPostPageProps {
   params: { slug: string }
@@ -104,57 +105,61 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   }
 
   const mdxComponents = createMDXComponents();
+  const url = `https://sazeai.com/blog/${params.slug}`
 
   return (
-    <article className="max-w-4xl mx-auto px-4 py-12">
-      <AdUnit 
-        client="ca-pub-7915372771416695"
-        slot="8441706260"
-        style={{ marginBottom: '20px' }}
-      />
-      <header className="mb-8">
-        <h1 className="text-4xl font-bold mb-2 text-primary">{post.title}</h1>
-        <div className="flex items-center text-sm mb-4">
-          <time dateTime={post.publishedDate}>
-            {formatDate(post.publishedDate)}
-          </time>
-          <span className="mx-2">•</span>
-          <span>{post.readingTime} min read</span>
-        </div>
-        <Image
-          src={post.coverImage}
-          alt={post.title}
-          width={1200}
-          height={630}
-          className="rounded-lg"
+    <>
+      <BlogPostSchema post={post} url={url} />
+      <article className="max-w-4xl mx-auto px-4 py-12">
+        <AdUnit 
+          client="ca-pub-7915372771416695"
+          slot="8441706260"
+          style={{ marginBottom: '20px' }}
         />
-      </header>
+        <header className="mb-8">
+          <h1 className="text-4xl font-bold mb-2 text-primary">{post.title}</h1>
+          <div className="flex items-center text-sm mb-4">
+            <time dateTime={post.publishedDate}>
+              {formatDate(post.publishedDate)}
+            </time>
+            <span className="mx-2">•</span>
+            <span>{post.readingTime} min read</span>
+          </div>
+          <Image
+            src={post.coverImage}
+            alt={post.title}
+            width={1200}
+            height={630}
+            className="rounded-lg"
+          />
+        </header>
 
-      <div className="flex flex-col md:flex-row gap-8">
-        <aside className="md:w-1/4">
-          <TableOfContents content={post.content} />
-        </aside>
+        <div className="flex flex-col md:flex-row gap-8">
+          <aside className="md:w-1/4">
+            <TableOfContents content={post.content} />
+          </aside>
 
-        <div className="md:w-3/4">
-          <MDXRemote source={post.content} components={mdxComponents} />
+          <div className="md:w-3/4">
+            <MDXRemote source={post.content} components={mdxComponents} />
 
-          <footer className="mt-12">
-            <div className="border-t border-border pt-8">
-              <AuthorBio author={post.author} />
-            </div>
-            <div className="mt-8">
-              <h3 className="text-lg font-semibold mb-4 text-primary">Share this article</h3>
-              <ShareButtons url={`https://sazeai.com/blog/${params.slug}`} title={post.title} />
-            </div>
-            <AdUnit 
-              client="ca-pub-7915372771416695"
-              slot="8441706260"
-              style={{ marginBottom: '20px' }}
-            />
-          </footer>
+            <footer className="mt-12">
+              <div className="border-t border-border pt-8">
+                <AuthorBio author={post.author} />
+              </div>
+              <div className="mt-8">
+                <h3 className="text-lg font-semibold mb-4 text-primary">Share this article</h3>
+                <ShareButtons url={url} title={post.title} />
+              </div>
+              <AdUnit 
+                client="ca-pub-7915372771416695"
+                slot="8441706260"
+                style={{ marginBottom: '20px' }}
+              />
+            </footer>
+          </div>
         </div>
-      </div>
-    </article>
+      </article>
+    </>
   )
 }
 
