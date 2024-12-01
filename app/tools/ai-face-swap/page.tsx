@@ -14,6 +14,11 @@ export default function Home() {
         style={{ marginBottom: '20px' }}
       />
         <FaceSwapTool />
+             <AdUnit 
+        client="ca-pub-7915372771416695"
+        slot="8441706260"
+        style={{ marginBottom: '20px' }}
+      />
       </div>
     </main>
   )
