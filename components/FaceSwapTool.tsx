@@ -23,13 +23,13 @@ export default function FaceSwapTool() {
 
   useEffect(() => {
     if (alertMessage) {
-      setShowAlert(true)
+      setShowAlert(true);
       const timer = setTimeout(() => {
-        setShowAlert(false)
-      }, 5000)
-      return () => clearTimeout(timer)
+        setShowAlert(false);
+      }, 5000);
+      return () => clearTimeout(timer);
     }
-  }, [alertMessage])
+  }, [alertMessage]);
 
   const handleImageChange = (type: 'face' | 'target') => async (file: File) => {
     const base64 = await fileToBase64(file)
