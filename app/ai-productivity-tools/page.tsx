@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Image, Zap, Star, Volume2 } from 'lucide-react'
+import { Image, Zap, Star, Volume2, Disc2  } from 'lucide-react'
 import { Metadata } from 'next'
 import AdUnit from '../../components/AdUnit'
 
@@ -35,6 +35,14 @@ const tools = [
     link: "/tools/ai-image-generator",
     badge: { text: "Hot", color: "bg-blue-500" }
   },
+   {
+    icon: <Disc2 className="h-8 w-8 text-yellow-500" />,
+    title: "AI Face swap",
+    description: "Create Fun & Realistic Face Swaps Instantly.",
+    link: "/tools/ai-face-swap",
+    badge: { text: "New", color: "bg-pink-500" }
+  },
+ 
 
 ]
 
