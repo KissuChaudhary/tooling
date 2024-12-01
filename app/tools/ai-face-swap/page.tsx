@@ -80,7 +80,7 @@ export default function AIEssayWriterPage() {
         })}
       </Script>
 
-      <div className="min-h-screen bg-background text-foreground" style={{ paddingBottom: '3rem' }}>
+      <div className="min-h-screen bg-background max-w-7xl mx-auto text-foreground" style={{ paddingBottom: '3rem' }}>
         <FaceSwapTool />
         <ToolEngagement 
           toolName="AI Face Swap Tool"
