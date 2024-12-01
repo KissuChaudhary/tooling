@@ -92,6 +92,24 @@ export default function PrivacyPolicy() {
           <h2>Data Retention</h2>
           <p>We will retain your Personal Data only for as long as necessary for the purposes set out in this Privacy Policy. We will also retain Usage Data for internal analysis purposes. Usage Data is generally retained for a shorter period, except when this data is used to strengthen the security or functionality of our Service or we are legally obligated to retain this data for longer periods.</p>
 
+          <h2>AI Face Swap Tool Privacy</h2>
+          <p>
+            The AI Face Swap Tool offered by SazeAI processes user-uploaded images to generate modified outputs. We are committed to protecting user privacy and ensuring the secure handling of all data. Below are the specific privacy practices related to this tool:
+          </p>
+          <h3>1. Image Processing and Storage</h3>
+          <p>
+           Uploaded images are processed entirely on the user's browser, and no images or results are stored on our servers. All processing is completed locally, ensuring maximum privacy and security.
+          </p>
+          <h3>2. No Unauthorized Sharing</h3>
+          <p>
+            SazeAI does not share, sell, or distribute uploaded images or generated outputs to third parties without explicit user consent, except as required by law or to comply with legal obligations.
+          </p>
+        
+          <h3>3. User Responsibilities</h3>
+          <p>
+            Users are responsible for ensuring that any images uploaded do not infringe on third-party rights, including intellectual property or privacy rights. By using the tool, you confirm that you have the necessary permissions to upload the images.
+          </p>
+         
           <h2>Your Rights</h2>
           <p>If you are a resident of the European Economic Area (EEA), you have certain data protection rights. You can request:</p>
           <ul>
