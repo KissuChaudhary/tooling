@@ -20,6 +20,28 @@ export default function TermsOfService() {
           <h2>Use of AI Project</h2>
           <p>You may use the AI project for lawful purposes and in compliance with all applicable laws and regulations. Any unauthorized or illegal use of the AI project is strictly prohibited.</p>
 
+            <h2>AI Face Swap Tool Terms</h2>
+          <p>
+            The AI Face Swap Tool provided by SazeAI is intended solely for creative and entertainment purposes. By using this tool, you agree to comply with the following terms:
+          </p>
+          <h3>1. Responsible Use</h3>
+          <p>
+            Users must not create or share content that is defamatory, harmful, obscene, or otherwise violates any applicable laws. The tool must not be used to:
+          </p>
+          <ul>
+            <li>Impersonate or deceive individuals without their explicit consent.</li>
+            <li>Create content that infringes on copyrights, trademarks, or other intellectual property rights.</li>
+            <li>Violate privacy rights or harm any person’s reputation.</li>
+          </ul>
+          <h3>2. User Liability</h3>
+          <p>
+            Users are solely responsible for all content created and shared using the AI Face Swap Tool. SazeAI disclaims any liability for misuse of the tool, including but not limited to legal, ethical, or privacy violations arising from user-generated content.
+          </p>
+          <h3>3. Content Moderation</h3>
+          <p>
+            SazeAI reserves the right to monitor, suspend, or terminate user access to the AI Face Swap Tool for violations of these terms or any unauthorized use.
+          </p>
+          
           <h2>Agreement</h2>
           <p>Welcome to SazeAI (the "Company," "we," "us," or "our"). These Terms of Service ("Terms," "Terms of Service") govern your use of our web pages and services operated by SazeAI.</p>
           <p>These Terms, along with our Privacy Policy (collectively, "Agreements"), explain your rights and responsibilities when using our Service. By using our Service, you acknowledge that you have read, understood, and agree to be bound by the Agreements.</p>
