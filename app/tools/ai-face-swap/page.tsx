@@ -80,7 +80,7 @@ export default function AIEssayWriterPage() {
         })}
       </Script>
 
-      <div className="min-h-screen bg-background max-w-7xl mx-auto text-foreground" style={{ paddingBottom: '3rem' }}>
+      <div className="min-h-screen bg-background max-w-7xl mx-auto text-foreground py-12 px-4" style={{ paddingBottom: '3rem' }}>
           <h1 className="text-4xl font-extrabold mb-8 text-center tracking-tight">100% Free AI Face Swap Online - No Sign-Up Needed</h1>
       <p className="text-xl text-center mb-12 max-w-3xl mx-auto">Easily create fun face swaps using our AI Face Swap Tool. Upload your photos and see amazing results in just seconds.</p>
           <AdUnit 
