@@ -153,8 +153,8 @@ export default function FaceSwapTool() {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-6 bg-background text-foreground">
-      <div className="relative min-h-[600px] rounded-lg bg-muted flex items-center justify-center overflow-hidden">
+    <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-6 text-foreground">
+      <div className="relative min-h-[600px] rounded-lg border flex items-center justify-center overflow-hidden">
         {swappedImage ? (
           <div className="relative w-full h-full">
             <Image
