@@ -294,4 +294,10 @@ export const tools: Tool[] = [
     description: "Solve anytype of riddle in seconds with ai!",
     link: "/tools/ai-riddle-solver",
   },
+    {
+    icon: Image,
+    title: "AI Face Swap",
+    description: "Create Fun & Realistic Face Swaps Instantly",
+    link: "/tools/ai-face-swap",
+  },
 ]
