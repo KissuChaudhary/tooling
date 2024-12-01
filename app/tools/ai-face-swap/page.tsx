@@ -55,15 +55,16 @@ export default function AIFaceSwapToolPage() {
         <title>{metadata.title}</title>
         <meta name="description" content={metadata.description} />
       </Head>
-      <Script id="schema-ai-face-swap-tool" type="application/ld+json">
-        {JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "WebPage",
-          "name": "100% Free AI Face Swap Online - No Sign-Up Needed",
-          "description": "Easily create fun face swaps using our AI Face Swap Tool. Upload your photos and see amazing results in just seconds.",
-          "url": "https://sazeai.com/tools/ai-face-swap-tool",
-        })}
-      </Script>
+ <Script id="schema-ai-face-swap-tool" type="application/ld+json">
+  {JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "100% Free AI Face Swap Online - No Sign-Up Needed | Saze AI",
+    "description": "Swap faces online for free with our AI face swap tool. No sign-up required—just upload your photo and create fun, realistic face swaps instantly!",
+    "url": "https://sazeai.com/tools/ai-face-swap",
+  })}
+</Script>
+
       <Script id="schema-ai-face-swap-webapp" type="application/ld+json">
         {JSON.stringify({
           "@context": "https://schema.org",
