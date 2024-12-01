@@ -7,8 +7,8 @@ import AdUnit from '@/components/AdUnit'
 import ToolEngagement from '@/components/tool-engagement'
 
 export const metadata = {
-  title: "AI Essay Writer | Generate Quality Essays in Minutes",
-  description: "Craft high-quality essays in minutes with the AI Essay Writer by Saze AI. Generate essays tailored to your topic, tone, audience, and purpose.",
+  title: "100% Free AI Face Swap Online - No Sign-Up Needed",
+  description: "Easily create fun face swaps using our AI Face Swap Tool. Upload your photos and see amazing results in just seconds.",
 };
 
 interface BenefitCardProps {
@@ -58,20 +58,20 @@ export default function AIEssayWriterPage() {
         {JSON.stringify({
           "@context": "https://schema.org",
           "@type": "WebPage",
-          "name": "AI Essay Writer - Saze AI",
-          "description": "Craft high-quality essays in minutes with the AI Essay Writer by Saze AI. Generate essays tailored to your topic, tone, audience, and purpose.",
-          "url": "https://sazeai.com/tools/ai-essay-writer",
+          "name": "100% Free AI Face Swap Online - No Sign-Up Needed",
+          "description": "Easily create fun face swaps using our AI Face Swap Tool. Upload your photos and see amazing results in just seconds.",
+          "url": "https://sazeai.com/tools/ai-face-swap",
         })}
       </Script>
       <Script id="schema-ai-essay-writer-webapp" type="application/ld+json">
         {JSON.stringify({
           "@context": "https://schema.org",
           "@type": "WebApplication",
-          "name": "AI Essay Writer - Saze AI",
-          "description": "Craft high-quality essays in minutes with the AI Essay Writer by Saze AI. Generate essays tailored to your topic, tone, audience, and purpose.",
+          "name": "100% Free AI Face Swap Online - No Sign-Up Needed",
+          "description": "Easily create fun face swaps using our AI Face Swap Tool. Upload your photos and see amazing results in just seconds.",
           "applicationCategory": "UtilityApplication",
           "operatingSystem": "All",
-          "url": "https://sazeai.com/tools/ai-essay-writer",
+          "url": "https://sazeai.com/tools/ai-face-swap",
           "offers": {
             "@type": "Offer",
             "price": "0.00",
@@ -83,50 +83,50 @@ export default function AIEssayWriterPage() {
       <div className="min-h-screen bg-background text-foreground" style={{ paddingBottom: '3rem' }}>
         <FaceSwapTool />
         <ToolEngagement 
-          toolName="AI Face Swap"
+          toolName="AI Face Swap Tool"
         />
         <AdUnit 
   client="ca-pub-7915372771416695"
   slot="8441706260"
   style={{ marginBottom: '20px' }}
 />
-        {/* What is AI Essay Writer Section */}
+        {/* What is AI Face Swap Tool Section */}
         <section className="py-12 bg-muted">
           <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-extrabold sm:text-4xl mb-8 text-center">What is AI Essay Writer?</h2>
+            <h2 className="text-3xl font-extrabold sm:text-4xl mb-8 text-center">What is the AI Face Swap Tool?</h2>
             <p className="leading-relaxed text-base text-muted-foreground">
-              The AI Essay Writer by Saze AI is designed to help you generate well-structured essays in minutes. Tailored to your specific topic, tone, and audience, this tool provides an efficient solution for students, professionals, and content creators seeking quality essay writing without spending hours on research and drafting.
+              The AI Face Swap Tool makes face swapping simple and fun. Just upload your photos, and the tool will create unique swaps that look seamless. Perfect for fun projects, social media, or creative edits.
             </p>
           </div>
 
           {/* Benefits Section */}
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-extrabold sm:text-4xl mb-8 text-center">Benefits of Using the AI Essay Writer</h2>
+            <h2 className="text-3xl font-extrabold sm:text-4xl mb-8 text-center">Why Use the AI Face Swap Tool?</h2>
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
               <BenefitCard
-                icon={<Book size={24} />}
-                title="Custom Essays"
-                description="Generate essays tailored to your specific topic, tone, and purpose, ensuring relevance and accuracy."
+                icon={<Image size={24} />}
+                title="High-Quality Swaps"
+                description="Get realistic and smooth face swaps that look amazing in any setting."
               />
               <BenefitCard
-                icon={<Feather size={24} />}
-                title="Multiple Essay Types"
-                description="From argumentative to persuasive essays, the AI adapts to various types and formats."
+                icon={<Smile size={24} />}
+                title="Easy to Use"
+                description="No technical skills needed. Just upload your photo, and you’re good to go."
               />
               <BenefitCard
-                icon={<Users size={24} />}
-                title="Audience Targeting"
-                description="Customize your essay for specific audiences, ensuring the message resonates with the intended readers."
+                icon={<Shield size={24} />}
+                title="Privacy Protected"
+                description="Your photos are processed securely, and all data is deleted after 60 minutes."
               />
               <BenefitCard
-                icon={<Target size={24} />}
-                title="Purpose-Driven Content"
-                description="Craft essays that meet your specific goal, whether it’s to inform, persuade, or analyze."
+                icon={<Clock size={24} />}
+                title="Fast Processing"
+                description="See your face swap results in just a few seconds."
               />
               <BenefitCard
-                icon={<FileText size={24} />}
-                title="Time-Efficient"
-                description="Save time and effort by generating high-quality essays in a matter of minutes."
+                icon={<Star size={24} />}
+                title="Free and Fun"
+                description="Enjoy creating face swaps for free with endless possibilities."
               />
             </div>
           </div>
@@ -135,51 +135,32 @@ export default function AIEssayWriterPage() {
         {/* How to Use Section */}
         <section className="py-12 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-extrabold mb-8 text-center">How to Use the AI Essay Writer</h2>
+            <h2 className="text-3xl font-extrabold mb-8 text-center">How to Use the AI Face Swap Tool</h2>
             <div className="space-y-8">
               <StepItem
                 number="1"
-                title="Enter Your Essay Topic"
-                description="Start by entering the topic for your essay. The AI uses this to create a relevant and focused essay."
+                title="Upload Your Photos"
+                description="Choose the photos you want to swap faces from and upload them to the tool."
               />
               <StepItem
                 number="2"
-                title="Select the Tone"
-                description="Choose the tone you want your essay to have: formal, neutral, or conversational. The tone sets the style of the essay."
+                title="Adjust Your Swap"
+                description="Select which faces to swap. The tool automatically detects and swaps them seamlessly."
               />
               <StepItem
                 number="3"
-                title="Choose Essay Type"
-                description="Select the type of essay you need—whether it's argumentative, narrative, or descriptive, the AI adjusts the format accordingly."
-              />
-              <StepItem
-                number="4"
-                title="Specify the Audience"
-                description="Indicate who the essay is for—whether it’s for academic purposes, professional readers, or general audiences."
-              />
-              <StepItem
-                number="5"
-                title="Set the Length"
-                description="Choose the desired length for your essay—short, medium, or long, based on the scope of the content you need."
-              />
-              <StepItem
-                number="6"
-                title="Select Purpose"
-                description="Identify the purpose of your essay—whether it’s to inform, persuade, or analyze a subject."
-              />
-              <StepItem
-                number="7"
-                title="Generate Your Essay"
-                description="Once all inputs are in place, click 'Generate Essay' to create a well-structured, high-quality essay that meets your criteria."
+                title="Preview and Download"
+                description="Check the result, and if you're happy, download your swapped photo instantly."
               />
             </div>
           </div>
         </section>
+
         <AdUnit 
-  client="ca-pub-7915372771416695"
-  slot="8441706260"
-  style={{ marginBottom: '20px' }}
-/>
+          client="ca-pub-7915372771416695"
+          slot="8441706260"
+          style={{ marginBottom: '20px' }}
+        />
       </div>
     </>
   );
