@@ -22,14 +22,19 @@ export default function FaceSwapTool() {
   const [showAlert, setShowAlert] = useState(false)
 
   useEffect(() => {
+    let timer: NodeJS.Timeout | null = null;
     if (alertMessage) {
       setShowAlert(true)
-      const timer = setTimeout(() => {
+      timer = setTimeout(() => {
         setShowAlert(false)
       }, 5000)
-      return () => clearTimeout(timer)
     }
-  }, [alertMessage]) // Fixed: Properly closed dependency array
+    return () => {
+      if (timer) {
+        clearTimeout(timer)
+      }
+    }
+  }, [alertMessage])
 
   const handleImageChange = (type: 'face' | 'target') => async (file: File) => {
     const base64 = await fileToBase64(file)
