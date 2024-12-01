@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { Button } from '@/components/ui/button'
+import AdUnit from '../components/AdUnit'
 import { ImageIcon, RefreshCw, Download } from 'lucide-react'
 import Image from 'next/image'
 import { Alert, AlertDescription } from "@/components/ui/alert"
@@ -196,6 +197,11 @@ export default function FaceSwapTool() {
           image={faceImage}
           onImageChange={handleImageChange('face')}
         />
+             <AdUnit 
+        client="ca-pub-7915372771416695"
+        slot="8441706260"
+        style={{ marginBottom: '20px' }}
+      />
         <ImageUploader
           title="Add Target Image"
           image={targetImage}
@@ -208,7 +214,7 @@ export default function FaceSwapTool() {
             </Alert>
           )}
           <p className="text-sm text-muted-foreground">
-            Face Swapper is best for one-to-one face swapping. For face swapping in group photos, try the Multiple Face Swap feature.
+           This tool is designed for fun and creative purposes only. Users must ensure their uploads and outputs comply with legal and ethical standards. Misuse, such as creating deceptive, harmful, or unauthorized content, is strictly prohibited.
           </p>
           <div className="flex gap-4">
             <Button
@@ -229,8 +235,8 @@ export default function FaceSwapTool() {
           </div>
           <p className="text-xs text-center text-muted-foreground">
             By uploading the images, you agree to our{' '}
-            <a href="#" className="underline">Terms of Use</a> and{' '}
-            <a href="#" className="underline">Privacy Policy</a>.
+            <a href="/page/terms" className="underline">Terms of Use</a> and{' '}
+            <a href="/page/privacy-policy" className="underline">Privacy Policy</a>.
           </p>
         </div>
       </div>
