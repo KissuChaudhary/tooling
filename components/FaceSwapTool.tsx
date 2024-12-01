@@ -22,13 +22,16 @@ export default function FaceSwapTool() {
   const [showAlert, setShowAlert] = useState(false)
 
   useEffect(() => {
+    let timer: NodeJS.Timeout;
     if (alertMessage) {
       setShowAlert(true);
-      const timer = setTimeout(() => {
+      timer = setTimeout(() => {
         setShowAlert(false);
       }, 5000);
-      return () => clearTimeout(timer);
     }
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
   }, [alertMessage]);
 
   const handleImageChange = (type: 'face' | 'target') => async (file: File) => {
@@ -233,4 +236,3 @@ export default function FaceSwapTool() {
     </div>
   )
 }
-
