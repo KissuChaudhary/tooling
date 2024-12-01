@@ -22,24 +22,23 @@ export default function FaceSwapTool() {
   const [showAlert, setShowAlert] = useState(false)
 
   useEffect(() => {
-    let timer: NodeJS.Timeout | null = null;
     if (alertMessage) {
       setShowAlert(true)
-      timer = setTimeout(() => {
+      const timer = setTimeout(() => {
         setShowAlert(false)
       }, 5000)
-    }
-    return () => {
-      if (timer) {
-        clearTimeout(timer)
-      }
+      return () => clearTimeout(timer)
     }
   }, [alertMessage])
 
   const handleImageChange = (type: 'face' | 'target') => async (file: File) => {
     const base64 = await fileToBase64(file)
     const imageData = { url: URL.createObjectURL(file), file, base64 }
-    type === 'face' ? setFaceImage(imageData) : setTargetImage(imageData)
+    if (type === 'face') {
+      setFaceImage(imageData)
+    } else {
+      setTargetImage(imageData)
+    }
   }
 
   const fileToBase64 = (file: File): Promise<string> => {
@@ -136,8 +135,8 @@ export default function FaceSwapTool() {
               <Image
                 src={image.url}
                 alt={title}
-                layout="fill"
-                objectFit="cover"
+                fill
+                style={{ objectFit: 'cover' }}
               />
             </div>
           ) : (
@@ -161,8 +160,8 @@ export default function FaceSwapTool() {
             <Image
               src={swappedImage}
               alt="Swapped Result"
-              layout="fill"
-              objectFit="contain"
+              fill
+              style={{ objectFit: 'contain' }}
               className="rounded-lg"
             />
             <Button
@@ -177,8 +176,8 @@ export default function FaceSwapTool() {
           <Image
             src={targetImage.url}
             alt="Target Image"
-            layout="fill"
-            objectFit="contain"
+            fill
+            style={{ objectFit: 'contain' }}
             className="rounded-lg"
           />
         ) : (
@@ -238,3 +237,4 @@ export default function FaceSwapTool() {
     </div>
   )
 }
+
