@@ -2,13 +2,13 @@ import Head from 'next/head';
 import FaceSwapTool from '@/components/FaceSwapTool';
 import Script from 'next/script';
 import React from 'react';
-import { Book, Feather, Target, Users, FileText } from 'lucide-react';
+import { Image, Smile, Shield, Clock, Star } from 'lucide-react';
 import AdUnit from '@/components/AdUnit'
 import ToolEngagement from '@/components/tool-engagement'
 
 export const metadata = {
   title: "100% Free AI Face Swap Online - No Sign-Up Needed",
-  description: "Easily create fun face swaps using our AI Face Swap Tool. Upload your photos and see amazing results in just seconds.",
+  description: "Swap faces online for free with our AI face swap tool. No sign-up required—just upload your photo and create fun, realistic face swaps instantly!",
 };
 
 interface BenefitCardProps {
@@ -59,7 +59,7 @@ export default function AIEssayWriterPage() {
           "@context": "https://schema.org",
           "@type": "WebPage",
           "name": "100% Free AI Face Swap Online - No Sign-Up Needed",
-          "description": "Easily create fun face swaps using our AI Face Swap Tool. Upload your photos and see amazing results in just seconds.",
+          "description": "Swap faces online for free with our AI face swap tool. No sign-up required—just upload your photo and create fun, realistic face swaps instantly!",
           "url": "https://sazeai.com/tools/ai-face-swap",
         })}
       </Script>
@@ -68,7 +68,7 @@ export default function AIEssayWriterPage() {
           "@context": "https://schema.org",
           "@type": "WebApplication",
           "name": "100% Free AI Face Swap Online - No Sign-Up Needed",
-          "description": "Easily create fun face swaps using our AI Face Swap Tool. Upload your photos and see amazing results in just seconds.",
+          "description": "Swap faces online for free with our AI face swap tool. No sign-up required—just upload your photo and create fun, realistic face swaps instantly!",
           "applicationCategory": "UtilityApplication",
           "operatingSystem": "All",
           "url": "https://sazeai.com/tools/ai-face-swap",
@@ -81,6 +81,13 @@ export default function AIEssayWriterPage() {
       </Script>
 
       <div className="min-h-screen bg-background max-w-7xl mx-auto text-foreground" style={{ paddingBottom: '3rem' }}>
+          <h1 className="text-4xl font-extrabold mb-8 text-center tracking-tight">100% Free AI Face Swap Online - No Sign-Up Needed</h1>
+      <p className="text-xl text-center mb-12 max-w-3xl mx-auto">Easily create fun face swaps using our AI Face Swap Tool. Upload your photos and see amazing results in just seconds.</p>
+          <AdUnit 
+  client="ca-pub-7915372771416695"
+  slot="8441706260"
+  style={{ marginBottom: '20px' }}
+/>
         <FaceSwapTool />
         <ToolEngagement 
           toolName="AI Face Swap Tool"
