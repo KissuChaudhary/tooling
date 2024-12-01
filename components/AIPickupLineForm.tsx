@@ -187,7 +187,7 @@ export default function PickupLineGenerator() {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="targetName" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="targetName" className="text-sm font-medium text-gray-500">
                   Target's Name (Optional)
                 </Label>
                 <div className="relative">
@@ -203,7 +203,7 @@ export default function PickupLineGenerator() {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="targetGender" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="targetGender" className="text-sm font-medium text-gray-500">
                   Target's Gender
                 </Label>
                 <Select onValueChange={(value) => handleInputChange('targetGender', value)}>
@@ -224,7 +224,7 @@ export default function PickupLineGenerator() {
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="setting" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="setting" className="text-sm font-medium text-gray-500">
                   Setting
                 </Label>
                 <div className="relative">
@@ -247,7 +247,7 @@ export default function PickupLineGenerator() {
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="style" className="text-sm font-medium text-gray-700">
+                <Label htmlFor="style" className="text-sm font-medium text-gray-500">
                   Pickup Line Style
                 </Label>
                 <Select onValueChange={(value) => handleInputChange('style', value as FormData['style'])}>
@@ -299,7 +299,7 @@ export default function PickupLineGenerator() {
           <CardContent>
             {generatedPickupLine ? (
               <>
-                <div className="bg-gray-100 p-4 rounded-md mb-4 max-h-96 overflow-y-auto">
+                <div className="p-4 rounded-md border text-card-foreground mb-4 overflow-y-auto">
                   <p className="whitespace-pre-wrap">{generatedPickupLine}</p>
                 </div>
                 <Button onClick={handleCopy} variant="outline" className="w-full">
