@@ -120,8 +120,10 @@ export default function ImageGenerator() {
       if (!response.ok) {
         if (response.status === 429) {
           setIsLimitReached(true)
+          setFlaggedError(null) // Clear any existing flagged error
           throw new Error(data.error || 'You have reached the daily limit for image generation.')
         } else if (response.status === 400 && data.error.includes('inappropriate content')) {
+          setIsLimitReached(false) // Ensure limit reached is false
           setFlaggedError(data.error)
         } else {
           throw new Error(data.error || 'Failed to generate image')
@@ -218,27 +220,27 @@ export default function ImageGenerator() {
               </Select>
             </div>
 
-            {isLimitReached && (
+            {isLimitReached ? (
               <Alert variant="destructive" className="mb-4">
                 <AlertTitle>Daily Limit Reached</AlertTitle>
                 <AlertDescription>
                   Congrats! You have officially hit your image generation limit for today. No more magic for you. Try again tomorrow, if you can wait that long!
                 </AlertDescription>
               </Alert>
-            )}
-
-            {showFlaggedError && flaggedError && (
-              <Alert variant="destructive" className="transition-opacity duration-300 ease-in-out">
-                <AlertTitle>Content Flagged</AlertTitle>
-                <AlertDescription>{flaggedError}</AlertDescription>
-              </Alert>
+            ) : (
+              showFlaggedError && flaggedError && (
+                <Alert variant="destructive" className="transition-opacity duration-300 ease-in-out">
+                  <AlertTitle>Content Flagged</AlertTitle>
+                  <AlertDescription>{flaggedError}</AlertDescription>
+                </Alert>
+              )
             )}
 
             <div className="grid grid-cols-2 gap-2">
               <Button
                 onClick={handleSubmit}
                 disabled={isGenerating || isLimitReached}
-                className="w-full text-white py-2 rounded-lg transition-all duration-300"
+                className="w-full text-primary-foreground py-2 rounded-lg transition-all duration-300"
               >
                 {isGenerating ? 'Generating...' : 'Generate Image'}
               </Button>
