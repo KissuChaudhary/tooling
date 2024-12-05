@@ -20,7 +20,7 @@ async function moderateContent(prompt: string) {
 
 export async function POST(req: Request) {
   try {
-    // Check user limit
+    // Check user limit first
     const cookieStore = cookies()
     const usageCount = parseInt(cookieStore.get('image_generator_usage')?.value || '0')
     
@@ -28,9 +28,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Congrats! You've officially hit your limit for today. Let others also use this free service. Try again tomorrow, if you can wait that long!" }, { status: 429 })
     }
 
+    // Only check content moderation if we haven't hit the limit
     const body = await req.json()
-
-    // Check if the prompt contains inappropriate content
     const isInappropriate = await moderateContent(body.prompt)
 
     if (isInappropriate) {
@@ -87,3 +86,4 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: 'Failed to get prediction status' }, { status: 500 })
   }
 }
+
