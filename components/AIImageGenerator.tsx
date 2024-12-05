@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -31,35 +31,16 @@ const initialParams: GenerationParams = {
   negative_prompt: ""
 }
 
-export default function AIImageGenerator() {
+export default function ImageGenerator() {
   const [params, setParams] = useState<GenerationParams>(initialParams)
   const [isGenerating, setIsGenerating] = useState(false)
-  const [isImageLoading, setIsImageLoading] = useState(false)
   const [flaggedError, setFlaggedError] = useState<string | null>(null)
   const [showFlaggedError, setShowFlaggedError] = useState(false)
   const [imageUrl, setImageUrl] = useState<string | null>(null)
   const [showAdOverlay, setShowAdOverlay] = useState(false)
   const [loadingProgress, setLoadingProgress] = useState(0)
   const [isLimitReached, setIsLimitReached] = useState(false)
-
-  useEffect(() => {
-    let interval: NodeJS.Timeout
-    if (isGenerating || isImageLoading) {
-      interval = setInterval(() => {
-        setLoadingProgress((prev) => {
-          if (isGenerating && prev < 90) {
-            return prev + 1
-          } else if (isImageLoading && prev < 99) {
-            return prev + 0.2
-          }
-          return prev
-        })
-      }, 100)
-    } else {
-      setLoadingProgress(0)
-    }
-    return () => clearInterval(interval)
-  }, [isGenerating, isImageLoading])
+  const [predictionId, setPredictionId] = useState<string | null>(null)
 
   useEffect(() => {
     if (flaggedError) {
@@ -70,6 +51,49 @@ export default function AIImageGenerator() {
       return () => clearTimeout(timer)
     }
   }, [flaggedError])
+
+  const checkPredictionStatus = useCallback(async (retryCount = 0) => {
+    if (!predictionId) return
+  
+    try {
+      const response = await fetch(`/api/generate-image?id=${predictionId}`)
+      if (!response.ok) {
+        throw new Error('Failed to get prediction status')
+      }
+      const data = await response.json()
+  
+      if (data.output) {
+        setImageUrl(data.output)
+        setIsGenerating(false)
+        setPredictionId(null)
+        setLoadingProgress(100)
+      } else if (data.error) {
+        throw new Error(data.error)
+      } else if (data.status === 'processing' || data.status === 'starting') {
+        setLoadingProgress((prev) => Math.min(prev + 10, 90))
+        const nextRetryCount = retryCount + 1
+        const delay = Math.min(1000 * Math.pow(2, nextRetryCount), 30000) // Max delay of 30 seconds
+        if (nextRetryCount < 10) { // Max 10 retries
+          setTimeout(() => checkPredictionStatus(nextRetryCount), delay)
+        } else {
+          throw new Error('Maximum retries reached. Please try again.')
+        }
+      } else {
+        throw new Error(`Unexpected prediction status: ${data.status}`)
+      }
+    } catch (error) {
+      console.error('Error:', error)
+      setFlaggedError(error instanceof Error ? error.message : 'An error occurred while checking image generation status.')
+      setIsGenerating(false)
+      setPredictionId(null)
+    }
+  }, [predictionId])
+
+  useEffect(() => {
+    if (predictionId) {
+      checkPredictionStatus()
+    }
+  }, [predictionId, checkPredictionStatus])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -105,23 +129,12 @@ export default function AIImageGenerator() {
         return
       }
 
-      if (!data.images || !Array.isArray(data.images) || data.images.length === 0) {
-        throw new Error('Invalid response format from API')
-      }
-
-      setImageUrl(data.images[0])
-      setIsGenerating(false)
-      setIsImageLoading(true)
+      setPredictionId(data.predictionId)
     } catch (err: any) {
       console.error('Error:', err)
       setIsGenerating(false)
       setFlaggedError(err.message)
     }
-  }
-
-  const handleImageLoad = () => {
-    setIsImageLoading(false)
-    setLoadingProgress(100)
   }
 
   const handleReset = () => {
@@ -130,7 +143,7 @@ export default function AIImageGenerator() {
     setFlaggedError(null)
     setLoadingProgress(0)
     setIsGenerating(false)
-    setIsImageLoading(false)
+    setPredictionId(null)
   }
 
   const handleDownload = () => {
@@ -224,10 +237,10 @@ export default function AIImageGenerator() {
             <div className="grid grid-cols-2 gap-2">
               <Button
                 onClick={handleSubmit}
-                disabled={isGenerating || isImageLoading || isLimitReached}
+                disabled={isGenerating || isLimitReached}
                 className="w-full text-white py-2 rounded-lg transition-all duration-300"
               >
-                {isGenerating || isImageLoading ? 'Processing...' : 'Generate Image'}
+                {isGenerating ? 'Generating...' : 'Generate Image'}
               </Button>
               <Button type="button" variant="outline" className="w-full" onClick={handleReset}>
                 Reset
@@ -249,34 +262,31 @@ export default function AIImageGenerator() {
           style={{ marginBottom: '20px' }}
         />
         <div className={`bg-white rounded-lg shadow flex items-center justify-center ${getImagePreviewStyle()} relative overflow-hidden`}>
-          {(isGenerating || isImageLoading) && (
+          {isGenerating && (
             <div className="absolute inset-0 bg-gray-200 z-10">
               <Progress value={loadingProgress} className="w-full" />
               <p className="text-center mt-4">
-                {isGenerating ? 'Generating' : 'Loading'}: {Math.round(loadingProgress)}%
+                Generating: {Math.round(loadingProgress)}%
               </p>
             </div>
           )}
           {imageUrl && (
-            <div className="relative w-full h-full transition-opacity duration-500 ease-in-out" style={{ opacity: isImageLoading ? 0 : 1 }}>
+            <div className="relative w-full h-full transition-opacity duration-500 ease-in-out">
               <Image
                 src={imageUrl}
                 alt="Generated image"
                 fill
                 className="object-contain rounded-lg"
-                onLoad={handleImageLoad}
               />
-              {!isImageLoading && (
-                <Button
-                  className="absolute bottom-2 right-2"
-                  onClick={handleDownload}
-                >
-                  Download
-                </Button>
-              )}
+              <Button
+                className="absolute bottom-2 right-2"
+                onClick={handleDownload}
+              >
+                Download
+              </Button>
             </div>
           )}
-          {!imageUrl && !isGenerating && !isImageLoading && (
+          {!imageUrl && !isGenerating && (
             <p className="text-gray-500">Your Art Will Appear Here..</p>
           )}
         </div>
@@ -288,3 +298,4 @@ export default function AIImageGenerator() {
     </div>
   )
 }
+
