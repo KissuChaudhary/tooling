@@ -180,7 +180,7 @@ export default function ImageGenerator() {
               style={{ marginBottom: '20px' }}
             />
             <div className="space-y-2">
-              <h2>Free AI Image Generator (Nvidia Sana)</h2>
+              <h2>100% Free Realistic AI Image Generator</h2>
               <Label htmlFor="prompt">Prompt</Label>
               <Textarea
                 id="prompt"
