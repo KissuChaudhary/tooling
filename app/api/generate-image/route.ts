@@ -37,23 +37,19 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'The provided prompt contains inappropriate content and cannot be processed.' }, { status: 400 })
     }
 
-    const output = await replicate.run(
-      "nvidia/sana:88312dcb9eaa543d7f8721e092053e8bb901a45a5d3c63c84e0a5aa7c247df33",
-      {
-        input: {
-          prompt: body.prompt,
-          negative_prompt: body.negative_prompt || "",
-          width: body.width,
-          height: body.height,
-          num_inference_steps: 18,
-          guidance_scale: 5,
-          pag_guidance_scale: 2,
-          seed: body.seed,
-        }
+    const prediction = await replicate.predictions.create({
+      version: "88312dcb9eaa543d7f8721e092053e8bb901a45a5d3c63c84e0a5aa7c247df33",
+      input: {
+        prompt: body.prompt,
+        negative_prompt: body.negative_prompt || "",
+        width: body.width,
+        height: body.height,
+        num_inference_steps: 18,
+        guidance_scale: 5,
+        pag_guidance_scale: 2,
+        seed: body.seed,
       }
-    )
-
-    console.log('Replicate output:', output)
+    })
 
     // Increment usage count
     cookieStore.set('image_generator_usage', (usageCount + 1).toString(), {
@@ -61,10 +57,33 @@ export async function POST(req: Request) {
       path: '/',
     })
 
-    return NextResponse.json({ images: [output] })
+    return NextResponse.json({ predictionId: prediction.id })
   } catch (error) {
     console.error('Error generating image:', error)
     return NextResponse.json({ error: 'Failed to generate image' }, { status: 500 })
   }
 }
 
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url)
+  const predictionId = searchParams.get('id')
+
+  if (!predictionId) {
+    return NextResponse.json({ error: 'No prediction ID provided' }, { status: 400 })
+  }
+
+  try {
+    const prediction = await replicate.predictions.get(predictionId)
+    
+    if (prediction.status === 'succeeded') {
+      return NextResponse.json({ output: prediction.output })
+    } else if (prediction.status === 'failed') {
+      return NextResponse.json({ error: 'Image generation failed' }, { status: 500 })
+    } else {
+      return NextResponse.json({ status: prediction.status })
+    }
+  } catch (error) {
+    console.error('Error:', error)
+    return NextResponse.json({ error: 'Failed to get prediction status' }, { status: 500 })
+  }
+}
