@@ -43,15 +43,17 @@ export async function POST(req: Request) {
         input: {
           prompt: body.prompt,
           negative_prompt: body.negative_prompt || "",
-          width: body.width || 1024,
-          height: body.height || 1024,
-          num_inference_steps: body.num_inference_steps || 18,
-          guidance_scale: body.guidance_scale || 5,
-          pag_guidance_scale: body.pag_guidance_scale || 2,
+          width: body.width,
+          height: body.height,
+          num_inference_steps: 18,
+          guidance_scale: 5,
+          pag_guidance_scale: 2,
           seed: body.seed,
         }
       }
     )
+
+    console.log('Replicate output:', output)
 
     // Increment usage count
     cookieStore.set('image_generator_usage', (usageCount + 1).toString(), {
@@ -65,3 +67,4 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Failed to generate image' }, { status: 500 })
   }
 }
+
