@@ -2,9 +2,8 @@
 
 import React, { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Slider } from "@/components/ui/slider"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent } from "@/components/ui/card"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Textarea } from "@/components/ui/textarea"
@@ -15,23 +14,21 @@ import AdUnit from './AdUnit'
 
 interface GenerationParams {
   prompt: string
+  image_size: 'portrait' | 'square' | 'landscape'
   negative_prompt: string
-  width: number
-  height: number
-  num_inference_steps: number
-  guidance_scale: number
-  pag_guidance_scale: number
   seed?: number
 }
 
+const IMAGE_SIZES = {
+  portrait: { width: 512, height: 768 },
+  square: { width: 512, height: 512 },
+  landscape: { width: 768, height: 512 },
+}
+
 const initialParams: GenerationParams = {
-  prompt: "a cyberpunk cat with a neon sign that says \"Sana\"",
-  negative_prompt: "",
-  width: 1024,
-  height: 1024,
-  num_inference_steps: 18,
-  guidance_scale: 5,
-  pag_guidance_scale: 2
+  prompt: "",
+  image_size: "square",
+  negative_prompt: ""
 }
 
 export default function AIImageGenerator() {
@@ -82,10 +79,16 @@ export default function AIImageGenerator() {
     setLoadingProgress(0)
 
     try {
+      const apiParams = {
+        ...params,
+        width: IMAGE_SIZES[params.image_size].width,
+        height: IMAGE_SIZES[params.image_size].height,
+      }
+
       const response = await fetch('/api/generate-image', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(params)
+        body: JSON.stringify(apiParams)
       })
 
       const data = await response.json()
@@ -109,9 +112,10 @@ export default function AIImageGenerator() {
       setImageUrl(data.images[0])
       setIsGenerating(false)
       setIsImageLoading(true)
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error:', err)
       setIsGenerating(false)
+      setFlaggedError(err.message)
     }
   }
 
@@ -137,6 +141,17 @@ export default function AIImageGenerator() {
 
   const handleCloseAdOverlay = () => {
     setShowAdOverlay(false)
+  }
+
+  const getImagePreviewStyle = () => {
+    switch (params.image_size) {
+      case 'portrait':
+        return 'aspect-[2/3] w-full max-w-[512px]'
+      case 'landscape':
+        return 'aspect-[3/2] w-full max-w-[768px]'
+      default:
+        return 'aspect-square w-full max-w-[512px]'
+    }
   }
 
   return (
@@ -174,75 +189,20 @@ export default function AIImageGenerator() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="width">Width</Label>
-              <Input
-                id="width"
-                type="number"
-                value={params.width}
-                onChange={(e) => setParams({...params, width: Number(e.target.value)})}
-                min={1}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="height">Height</Label>
-              <Input
-                id="height"
-                type="number"
-                value={params.height}
-                onChange={(e) => setParams({...params, height: Number(e.target.value)})}
-                min={1}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="num_inference_steps">Number of Inference Steps</Label>
-              <Slider
-                id="num_inference_steps"
-                min={1}
-                max={50}
-                step={1}
-                value={[params.num_inference_steps]}
-                onValueChange={(value) => setParams({...params, num_inference_steps: value[0]})}
-              />
-              <span>{params.num_inference_steps}</span>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="guidance_scale">Guidance Scale</Label>
-              <Slider
-                id="guidance_scale"
-                min={1}
-                max={20}
-                step={0.1}
-                value={[params.guidance_scale]}
-                onValueChange={(value) => setParams({...params, guidance_scale: value[0]})}
-              />
-              <span>{params.guidance_scale}</span>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="pag_guidance_scale">PAG Guidance Scale</Label>
-              <Slider
-                id="pag_guidance_scale"
-                min={1}
-                max={20}
-                step={0.1}
-                value={[params.pag_guidance_scale]}
-                onValueChange={(value) => setParams({...params, pag_guidance_scale: value[0]})}
-              />
-              <span>{params.pag_guidance_scale}</span>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="seed">Seed (optional)</Label>
-              <Input
-                id="seed"
-                type="number"
-                value={params.seed || ''}
-                onChange={(e) => setParams({...params, seed: e.target.value ? Number(e.target.value) : undefined})}
-                placeholder="Random seed for reproducible generation"
-              />
+              <Label htmlFor="image_size">Image Size</Label>
+              <Select
+                value={params.image_size}
+                onValueChange={(value: 'portrait' | 'square' | 'landscape') => setParams({...params, image_size: value})}
+              >
+                <SelectTrigger id="image_size">
+                  <SelectValue placeholder="Select image size" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="portrait">Portrait (512x768)</SelectItem>
+                  <SelectItem value="square">Square (512x512)</SelectItem>
+                  <SelectItem value="landscape">Landscape (768x512)</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             {isLimitReached && (
@@ -288,7 +248,7 @@ export default function AIImageGenerator() {
           slot="2181958821"
           style={{ marginBottom: '20px' }}
         />
-        <div className="bg-white rounded-lg shadow flex items-center justify-center w-full max-w-2xl aspect-square relative overflow-hidden">
+        <div className={`bg-white rounded-lg shadow flex items-center justify-center ${getImagePreviewStyle()} relative overflow-hidden`}>
           {(isGenerating || isImageLoading) && (
             <div className="absolute inset-0 bg-gray-200 z-10">
               <Progress value={loadingProgress} className="w-full" />
@@ -298,7 +258,7 @@ export default function AIImageGenerator() {
             </div>
           )}
           {imageUrl && (
-            <div className="relative w-full h-full transition-opacity duration-500 ease-in-out opacity-0" style={{ opacity: isGenerating ? 0 : 1 }}>
+            <div className="relative w-full h-full transition-opacity duration-500 ease-in-out" style={{ opacity: isImageLoading ? 0 : 1 }}>
               <Image
                 src={imageUrl}
                 alt="Generated image"
@@ -328,4 +288,3 @@ export default function AIImageGenerator() {
     </div>
   )
 }
-
