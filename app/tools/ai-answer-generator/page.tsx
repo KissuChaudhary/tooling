@@ -2,6 +2,7 @@ import Head from 'next/head';
 import AnswerGenerator from '@/components/AIAnswerForm';
 import Script from 'next/script';
 import React from 'react';
+import RelatedTools from '@/components/related-tools';
 import { Search, Brain, Clock, Lightbulb, Sparkles } from 'lucide-react';
 import AdUnit from '@/components/AdUnit';
 import ToolEngagement from '@/components/tool-engagement';
@@ -80,13 +81,14 @@ export default function AIAnswerGeneratorPage() {
         })}
       </Script>
       <div className="min-h-screen bg-background text-foreground" style={{ paddingBottom: '3rem' }}>
-        <AIAnswerGenerator />
+        <AnswerGenerator />
         <ToolEngagement toolName="AI Answer Generator" />
         <AdUnit
           client="ca-pub-7915372771416695"
           slot="8441706260"
           style={{ marginBottom: '20px' }}
         />
+        <RelatedTools currentToolLink="/tools/ai-answer-generator" />
         {/* What is AI Answer Generator Section */}
         <section className="py-12 bg-muted">
           <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
