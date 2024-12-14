@@ -9,6 +9,7 @@ import WebSiteSchema from './WebSiteSchema'
 import ScrollToTopButton from '@/components/ScrollToTopButton'
 import { Toaster } from '@/components/ui/toaster'
 import AIPopup from '@/components/ai-popup'
+import { bricolage } from './fonts'
 import RatingPopup from '@/components/RatingPopup'
 
 export const metadata: Metadata = {
@@ -73,7 +74,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={bricolage.variable}>
       <head>
         <meta name="google-site-verification" content="-EToNVqz4RKdu9ZyN3wvrcZ_iMPju9wcG9p0YI4W6sM" />
         <Script
