@@ -11,6 +11,8 @@ import { Toaster } from '@/components/ui/toaster'
 import AIPopup from '@/components/ai-popup'
 import { bricolage } from './fonts'
 import RatingPopup from '@/components/RatingPopup'
+import FloatingAISupport from '@/components/FloatingAISupport'
+
 
 export const metadata: Metadata = {
   title: {
@@ -110,6 +112,7 @@ export default function RootLayout({
             </main>
                 <AIPopup />
                 <ScrollToTopButton />
+                    <FloatingAISupport />
                 <Footer />
         </div>
           <Toaster />
