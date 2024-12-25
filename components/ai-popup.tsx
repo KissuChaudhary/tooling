@@ -68,7 +68,7 @@ export default function AIPopup() {
         
         {/* Footer */}
         <div className="bg-[#6366f1]/10 dark:bg-[#6366f1]/20 p-3 text-center text-sm text-[#6366f1] dark:text-[#6366f1]">
-          🎉 Limited Time Offer: Celebrate for just $8!
+          🎉 Limited Time Offer: Celebrate for just $5!
         </div>
       </motion.div>
     </div>
