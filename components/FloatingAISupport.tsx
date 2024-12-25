@@ -97,7 +97,7 @@ export default function FloatingAISupport() {
   }, [toolsUsed, checkMilestone])
 
   const handleSupport = () => {
-    window.open('https://www.buymeacoffee.com/yourusername', '_blank', 'noopener,noreferrer')
+    window.open('https://buymeacoffee.com/harvansh', '_blank', 'noopener,noreferrer')
   }
 
   const toggleExpanded = () => {
