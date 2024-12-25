@@ -57,7 +57,7 @@ export default function AIPopup() {
             </div>
           </div>
 
-          <Link href="https://www.unrealshot.com/login" passHref>
+          <Link href="https://www.unrealshot.com/ai-christmas-photoshoot" passHref>
             <Button 
               className="w-full bg-[#6366f1] hover:bg-[#4f46e5] text-white font-semibold py-3 px-4 rounded-lg text-sm"
             >
