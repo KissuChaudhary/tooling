@@ -90,9 +90,9 @@ export default function AIPdfSummarizerPage() {
         <section className="py-12 bg-muted">
           <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl font-extrabold sm:text-4xl mb-8 text-center">What is AI PDF Summarizer?</h2>
-            <p className="leading-relaxed text-base text-muted-foreground">
+            <p className="leading-relaxed text-lg text-base text-muted-foreground">
               The AI PDF Summarizer is a cutting-edge tool that simplifies the way you engage with lengthy PDF files. Using advanced AI algorithms, it quickly analyzes your documents to extract key points and generate concise summaries. Whether you’re a student trying to grasp complex research papers, a professional reviewing detailed reports, or a researcher processing large volumes of information, this tool is tailored to save you time and effort.</p>
-         <p>What sets it apart? You don’t need to sign up or go through any complicated setup. The AI PDF Summarizer delivers results in seconds, combining speed with exceptional accuracy. From highlighting critical insights to creating streamlined summaries, it’s your go-to solution for turning overwhelming PDFs into actionable knowledge. </p>
+         <p className="leading-relaxed text-lg text-base text-muted-foreground"> What sets it apart? You don’t need to sign up or go through any complicated setup. The AI PDF Summarizer delivers results in seconds, combining speed with exceptional accuracy. From highlighting critical insights to creating streamlined summaries, it’s your go-to solution for turning overwhelming PDFs into actionable knowledge. </p>
           </div>
 
           {/* Benefits Section */}
