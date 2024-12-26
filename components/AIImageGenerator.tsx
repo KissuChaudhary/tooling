@@ -97,6 +97,10 @@ export default function ImageGenerator() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!params.prompt.trim()) {
+      setFlaggedError("Please provide a prompt for image generation.")
+      return
+    }
     setIsGenerating(true)
     setFlaggedError(null)
     setImageUrl(null)
@@ -169,6 +173,8 @@ export default function ImageGenerator() {
     }
   }
 
+  const isPromptEmpty = params.prompt.trim() === ""
+
   return (
     <div className="flex flex-col md:flex-row min-h-screen">
       <Card className="w-full md:w-[30%] md:h-screen md:overflow-y-auto">
@@ -230,7 +236,7 @@ export default function ImageGenerator() {
             ) : (
               showFlaggedError && flaggedError && (
                 <Alert variant="destructive" className="transition-opacity duration-300 ease-in-out">
-                  <AlertTitle>Content Flagged</AlertTitle>
+                  <AlertTitle>Error</AlertTitle>
                   <AlertDescription>{flaggedError}</AlertDescription>
                 </Alert>
               )
@@ -239,8 +245,8 @@ export default function ImageGenerator() {
             <div className="grid grid-cols-2 gap-2">
               <Button
                 onClick={handleSubmit}
-                disabled={isGenerating || isLimitReached}
-                className="w-full text-primary-foreground py-2 rounded-lg transition-all duration-300"
+                disabled={isGenerating || isLimitReached || isPromptEmpty}
+                className={`w-full text-primary-foreground py-2 rounded-lg transition-all duration-300 ${isPromptEmpty ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 {isGenerating ? 'Generating...' : 'Generate Image'}
               </Button>
