@@ -163,8 +163,8 @@ export default function EnhancedContent() {
             { question: "Is there a file size limit for uploads?", answer: "Yes, you can upload files up to 10 MB for processing." },
           ].map((faq, index) => (
             <AccordionItem key={index} value={`faq-${index}`}>
-              <AccordionTrigger>{faq.question}</AccordionTrigger>
-              <AccordionContent className="text-left">{faq.answer}</AccordionContent>
+              <AccordionTrigger className="text-left">{faq.question}</AccordionTrigger>
+              <AccordionContent>{faq.answer}</AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>
