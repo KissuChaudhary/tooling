@@ -8,7 +8,6 @@ import Footer from '../components/Footer'
 import WebSiteSchema from './WebSiteSchema'
 import ScrollToTopButton from '@/components/ScrollToTopButton'
 import { Toaster } from '@/components/ui/toaster'
-import AIPopup from '@/components/ai-popup'
 import { bricolage } from './fonts'
 import RatingPopup from '@/components/RatingPopup'
 import FloatingAISupport from '@/components/FloatingAISupport'
@@ -110,7 +109,6 @@ export default function RootLayout({
               <SpeedInsights />
                 <RatingPopup />
             </main>
-                <AIPopup />
                 <ScrollToTopButton />
                     <FloatingAISupport />
                 <Footer />
