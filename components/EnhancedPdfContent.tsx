@@ -11,11 +11,10 @@ export default function EnhancedContent() {
       <section>
         <h2 className="text-3xl font-bold mb-6">Unlock the Power of AI for PDF Summaries</h2>
         <p className="text-lg text-muted-foreground mb-4">
-          The AI PDF Summarizer tool is designed to help you quickly extract key insights from lengthy PDF documents. Whether it’s academic research, business reports, or eBooks, this tool provides concise summaries to save your time and effort.
-        </p>
+          Our Free AI PDF Summarizer makes it easy to pull out the most important information from long PDF files. Whether you’re working with research papers, business reports, or eBooks, it creates clear and concise summaries that save you time and effort.  </p>
         <p className="text-lg text-muted-foreground">
-          By leveraging advanced AI algorithms, this tool converts PDF content into easily readable summaries, key points, or highlights. Perfect for students, professionals, and researchers, it ensures you never miss out on important information.
-        </p>
+          With smart AI technology, this tool turns complex content into simple summaries, key points, or highlights you can read in seconds. It’s perfect for students, professionals, and anyone who needs to stay on top of important details without the hassle of reading everything.
+   </p>
       </section>
 
       <section>
@@ -23,11 +22,11 @@ export default function EnhancedContent() {
         <div className="grid gap-6 md:grid-cols-2">
           {[
             { title: "Summarize PDFs Instantly", description: "Generate concise summaries from PDF files in seconds with just a few clicks." },
-            { title: "Text Extraction Made Simple", description: "Effortlessly extract text and main points from scanned or text-based PDF documents." },
-            { title: "Completely Free to Use", description: "Enjoy this tool without any charges, perfect for users across all fields." },
-            { title: "Customizable Summaries", description: "Switch between detailed explanations, bullet-point highlights, or quick overviews." },
-            { title: "AI-Powered Precision", description: "Built with AI, ensuring high accuracy and context-aware summarizations." },
-            { title: "User-Friendly Interface", description: "Experience a simple, intuitive design for hassle-free PDF summarization." },
+            { title: "Text Extraction Made Simple", description: "Pull out key details from both scanned and text-based PDFs without any hassle." },
+            { title: "Completely Free to Use", description: "Use the tool at no cost, making it perfect for everyone, no matter your field." },
+            { title: "Customizable Summaries", description: "Choose how you want your summary—detailed paragraphs, bullet points, or quick overviews." },
+            { title: "AI-Powered Precision", description: "Powered by smart AI, it delivers precise and context-aware summaries every time." },
+            { title: "User-Friendly Interface", description: "Enjoy an easy-to-use interface that makes summarizing PDFs quick and stress-free." },
           ].map((feature, index) => (
             <Card key={index}>
               <CardHeader>
@@ -71,7 +70,7 @@ export default function EnhancedContent() {
       </section>
 
       <section>
-        <h2 className="text-2xl font-semibold mb-6">Why Use This AI PDF Summarizer?</h2>
+        <h2 className="text-2xl font-semibold mb-6">Why Use Saze AI PDF Summarizer?</h2>
         <ul className="space-y-4">
           {[
             { title: "Save Time and Effort", description: "Avoid reading lengthy PDFs by getting summaries within seconds." },
@@ -84,7 +83,7 @@ export default function EnhancedContent() {
               <CheckCircle2 className="h-6 w-6 text-green-500 mr-2 flex-shrink-0" />
               <div>
                 <h3 className="font-medium">{reason.title}</h3>
-                <p className="text-muted-foreground">{reason.description}</p>
+                <p className="text-lg text-muted-foreground">{reason.description}</p>
               </div>
             </li>
           ))}
@@ -110,7 +109,7 @@ export default function EnhancedContent() {
               <CheckCircle2 className="h-6 w-6 text-green-500 mr-2 flex-shrink-0" />
               <div>
                 <h3 className="font-medium">{beneficiary.title}</h3>
-                <p className="text-muted-foreground">{beneficiary.description}</p>
+                <p className="text-muted-foreground text-lg">{beneficiary.description}</p>
               </div>
             </li>
           ))}
@@ -165,7 +164,7 @@ export default function EnhancedContent() {
           ].map((faq, index) => (
             <AccordionItem key={index} value={`faq-${index}`}>
               <AccordionTrigger>{faq.question}</AccordionTrigger>
-              <AccordionContent>{faq.answer}</AccordionContent>
+              <AccordionContent className="text-left">{faq.answer}</AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>
