@@ -153,22 +153,31 @@ export default function EnhancedContent() {
       />
 
       <section>
-        <h2 className="text-2xl font-semibold mb-6">Frequently Asked Questions (FAQs)</h2>
-        <Accordion type="single" collapsible className="w-full">
-          {[
-            { question: "Is the AI PDF Summarizer completely free?", answer: "Yes, this tool is entirely free to use without any hidden charges." },
-            { question: "What types of PDFs are supported?", answer: "Both scanned and text-based PDFs are supported for summarization." },
-            { question: "Are the summaries accurate?", answer: "Our AI ensures highly accurate and context-aware summaries tailored to your needs." },
-            { question: "Can I share the summaries?", answer: "Yes, the summaries can be copied and shared directly from the web." },
-            { question: "Is there a file size limit for uploads?", answer: "Yes, you can upload files up to 10 MB for processing." },
-          ].map((faq, index) => (
-            <AccordionItem key={index} value={`faq-${index}`}>
-              <AccordionTrigger className="text-left">{faq.question}</AccordionTrigger>
-              <AccordionContent>{faq.answer}</AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
-      </section>
+  <h2 className="text-2xl font-semibold mb-6">Frequently Asked Questions (FAQs)</h2>
+  <Accordion type="single" collapsible className="w-full">
+    {[
+      { question: "Is the AI PDF Summarizer completely free?", answer: "Yes, this tool is entirely free to use without any hidden charges." },
+      { question: "What types of PDFs are supported?", answer: "Both scanned and text-based PDFs are supported for summarization." },
+      { question: "Are the summaries accurate?", answer: "Our AI ensures highly accurate and context-aware summaries tailored to your needs." },
+      { question: "Can I share the summaries?", answer: "Yes, the summaries can be copied and shared directly from the web." },
+      { question: "Is there a file size limit for uploads?", answer: "Yes, you can upload files up to 10 MB for processing." },
+      { question: "How fast is the AI PDF summarization process?", answer: "The summarization is typically completed in seconds, depending on the file size." },
+      { question: "Can I use the AI PDF Summarizer on mobile?", answer: "Yes, the tool works seamlessly across all devices, including mobile phones and tablets." },
+      { question: "Does the AI summarize tables and images in PDFs?", answer: "Currently, the AI focuses on text-based content, but it can summarize information from tables." },
+      { question: "How do I upload a PDF for summarization?", answer: "Simply drag and drop your PDF file into the upload area, and the AI will start processing it instantly." },
+      { question: "Can I download the summarized content?", answer: "Yes, you can download the summarized text as a file or copy it directly." },
+    ].map((faq, index) => (
+      <AccordionItem key={index} value={`faq-${index}`}>
+        <AccordionTrigger className="text-left justify-start hover:no-underline">
+          {faq.question}
+        </AccordionTrigger>
+        <AccordionContent className="text-left">
+          {faq.answer}
+        </AccordionContent>
+      </AccordionItem>
+    ))}
+  </Accordion>
+</section>
     </div>
   );
 }
