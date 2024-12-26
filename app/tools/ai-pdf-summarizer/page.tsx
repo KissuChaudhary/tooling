@@ -91,8 +91,8 @@ export default function AIPdfSummarizerPage() {
           <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl font-extrabold sm:text-4xl mb-8 text-center">What is AI PDF Summarizer?</h2>
             <p className="leading-relaxed text-base text-muted-foreground">
-              The AI PDF Summarizer lets you quickly analyze and summarize lengthy PDF files. Powered by advanced AI technology, it helps users extract key highlights and create concise summaries. Perfect for students, professionals, and researchers, this tool is designed for speed and accuracy—no signup required.
-            </p>
+              The AI PDF Summarizer is a cutting-edge tool that simplifies the way you engage with lengthy PDF files. Using advanced AI algorithms, it quickly analyzes your documents to extract key points and generate concise summaries. Whether you’re a student trying to grasp complex research papers, a professional reviewing detailed reports, or a researcher processing large volumes of information, this tool is tailored to save you time and effort.</p>
+         <p>What sets it apart? You don’t need to sign up or go through any complicated setup. The AI PDF Summarizer delivers results in seconds, combining speed with exceptional accuracy. From highlighting critical insights to creating streamlined summaries, it’s your go-to solution for turning overwhelming PDFs into actionable knowledge. </p>
           </div>
 
           {/* Benefits Section */}
@@ -104,27 +104,27 @@ export default function AIPdfSummarizerPage() {
               <BenefitCard
                 icon={<Clock size={24} />}
                 title="Fast Summarization"
-                description="Generate concise summaries in seconds, saving time on skimming long PDFs."
+                description="Get clear summaries in just a few seconds. Skip the hassle of reading through long PDFs and save your time for what matters."
               />
               <BenefitCard
                 icon={<Lightbulb size={24} />}
                 title="Key Highlights"
-                description="Extract the most important points instantly with the dedicated Key Highlights tab."
+                description="Find the most important details right away. The Key Highlights tab pulls out the main ideas so you don’t have to dig through the document."
               />
               <BenefitCard
                 icon={<Book size={24} />}
                 title="Large File Support"
-                description="Easily summarize large documents up to 10MB in size."
+                description="Got a big file? No problem. This tool works with PDFs up to 10MB, making it great for reports, research, or eBooks."
               />
               <BenefitCard
                 icon={<Target size={24} />}
                 title="Custom Length"
-                description="Adjust the summary length with a simple slider to fit your needs."
+                description="Choose how detailed you want your summary. Use a simple slider to get the exact amount of information you need."
               />
               <BenefitCard
                 icon={<Sparkles size={24} />}
                 title="Scanned PDFs"
-                description="Works seamlessly with scanned PDFs for accurate results."
+                description="Even scanned documents are easy to summarize. The Saze AI Free PDF Summarizer Tool reads them accurately and gives you the results you need."
               />
             </div>
           </div>
