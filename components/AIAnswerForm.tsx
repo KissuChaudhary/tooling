@@ -1,6 +1,5 @@
 "use client"
 
-
 import React, { useState } from 'react'
 import AdUnit from '../components/AdUnit'
 import { Loader2, Clipboard, Check, AlertCircle } from 'lucide-react'
