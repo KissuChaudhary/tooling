@@ -3,6 +3,8 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { HarmBlockThreshold, HarmCategory } from "@google/generative-ai";
 import { z } from 'zod';
 import { LRUCache } from 'lru-cache';
+import OpenAI from 'openai';
+import { Filter } from 'bad-words';
 
 // Rate limiting setup
 const rateLimit = new LRUCache<string, number>({
@@ -76,28 +78,52 @@ const RequestSchema = z.object({
   data: z.union([RiddleSolverRequestSchema, RiddleGeneratorRequestSchema, NameCombinerRequestSchema, UsernameGeneratorRequestSchema, WizardNameGeneratorRequestSchema]),
 });
 
-// Content moderation function
+// Initialize OpenAI
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+// Initialize bad-words filter
+const filter = new Filter();
+
+// Enhanced content moderation function
 async function moderateContent(content: string) {
-  const openaiApiKey = process.env.OPENAI_API_KEY;
-  if (!openaiApiKey) {
-    throw new Error('OpenAI API key is not set');
+  try {
+    // Step 1: Use bad-words filter
+    if (filter.isProfane(content)) {
+      return { flagged: true, reason: 'Profanity detected' };
+    }
+
+    // Step 2: Use OpenAI's moderation API
+    const openaiModeration = await openai.moderations.create({
+      input: content,
+    });
+    if (openaiModeration.results[0].flagged) {
+      return { flagged: true, reason: 'Flagged by OpenAI moderation' };
+    }
+
+    // Step 3: Additional custom checks
+    const lowercaseContent = content.toLowerCase();
+    const sensitiveTerms = [
+      'suicide', 'kill', 'murder', 'die', 'death',
+      'abuse', 'assault', 'attack', 'violent', 'weapon',
+      'explicit', 'nude', 'naked', 'sex', 'porn',
+      'drug', 'cocaine', 'heroin', 'meth',
+      'terrorist', 'bomb', 'explosion'
+    ];
+
+    for (const term of sensitiveTerms) {
+      if (lowercaseContent.includes(term)) {
+        return { flagged: true, reason: `Sensitive term detected: ${term}` };
+      }
+    }
+
+    // Content passed all checks
+    return { flagged: false };
+  } catch (error) {
+    console.error('Error in content moderation:', error);
+    throw new Error('Failed to moderate content');
   }
-
-  const response = await fetch('https://api.openai.com/v1/moderations', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${openaiApiKey}`
-    },
-    body: JSON.stringify({ input: content })
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to check content moderation');
-  }
-
-  const result = await response.json();
-  return result.results[0];
 }
 
 export async function POST(request: NextRequest) {
@@ -130,7 +156,7 @@ export async function POST(request: NextRequest) {
   try {
     const moderationResult = await moderateContent(userInput);
     if (moderationResult.flagged) {
-      return NextResponse.json({ error: "Content flagged for abusive or explicit material. Please revise to meet our guidelines." }, { status: 400 });
+      return NextResponse.json({ error: `Content flagged: ${moderationResult.reason}. Please revise your input.` }, { status: 400 });
     }
   } catch (error) {
     console.error('Moderation API error:', error);
@@ -315,3 +341,4 @@ function createWizardNameGeneratorMessages(data: z.infer<typeof WizardNameGenera
       Provide a list of ${numberOfNames} wizard names, one per line.` }
   ];
 }
+
