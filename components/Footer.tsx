@@ -7,16 +7,13 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-foreground"> Download Our App</h3>
-          <Link href="https://play.google.com/store/apps/details?id=com.sazeai.sazeaichat">
               <Image
-                src="/images/google.png"
-                alt="Saze AI App"
+                src="/images/logo.png"
+                alt="Saze AI Logo"
                 width={150} // Set the width of your logo
                 height={50} // Set the height of your logo
                 className="mb-4"
               />
-            </Link>
             <p>
              SazeAI: Your ultimate AI-powered content generator. Create high-quality content effortlessly.
             </p>
