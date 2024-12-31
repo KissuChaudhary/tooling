@@ -57,7 +57,7 @@ export default function Component() {
                 Best AI Tool of 2024
               </p>
               <p className="font-medium text-base mb-2 text-center">
-                on TAAFT.com!
+                contest on TAAFT.com!
               </p>
               <p className="text-xs text-blue-500 italic mb-4">
                 No vote = No free tools. (Just kidding… or am I?)
