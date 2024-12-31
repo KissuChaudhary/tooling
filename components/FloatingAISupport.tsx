@@ -4,14 +4,16 @@ import { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 
 const MESSAGES = [
-  "Enjoying Saze AI? Help us keep the magic flowing!",
-  "Your support powers our innovation. Thank you!",
-  "Together, we're shaping the future of AI. Join us!",
-  "Every contribution fuels new features. Support us!",
-  "Love our tools? Show your appreciation here!",
-  "Help us continue to provide cutting-edge AI for free!",
-  "Be a part of the AI revolution. Support Saze AI today!",
-  "Your support means the world to us. Thank you!",
+  "Enjoying Saze AI? Help me keep the magic flowing!",
+  "Your support powers my innovation. Thank you!",
+  "I'm working hard to make AI accessible to everyone!",
+  "Every contribution helps me add new features!",
+  "Love these tools? Show your appreciation here!",
+  "Help me keep providing cutting-edge AI for free!",
+  "Support my mission to democratize AI technology!",
+  "Your support means everything to me. Thank you!",
+  "I'm a solo developer making AI tools for you!",
+  "Your contribution helps me maintain these tools!",
 ]
 
 export default function FloatingBuyMeACoffee() {
