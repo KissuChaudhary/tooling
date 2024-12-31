@@ -46,7 +46,7 @@ export default function FloatingBuyMeACoffee() {
   }, [])
 
   const handleClick = () => {
-    window.open('https://www.buymeacoffee.com/yourusername', '_blank')
+    window.open('https://buymeacoffee.com/harvansh', '_blank')
   }
 
   return (
