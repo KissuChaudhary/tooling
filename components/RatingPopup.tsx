@@ -3,7 +3,7 @@
 import * as React from "react"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 
-export default function PopupComponent() {
+export default function Component() {
   const [open, setOpen] = React.useState(false)
 
   React.useEffect(() => {
