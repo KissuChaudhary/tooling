@@ -71,14 +71,14 @@ export default function FaceSwapTool() {
     // First check if the response is ok
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({
-        error: `HTTP error! status: ${response.status}`
+        error: `HTTP error, Try Again! status: ${response.status}`
       }))
       throw new Error(errorData.error || 'Face swap failed')
     }
 
     // Then try to parse the JSON
     const data = await response.json().catch(() => {
-      throw new Error('Failed to parse response')
+      throw new Error('Try Again, Failed to parse response')
     })
 
     if (typeof data.result === 'object' && data.result.image) {
