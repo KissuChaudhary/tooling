@@ -52,40 +52,48 @@ export default function FaceSwapTool() {
   }
 
   const handleSwap = async () => {
-    if (!faceImage || !targetImage) return
-    setIsProcessing(true)
-    try {
-      const response = await fetch('/api/face-swap', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          faceImage: faceImage.base64,
-          targetImage: targetImage.base64,
-        }),
-      })
-      const data = await response.json()
-      if (!response.ok) {
-        if (data.isRateLimitExceeded) {
-          setAlertMessage(data.error)
-        } else {
-          throw new Error(data.error || 'Face swap failed')
-        }
-      } else {
-        if (typeof data.result === 'object' && data.result.image) {
-          setSwappedImage(`data:image/jpeg;base64,${data.result.image}`)
-        } else {
-          throw new Error('Invalid response format')
-        }
-      }
-    } catch (error) {
-      console.error('Error during face swap:', error)
-      setAlertMessage(error instanceof Error ? error.message : 'Face swap failed. Please try again.')
-    } finally {
-      setIsProcessing(false)
+  if (!faceImage || !targetImage) return
+  setIsProcessing(true)
+  setAlertMessage(null)
+  
+  try {
+    const response = await fetch('/api/face-swap', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        faceImage: faceImage.base64,
+        targetImage: targetImage.base64,
+      }),
+    })
+
+    // First check if the response is ok
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({
+        error: `HTTP error! status: ${response.status}`
+      }))
+      throw new Error(errorData.error || 'Face swap failed')
     }
+
+    // Then try to parse the JSON
+    const data = await response.json().catch(() => {
+      throw new Error('Failed to parse response')
+    })
+
+    if (typeof data.result === 'object' && data.result.image) {
+      setSwappedImage(`data:image/jpeg;base64,${data.result.image}`)
+    } else {
+      throw new Error('Invalid response format')
+    }
+  } catch (error) {
+    console.error('Error during face swap:', error)
+    setAlertMessage(error instanceof Error ? error.message : 'Face swap failed. Please try again.')
+  } finally {
+    setIsProcessing(false)
   }
+}
+
 
   const resetTool = () => {
     setFaceImage(null)
