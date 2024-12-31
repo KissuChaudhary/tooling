@@ -50,8 +50,8 @@ export default function FloatingBuyMeACoffee() {
   return (
     <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-2 transition-all duration-300">
       {isVisible && (
-        <div className="bg-background text-foreground px-4 py-2 rounded-full shadow-lg animate-float text-sm max-w-[280px]">
-          <p className="font-medium truncate">{message}</p>
+        <div className="bg-background text-foreground px-4 py-2 rounded-full shadow-lg animate-float text-sm max-w-[350px]">
+          <p className="font-medium">{message}</p>
         </div>
       )}
       <div className={`transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
