@@ -183,8 +183,8 @@ export default function FaceSwapTool() {
           />
         ) : (
           <Image
-            src="/placeholder.svg?height=600&width=800"
-            alt="Placeholder Image"
+            src="/ai-face-swap.png"
+            alt="free ai face swap"
             width={800}
             height={600}
             className="rounded-lg"
