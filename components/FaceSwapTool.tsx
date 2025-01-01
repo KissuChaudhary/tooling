@@ -51,7 +51,8 @@ export default function FaceSwapTool() {
     })
   }
 
-const handleSwap = async () => {
+
+ const handleSwap = async () => {
   if (!faceImage || !targetImage) return;
   setIsProcessing(true);
   setAlertMessage(null);
@@ -97,7 +98,6 @@ const handleSwap = async () => {
     setIsProcessing(false);
   }
 }
-
 
 
   const resetTool = () => {
