@@ -51,10 +51,10 @@ export default function FaceSwapTool() {
     })
   }
 
-  const handleSwap = async () => {
-  if (!faceImage || !targetImage) return
-  setIsProcessing(true)
-  setAlertMessage(null)
+const handleSwap = async () => {
+  if (!faceImage || !targetImage) return;
+  setIsProcessing(true);
+  setAlertMessage(null);
   
   try {
     const response = await fetch('/api/face-swap', {
@@ -66,33 +66,38 @@ export default function FaceSwapTool() {
         faceImage: faceImage.base64,
         targetImage: targetImage.base64,
       }),
-    })
+    });
 
-    // First check if the response is ok
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({
-        error: `HTTP error, Try Again! status: ${response.status}`
-      }))
-      throw new Error(errorData.error || 'Face swap failed')
+        error: `HTTP error! status: ${response.status}`
+      }));
+      throw new Error(errorData.error || 'Face swap failed');
     }
 
-    // Then try to parse the JSON
-    const data = await response.json().catch(() => {
-      throw new Error('Try Again, Failed to parse response')
-    })
+    const data = await response.json();
 
     if (typeof data.result === 'object' && data.result.image) {
-      setSwappedImage(`data:image/jpeg;base64,${data.result.image}`)
+      setSwappedImage(`data:image/jpeg;base64,${data.result.image}`);
     } else {
-      throw new Error('Invalid response format')
+      throw new Error('Invalid response format');
     }
   } catch (error) {
-    console.error('Error during face swap:', error)
-    setAlertMessage(error instanceof Error ? error.message : 'Face swap failed. Please try again.')
+    console.error('Error during face swap:', error);
+    let errorMessage = error instanceof Error ? error.message : 'Face swap failed. Please try again.';
+    
+    if (errorMessage.includes('status: 504')) {
+      errorMessage = 'The request timed out. Please try again or use smaller images.';
+    } else if (errorMessage.includes('status: 413')) {
+      errorMessage = 'The image size is too large. Please use smaller images.';
+    }
+    
+    setAlertMessage(errorMessage);
   } finally {
-    setIsProcessing(false)
+    setIsProcessing(false);
   }
 }
+
 
 
   const resetTool = () => {
