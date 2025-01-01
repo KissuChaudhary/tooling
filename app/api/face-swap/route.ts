@@ -18,7 +18,7 @@ function checkRateLimit(ip: string): boolean {
   if (rateData.count >= MAX_USES_PER_DAY) {
     return false
   }
-
+  
   rateData.count++
   rateLimitStore.set(ip, rateData)
   return true
