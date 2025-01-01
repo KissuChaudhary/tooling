@@ -10,7 +10,7 @@ import ScrollToTopButton from '@/components/ScrollToTopButton'
 import { Toaster } from '@/components/ui/toaster'
 import { bricolage } from './fonts'
 import RatingPopup from '@/components/RatingPopup'
-import FloatingAISupport from '@/components/FloatingAISupport'
+import FloatingBuyMeACoffee from '@/components/FloatingAISupport'
 
 
 export const metadata: Metadata = {
@@ -110,7 +110,7 @@ export default function RootLayout({
                 <RatingPopup />
             </main>
                 <ScrollToTopButton />
-                    <FloatingAISupport />
+                    <FloatingBuyMeACoffee />
                 <Footer />
         </div>
           <Toaster />
