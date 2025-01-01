@@ -56,7 +56,7 @@ export default function FloatingBuyMeACoffee() {
   }
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-2 transition-all duration-300">
+    <div className="fixed bottom-4 mb-12 right-4 z-50 flex flex-col items-end gap-2 transition-all duration-300">
       {isVisible && !isMinimized && (
         <div className="bg-background text-foreground px-4 py-2 rounded-full shadow-lg animate-float text-sm max-w-[350px] relative">
           <Button
