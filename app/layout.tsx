@@ -9,7 +9,7 @@ import WebSiteSchema from './WebSiteSchema'
 import ScrollToTopButton from '@/components/ScrollToTopButton'
 import { Toaster } from '@/components/ui/toaster'
 import { bricolage } from './fonts'
-import RatingPopup from '@/components/RatingPopup'
+import AIPopup from '@/components/ai-popup'
 import FloatingBuyMeACoffee from '@/components/FloatingAISupport'
 
 
@@ -107,7 +107,7 @@ export default function RootLayout({
             <main className="flex-grow">
               {children}
               <SpeedInsights />
-                <RatingPopup />
+                <AIPopup />
             </main>
                 <ScrollToTopButton />
                     <FloatingBuyMeACoffee />
