@@ -203,3 +203,7 @@ footer a{
   animation: float 3s ease-in-out infinite;
 }
 
+.writing-mode-vertical {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
