@@ -117,7 +117,7 @@ export default function RootLayout({
         </div>
           <Toaster />
         </Providers>
- <FixedButton text="Get Your Headshots" onClick={() => console.log("Button clicked!")} />
+ <FixedButton />
       </body>
     </html>
   )
