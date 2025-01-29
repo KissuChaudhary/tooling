@@ -1,21 +1,15 @@
 "use client"
 
+import Link from "next/link"
 import { cn } from "@/lib/utils"
-import type { ButtonHTMLAttributes } from "react"
 
-interface FixedButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  text: string
-  className?: string
-}
-
-export function FixedButton({ text, className, ...props }: FixedButtonProps) {
+export function FixedButton() {
   return (
-    <button
+    <Link
+      href="https://www.unrealshot.com"
       className={cn(
         "fixed hidden md:flex items-center gap-2 right-0 top-1/2 -translate-x-5 -translate-y-20 bg-secondary-200 text-black px-4 py-2 rounded-t-lg transform -rotate-90 origin-right border hover:bg-secondary-300 outline-none transition-colors duration-300 text-sm font-medium shadow-lg",
-        className,
       )}
-      {...props}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -30,8 +24,8 @@ export function FixedButton({ text, className, ...props }: FixedButtonProps) {
           clipRule="evenodd"
         />
       </svg>
-      {text}
-    </button>
+      Get Your Headshots
+    </Link>
   )
 }
 
