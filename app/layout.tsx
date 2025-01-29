@@ -11,6 +11,8 @@ import { Toaster } from '@/components/ui/toaster'
 import { bricolage } from './fonts'
 import Component from '@/components/RatingPopup'
 import FloatingBuyMeACoffee from '@/components/FloatingAISupport'
+import { FixedButton } from "@/components/fixed-button"
+
 
 
 export const metadata: Metadata = {
@@ -115,6 +117,7 @@ export default function RootLayout({
         </div>
           <Toaster />
         </Providers>
+ <FixedButton text="Get Your Headshots" onClick={() => console.log("Button clicked!")} />
       </body>
     </html>
   )
