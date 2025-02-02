@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Image, Zap, Star, Volume2, Disc2  } from 'lucide-react'
+import { Image, Zap, Star, Volume2  } from 'lucide-react'
 import { Metadata } from 'next'
 import AdUnit from '../../components/AdUnit'
 
