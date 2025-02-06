@@ -9,7 +9,7 @@ export function FixedButton() {
       href="https://www.unrealshot.com"
       className={cn(
         "fixed flex items-center gap-2 right-0 top-1/2 -translate-x-5 -translate-y-20 bg-gray-200 text-black px-4 py-2 rounded-t-lg transform -rotate-90 origin-right border hover:bg-gray-300 outline-none transition-colors duration-300 text-sm font-medium shadow-lg ",
-     "whitespace-nowrap",
+     "whitespace-nowrap z-[9999]",
       )}
     >
       <svg
