@@ -8,7 +8,8 @@ export function FixedButton() {
     <Link
       href="https://www.unrealshot.com"
       className={cn(
-        "fixed md:flex items-center gap-2 right-0 top-1/2 -translate-x-5 -translate-y-20 bg-gray-200 text-black px-4 py-2 rounded-t-lg transform -rotate-90 origin-right border hover:bg-gray-300 outline-none transition-colors duration-300 text-sm font-medium shadow-lg",
+        "fixed flex items-center gap-2 right-0 top-1/2 -translate-x-5 -translate-y-20 bg-gray-200 text-black px-4 py-2 rounded-t-lg transform -rotate-90 origin-right border hover:bg-gray-300 outline-none transition-colors duration-300 text-sm font-medium shadow-lg ",
+     "whitespace-nowrap",
       )}
     >
       <svg
@@ -16,7 +17,7 @@ export function FixedButton() {
         viewBox="0 0 24 24"
         fill="currentColor"
         aria-hidden="true"
-        className="w-5 h-5"
+        className="w-5 h-5 inline-block"
       >
         <path
           fillRule="evenodd"
@@ -24,7 +25,7 @@ export function FixedButton() {
           clipRule="evenodd"
         />
       </svg>
-      Get Your Headshots
+      <span className="inline-block">Get Your Headshots</span>
     </Link>
   )
 }
