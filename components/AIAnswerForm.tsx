@@ -89,8 +89,8 @@ export default function AnswerGenerator() {
 
   return (
     <div className="max-w-7xl mx-auto p-4 mt-10">
-      <h1 className="text-4xl font-extrabold mb-8 text-center tracking-tight">AI Answer Generator</h1>
-      <p className="text-xl text-center mb-12 max-w-3xl mx-auto">Get Instant, Accurate Answers with Saze AI – Powered by Advanced Language Models.</p>
+      <h1 className="text-4xl font-extrabold mb-8 text-center tracking-tight">AI Answer Generator: Get Instant, Accurate Answers Powered by GPT Technology (Free & Online)</h1>
+      <p className="text-xl text-center mb-12 max-w-3xl mx-auto">Generate precise answers to any question in seconds—no signup, no cost. Perfect for students, professionals, and curious minds. </p>
       <AdUnit 
         client="ca-pub-7915372771416695"
         slot="8441706260"
