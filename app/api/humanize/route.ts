@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
     
     const sanitizedText = DOMPurify.sanitize(text)
 
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" })
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" })
 
     const prompt = `
       As an expert in natural language and human communication, transform the following AI-generated text into a more natural, human-like style. Follow these guidelines:
