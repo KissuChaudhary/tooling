@@ -12,7 +12,7 @@ import { bricolage } from './fonts'
 import Component from '@/components/RatingPopup'
 import FloatingBuyMeACoffee from '@/components/FloatingAISupport'
 import { FixedButton } from "@/components/fixed-button"
-
+import PopupMessage from "@/components/PopupMessage";
 
 
 export const metadata: Metadata = {
@@ -112,6 +112,7 @@ export default function RootLayout({
                 <Component />
             </main>
                 <ScrollToTopButton />
+            <PopupMessage />
                     <FloatingBuyMeACoffee />
                 <Footer />
         </div>
