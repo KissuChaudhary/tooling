@@ -1,23 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { HarmBlockThreshold, HarmCategory } from "@google/generative-ai";
 import { z } from 'zod';
 import { LRUCache } from 'lru-cache';
+import { Filter } from 'bad-words';
 
 // Rate limiting setup
 const rateLimit = new LRUCache<string, number>({
   max: 5000,
-  ttl: 1200,
+  ttl: 1200, // 20 minutes
 });
 
 const getIP = (request: NextRequest) => {
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0]
     || request.headers.get('x-real-ip')
     || request.headers.get('cf-connecting-ip')
-    || request.ip  // This line is causing the error
-    || '0.0.0.0';
+    || '0.0.0.0'; // Removed request.ip as it was causing an error
   return isValidIP(ip) ? ip : '0.0.0.0';
 };
+
 const isValidIP = (ip: string): boolean => {
   const ipv4Regex = /^(\d{1,3}\.){3}\d{1,3}$/;
   const ipv6Regex = /^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$/;
@@ -26,22 +26,47 @@ const isValidIP = (ip: string): boolean => {
 
 const rateLimiter = (ip: string) => {
   const tokenCount = rateLimit.get(ip) || 0;
-  if (tokenCount > 5) return false;
+  if (tokenCount > 5) {
+    console.log(`Rate limit exceeded for IP: ${ip}`);
+    return false;
+  }
   rateLimit.set(ip, tokenCount + 1);
   return true;
 };
 
-const safetySettings = [
-  {
-    category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-    threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
-  },
-  {
-    category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-    threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
-  },
-];
-// Zod schemas for request validation
+// Initialize bad-words filter
+const filter = new Filter();
+
+// Content moderation function
+async function moderateContent(content: string) {
+  try {
+    if (filter.isProfane(content)) {
+      return { flagged: true, reason: 'Profanity detected' };
+    }
+
+    const lowercaseContent = content.toLowerCase();
+    const sensitiveTerms = [
+      'suicide', 'kill', 'murder', 'die', 'death',
+      'abuse', 'assault', 'attack', 'violent', 'weapon',
+      'explicit', 'nude', 'naked', 'sex', 'porn',
+      'drug', 'cocaine', 'heroin', 'meth',
+      'terrorist', 'bomb', 'explosion'
+    ];
+
+    for (const term of sensitiveTerms) {
+      if (lowercaseContent.includes(term)) {
+        return { flagged: true, reason: `Sensitive term detected: ${term}` };
+      }
+    }
+
+    return { flagged: false };
+  } catch (error) {
+    console.error('Error in content moderation:', error);
+    throw new Error('Failed to moderate content');
+  }
+}
+
+// Zod schemas for request validation (unchanged except for RequestSchema)
 const BioRequestSchema = z.object({
   name: z.string(),
   currentRole: z.string(),
@@ -282,92 +307,35 @@ const RizzGeneratorSchema = z.object({
 
 const RequestSchema = z.object({
   tool: z.enum([
-    'aiReviewGenerator',
-    'aiSeoMetaDescriptionGenerator',
-    'aiSloganGenerator',
-    'aiYoutubeTitleGenerator',
-    'aiRealisticInfluencerImagePrompts',
-    'aiCaptionGenerator',
-    'aiBirthdayWishGenerator',
-    'aiLoveLetterWriter', 
-    'linkedinBio', 'linkedinPost', 'linkedinHeadline', 'instagramBio', 'instagramCaption', 
-    'aiEssay', 'aiTextImprover', 'aiStoryGenerator', 'aiPickupLines', 'aiThesisStatement',
-    'aiAnswerGenerator', 'aiMetaphorGenerator', 'aiPoemGenerator', 'aiCharacterGenerator',
-    'aiConclusionGenerator', 'aiHaikuGenerator', 'aiIntroWriter', 'aiLyricGenerator',
-    'aiPlotGenerator', 'aiQuotesGenerator', 'aiRhymeGenerator', 'aiSEOTitleGenerator',
-    'aiParaphrasingTool', 'aiEmailResponseGenerator', 'aiBookTitleGenerator',
-    'aiBackstoryGenerator', 'aiCoverLetterWriter', 'aiLinkedInSummaryGenerator',
-    'aiProductDescriptionGenerator', 'aiPunctuationChecker', 'aiRizzGenerator'
+    'aiReviewGenerator', 'aiSeoMetaDescriptionGenerator', 'aiSloganGenerator', 'aiYoutubeTitleGenerator',
+    'aiRealisticInfluencerImagePrompts', 'aiCaptionGenerator', 'aiBirthdayWishGenerator', 'aiLoveLetterWriter',
+    'linkedinBio', 'linkedinPost', 'linkedinHeadline', 'instagramBio', 'instagramCaption', 'aiEssay',
+    'aiTextImprover', 'aiStoryGenerator', 'aiPickupLines', 'aiThesisStatement', 'aiAnswerGenerator',
+    'aiMetaphorGenerator', 'aiPoemGenerator', 'aiCharacterGenerator', 'aiConclusionGenerator', 'aiHaikuGenerator',
+    'aiIntroWriter', 'aiLyricGenerator', 'aiPlotGenerator', 'aiQuotesGenerator', 'aiRhymeGenerator',
+    'aiSEOTitleGenerator', 'aiParaphrasingTool', 'aiEmailResponseGenerator', 'aiBookTitleGenerator',
+    'aiBackstoryGenerator', 'aiCoverLetterWriter', 'aiLinkedInSummaryGenerator', 'aiProductDescriptionGenerator',
+    'aiPunctuationChecker', 'aiRizzGenerator'
   ]),
-  model: z.enum(['gpt4o', 'gemini']),
   data: z.union([
-    BioRequestSchema,
-    PostRequestSchema,
-    HeadlineRequestSchema,
-    InstagramBioRequestSchema,
-    InstagramCaptionRequestSchema,
-    EssayRequestSchema,
-    TextImproverRequestSchema,
-    StoryRequestSchema,
-    PickupLineRequestSchema,
-    ThesisStatementRequestSchema,
-    AIAnswerSchema,
-    MetaphorGeneratorSchema,
-    PoemGeneratorSchema,
-    CharacterGeneratorSchema,
-    ConclusionGeneratorSchema,
-    HaikuGeneratorSchema,
-    IntroWriterSchema,
-    LyricGeneratorSchema,
-    PlotGeneratorSchema,
-    QuotesGeneratorSchema,
-    RhymeGeneratorSchema,
-    SEOTitleGeneratorSchema,
-    ParaphrasingToolSchema,
-    EmailResponseGeneratorSchema,
-    BookTitleGeneratorSchema,
-    BackstoryGeneratorSchema,
-    CoverLetterWriterSchema,
-    LinkedInSummaryGeneratorSchema,
-    ProductDescriptionGeneratorSchema,
-    PunctuationCheckerSchema,
-    ReviewGeneratorSchema,
-    SeoMetaDescriptionGeneratorSchema,
-    SloganGeneratorSchema,
-    YoutubeTitleGeneratorSchema,
-    RealisticInfluencerImagePromptsSchema,
-    CaptionGeneratorSchema,
-    BirthdayWishGeneratorSchema,
-    LoveLetterWriterSchema,
-    RizzGeneratorSchema
+    BioRequestSchema, PostRequestSchema, HeadlineRequestSchema, InstagramBioRequestSchema,
+    InstagramCaptionRequestSchema, EssayRequestSchema, TextImproverRequestSchema, StoryRequestSchema,
+    PickupLineRequestSchema, ThesisStatementRequestSchema, AIAnswerSchema, MetaphorGeneratorSchema,
+    PoemGeneratorSchema, CharacterGeneratorSchema, ConclusionGeneratorSchema, HaikuGeneratorSchema,
+    IntroWriterSchema, LyricGeneratorSchema, PlotGeneratorSchema, QuotesGeneratorSchema,
+    RhymeGeneratorSchema, SEOTitleGeneratorSchema, ParaphrasingToolSchema, EmailResponseGeneratorSchema,
+    BookTitleGeneratorSchema, BackstoryGeneratorSchema, CoverLetterWriterSchema, LinkedInSummaryGeneratorSchema,
+    ProductDescriptionGeneratorSchema, PunctuationCheckerSchema, ReviewGeneratorSchema,
+    SeoMetaDescriptionGeneratorSchema, SloganGeneratorSchema, YoutubeTitleGeneratorSchema,
+    RealisticInfluencerImagePromptsSchema, CaptionGeneratorSchema, BirthdayWishGeneratorSchema,
+    LoveLetterWriterSchema, RizzGeneratorSchema
   ]),
 });
 
-// New function to check content using OpenAI's moderation API
-async function moderateContent(content: string) {
-  const openaiApiKey = process.env.OPENAI_API_KEY;
-  if (!openaiApiKey) {
-    throw new Error('OpenAI API key is not set');
-  }
-
-  const response = await fetch('https://api.openai.com/v1/moderations', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${openaiApiKey}`
-    },
-    body: JSON.stringify({ input: content })
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to check content moderation');
-  }
-
-  const result = await response.json();
-  return result.results[0];
-}
-
 export async function POST(request: NextRequest) {
+  const requestId = Math.random().toString(36).slice(2); // Unique request ID
+  console.log(`[${requestId}] Processing request`);
+
   // Rate limiting
   const ip = getIP(request);
   if (!rateLimiter(ip)) {
@@ -380,337 +348,160 @@ export async function POST(request: NextRequest) {
     body = await request.json();
     RequestSchema.parse(body);
   } catch (error) {
-    console.error('Validation error:', error);
+    console.error(`[${requestId}] Validation error:`, error);
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
 
-  const { tool, model, data } = body;
+  const { tool, data } = body;
 
   // Combine all user inputs into a single string for moderation
   const userInput = Object.values(data).join(' ');
 
-  // Check content moderation
+  // Check content moderation for input
   try {
     const moderationResult = await moderateContent(userInput);
+    console.log(`[${requestId}] Input moderation:`, moderationResult);
     if (moderationResult.flagged) {
-      return NextResponse.json({ error: "Content flagged for abusive or explicit material. Please revise to meet our guidelines." }, { status: 400 });
+      return NextResponse.json({ error: `Content flagged: ${moderationResult.reason}. Please revise your input.` }, { status: 400 });
     }
   } catch (error) {
-    console.error('Moderation API error:', error);
+    console.error(`[${requestId}] Moderation API error:`, error);
     return NextResponse.json({ error: "Failed to moderate content" }, { status: 500 });
   }
 
   let messages;
-
   switch (tool) {
-    case 'linkedinBio':
-      messages = createLinkedInBioMessages(data);
-      break;
-    case 'linkedinPost':
-      messages = createLinkedInPostMessages(data);
-      break;
-    case 'linkedinHeadline':
-      messages = createLinkedInHeadlineMessages(data);
-      break;
-    case 'instagramBio':
-      messages = createInstagramBioMessages(data);
-      break;
-    case 'instagramCaption':
-      messages = createInstagramCaptionMessages(data);
-      break;
-    case 'aiEssay':
-      messages = createAIEssayMessages(data);
-      break;
-    case 'aiTextImprover':
-      messages = createAITextImproverMessages(data);
-      break;
-    case 'aiStoryGenerator':
-      messages = createAIStoryGeneratorMessages(data);
-      break;
-    case 'aiPickupLines':
-      messages = createAIPickupLinesMessages(data);
-      break;
-    case 'aiThesisStatement':
-      messages = createAIThesisStatementMessages(data);
-      break;
-    case 'aiAnswerGenerator':
-      messages = createAIAnswerGeneratorMessages(data);
-      break;
-    case 'aiMetaphorGenerator':
-      messages = createAIMetaphorGeneratorMessages(data);
-      break;
-    case 'aiPoemGenerator':
-      messages = createAIPoemGeneratorMessages(data);
-      break;
-    case 'aiCharacterGenerator':
-      messages = createAICharacterGeneratorMessages(data);
-      break;
-    case 'aiConclusionGenerator':
-      messages = createAIConclusionGeneratorMessages(data);
-      break;
-    case 'aiHaikuGenerator':
-      messages = createAIHaikuGeneratorMessages(data);
-      break;
-    case 'aiIntroWriter':
-      messages = createAIIntroWriterMessages(data);
-      break;
-    case 'aiLyricGenerator':
-      messages = createAILyricGeneratorMessages(data);
-      break;
-    case 'aiPlotGenerator':
-      messages = createAIPlotGeneratorMessages(data);
-      break;
-    case 'aiQuotesGenerator':
-      messages = createAIQuotesGeneratorMessages(data);
-      break;
-    case 'aiRhymeGenerator':
-      messages = createAIRhymeGeneratorMessages(data);
-      break;
-    case 'aiSEOTitleGenerator':
-      messages = createAISEOTitleGeneratorMessages(data);
-      break;
-    case 'aiParaphrasingTool':
-      messages = createAIParaphrasingToolMessages(data);
-      break;
-    case 'aiEmailResponseGenerator':
-      messages = createAIEmailResponseGeneratorMessages(data);
-      break;
-    case 'aiBookTitleGenerator':
-      messages = createAIBookTitleGeneratorMessages(data);
-      break;
-    case 'aiBackstoryGenerator':
-      messages = createAIBackstoryGeneratorMessages(data);
-      break;
-    case 'aiCoverLetterWriter':
-      messages = createAICoverLetterWriterMessages(data);
-      break;
-    case 'aiLinkedInSummaryGenerator':
-      messages = createAILinkedInSummaryGeneratorMessages(data);
-      break;
-    case 'aiProductDescriptionGenerator':
-      messages = createAIProductDescriptionGeneratorMessages(data);
-      break;
-    case 'aiPunctuationChecker':
-      messages = createAIPunctuationCheckerMessages(data);
-      break;
-    case 'aiReviewGenerator':
-      messages = createReviewGeneratorMessages(data);
-      break;
-    case 'aiSeoMetaDescriptionGenerator':
-      messages = createSeoMetaDescriptionGeneratorMessages(data);
-      break;
-    case 'aiSloganGenerator':
-      messages = createSloganGeneratorMessages(data);
-      break;
-    case 'aiYoutubeTitleGenerator':
-      messages = createYoutubeTitleGeneratorMessages(data);
-      break;
-    case 'aiRealisticInfluencerImagePrompts':
-      messages = createRealisticInfluencerImagePromptsMessages(data);
-      break;
-    case 'aiCaptionGenerator':
-      messages = createCaptionGeneratorMessages(data);
-      break;
-    case 'aiBirthdayWishGenerator':
-      messages = createBirthdayWishGeneratorMessages(data);
-      break;
-    case 'aiLoveLetterWriter':
-      messages = createLoveLetterWriterMessages(data);
-      break;
-      case 'aiRizzGenerator':
-      messages = createRizzGeneratorMessages(data);
-      break;
-    default:
-      return NextResponse.json({ error: "Invalid tool specified" }, { status: 400 });
+    case 'linkedinBio': messages = createLinkedInBioMessages(data); break;
+    case 'linkedinPost': messages = createLinkedInPostMessages(data); break;
+    case 'linkedinHeadline': messages = createLinkedInHeadlineMessages(data); break;
+    case 'instagramBio': messages = createInstagramBioMessages(data); break;
+    case 'instagramCaption': messages = createInstagramCaptionMessages(data); break;
+    case 'aiEssay': messages = createAIEssayMessages(data); break;
+    case 'aiTextImprover': messages = createAITextImproverMessages(data); break;
+    case 'aiStoryGenerator': messages = createAIStoryGeneratorMessages(data); break;
+    case 'aiPickupLines': messages = createAIPickupLinesMessages(data); break;
+    case 'aiThesisStatement': messages = createAIThesisStatementMessages(data); break;
+    case 'aiAnswerGenerator': messages = createAIAnswerGeneratorMessages(data); break;
+    case 'aiMetaphorGenerator': messages = createAIMetaphorGeneratorMessages(data); break;
+    case 'aiPoemGenerator': messages = createAIPoemGeneratorMessages(data); break;
+    case 'aiCharacterGenerator': messages = createAICharacterGeneratorMessages(data); break;
+    case 'aiConclusionGenerator': messages = createAIConclusionGeneratorMessages(data); break;
+    case 'aiHaikuGenerator': messages = createAIHaikuGeneratorMessages(data); break;
+    case 'aiIntroWriter': messages = createAIIntroWriterMessages(data); break;
+    case 'aiLyricGenerator': messages = createAILyricGeneratorMessages(data); break;
+    case 'aiPlotGenerator': messages = createAIPlotGeneratorMessages(data); break;
+    case 'aiQuotesGenerator': messages = createAIQuotesGeneratorMessages(data); break;
+    case 'aiRhymeGenerator': messages = createAIRhymeGeneratorMessages(data); break;
+    case 'aiSEOTitleGenerator': messages = createAISEOTitleGeneratorMessages(data); break;
+    case 'aiParaphrasingTool': messages = createAIParaphrasingToolMessages(data); break;
+    case 'aiEmailResponseGenerator': messages = createAIEmailResponseGeneratorMessages(data); break;
+    case 'aiBookTitleGenerator': messages = createAIBookTitleGeneratorMessages(data); break;
+    case 'aiBackstoryGenerator': messages = createAIBackstoryGeneratorMessages(data); break;
+    case 'aiCoverLetterWriter': messages = createAICoverLetterWriterMessages(data); break;
+    case 'aiLinkedInSummaryGenerator': messages = createAILinkedInSummaryGeneratorMessages(data); break;
+    case 'aiProductDescriptionGenerator': messages = createAIProductDescriptionGeneratorMessages(data); break;
+    case 'aiPunctuationChecker': messages = createAIPunctuationCheckerMessages(data); break;
+    case 'aiReviewGenerator': messages = createReviewGeneratorMessages(data); break;
+    case 'aiSeoMetaDescriptionGenerator': messages = createSeoMetaDescriptionGeneratorMessages(data); break;
+    case 'aiSloganGenerator': messages = createSloganGeneratorMessages(data); break;
+    case 'aiYoutubeTitleGenerator': messages = createYoutubeTitleGeneratorMessages(data); break;
+    case 'aiRealisticInfluencerImagePrompts': messages = createRealisticInfluencerImagePromptsMessages(data); break;
+    case 'aiCaptionGenerator': messages = createCaptionGeneratorMessages(data); break;
+    case 'aiBirthdayWishGenerator': messages = createBirthdayWishGeneratorMessages(data); break;
+    case 'aiLoveLetterWriter': messages = createLoveLetterWriterMessages(data); break;
+    case 'aiRizzGenerator': messages = createRizzGeneratorMessages(data); break;
+    default: return NextResponse.json({ error: "Invalid tool specified" }, { status: 400 });
   }
 
   try {
-    let content;
-    if (model === 'gpt4o') {
-      content = await handleOpenAIRequest(messages);
-    } else if (model === 'gemini') {
-      content = await handleGeminiRequest(messages);
-    } else {
-      throw new Error('Invalid model specified');
-    }
+    const content = await handleGeminiRequest(messages, requestId);
 
-    // Moderate the generated content as well
-    try {
-      const generatedContentModerationResult = await moderateContent(content);
-      if (generatedContentModerationResult.flagged) {
-        return NextResponse.json({ error: "Content flagged for abusive or explicit material. Please revise to meet our guidelines." }, { status: 400 });
-      }
-    } catch (error) {
-      console.error('Generated content moderation API error:', error);
-      return NextResponse.json({ error: "Failed to moderate generated content" }, { status: 500 });
-    }
+
 
     // Return appropriate response based on tool type
+    let response;
     switch (tool) {
-      case 'linkedinBio':
-      case 'instagramBio':
-        return NextResponse.json({ bio: content });
-      case 'linkedinPost':
-        return NextResponse.json({ post: content });
-      case 'linkedinHeadline':
-        return NextResponse.json({ headline: content });
-      case 'instagramCaption':
-        return NextResponse.json({ caption: content });
-      case 'aiEssay':
-        return NextResponse.json({ essay: content });
-      case 'aiTextImprover':
-        return NextResponse.json({ improvedText: content });
-      case 'aiStoryGenerator':
-        return NextResponse.json({ story: content });
-      case 'aiPickupLines':
-        return NextResponse.json({ pickupLine: content.trim() });
-      case 'aiThesisStatement':
-        return NextResponse.json({ thesisStatement: content });
-      case 'aiAnswerGenerator':
-        return NextResponse.json({ answer: content });
-      case 'aiMetaphorGenerator':
-        return NextResponse.json({ metaphor: content });
-      case 'aiPoemGenerator':
-        return NextResponse.json({ poem: content });
-      case 'aiCharacterGenerator':
-        return NextResponse.json({ character: content });
-      case 'aiConclusionGenerator':
-        return NextResponse.json({ conclusion: content });
-      case 'aiHaikuGenerator':
-        return NextResponse.json({ haiku: content });
-      case 'aiIntroWriter':
-        return NextResponse.json({ introduction: content });
-      case 'aiLyricGenerator':
-        return NextResponse.json({ lyrics: content });
-      case 'aiPlotGenerator':
-        return NextResponse.json({ plot: content });
-      case 'aiQuotesGenerator':
-        return NextResponse.json({ quotes: content });
-      case 'aiRhymeGenerator':
-        return NextResponse.json({ rhymes: content });
-      case 'aiSEOTitleGenerator':
-        return NextResponse.json({ seoTitle: content });
-      case 'aiParaphrasingTool':
-        return NextResponse.json({ paraphrasedText: content });
-      case 'aiEmailResponseGenerator':
-        return NextResponse.json({ emailResponse: content });
-      case 'aiBookTitleGenerator':
-        return NextResponse.json({ bookTitle: content });
-      case 'aiBackstoryGenerator':
-        return NextResponse.json({ backstory: content });
-      case 'aiCoverLetterWriter':
-        return NextResponse.json({ coverLetter: content });
-      case 'aiLinkedInSummaryGenerator':
-        return NextResponse.json({ linkedInSummary: content });
-      case 'aiProductDescriptionGenerator':
-        return NextResponse.json({ productDescription: content });
-      case 'aiPunctuationChecker':
-        return NextResponse.json({ correctedText: content });
-      case 'aiReviewGenerator':
-        return NextResponse.json({ review: content });
-      case 'aiSeoMetaDescriptionGenerator':
-        return NextResponse.json({ metaDescription: content });
-      case 'aiSloganGenerator':
-        return NextResponse.json({ slogan: content });
-      case 'aiYoutubeTitleGenerator':
-        return NextResponse.json({ youtubeTitle: content });
-      case 'aiRealisticInfluencerImagePrompts':
-        return NextResponse.json({ imagePrompt: content });
-      case 'aiCaptionGenerator':
-        return NextResponse.json({ caption: content });
-      case 'aiBirthdayWishGenerator':
-        return NextResponse.json({ birthdayWish: content });
-      case 'aiLoveLetterWriter':
-        return NextResponse.json({ loveLetter: content });
-      case 'aiRizzGenerator':
-        return NextResponse.json({ rizz: content });
-      default:
-        throw new Error(`Unsupported tool: ${tool}`);
+      case 'linkedinBio': case 'instagramBio': response = { bio: content }; break;
+      case 'linkedinPost': response = { post: content }; break;
+      case 'linkedinHeadline': response = { headline: content }; break;
+      case 'instagramCaption': case 'aiCaptionGenerator': response = { caption: content }; break;
+      case 'aiEssay': response = { essay: content }; break;
+      case 'aiTextImprover': response = { improvedText: content }; break;
+      case 'aiStoryGenerator': response = { story: content }; break;
+      case 'aiPickupLines': response = { pickupLine: content.trim() }; break;
+      case 'aiThesisStatement': response = { thesisStatement: content }; break;
+      case 'aiAnswerGenerator': response = { answer: content }; break;
+      case 'aiMetaphorGenerator': response = { metaphor: content }; break;
+      case 'aiPoemGenerator': response = { poem: content }; break;
+      case 'aiCharacterGenerator': response = { character: content }; break;
+      case 'aiConclusionGenerator': response = { conclusion: content }; break;
+      case 'aiHaikuGenerator': response = { haiku: content }; break;
+      case 'aiIntroWriter': response = { introduction: content }; break;
+      case 'aiLyricGenerator': response = { lyrics: content }; break;
+      case 'aiPlotGenerator': response = { plot: content }; break;
+      case 'aiQuotesGenerator': response = { quotes: content }; break;
+      case 'aiRhymeGenerator': response = { rhymes: content }; break;
+      case 'aiSEOTitleGenerator': response = { seoTitle: content }; break;
+      case 'aiParaphrasingTool': response = { paraphrasedText: content }; break;
+      case 'aiEmailResponseGenerator': response = { emailResponse: content }; break;
+      case 'aiBookTitleGenerator': response = { bookTitle: content }; break;
+      case 'aiBackstoryGenerator': response = { backstory: content }; break;
+      case 'aiCoverLetterWriter': response = { coverLetter: content }; break;
+      case 'aiLinkedInSummaryGenerator': response = { linkedInSummary: content }; break;
+      case 'aiProductDescriptionGenerator': response = { productDescription: content }; break;
+      case 'aiPunctuationChecker': response = { correctedText: content }; break;
+      case 'aiReviewGenerator': response = { review: content }; break;
+      case 'aiSeoMetaDescriptionGenerator': response = { metaDescription: content }; break;
+      case 'aiSloganGenerator': response = { slogan: content }; break;
+      case 'aiYoutubeTitleGenerator': response = { youtubeTitle: content }; break;
+      case 'aiRealisticInfluencerImagePrompts': response = { imagePrompt: content }; break;
+      case 'aiBirthdayWishGenerator': response = { birthdayWish: content }; break;
+      case 'aiLoveLetterWriter': response = { loveLetter: content }; break;
+      case 'aiRizzGenerator': response = { rizz: content }; break;
+      default: throw new Error(`Unsupported tool: ${tool}`);
     }
-    
-} catch (error) {
-    console.error('Error details:', {
+
+    console.log(`[${requestId}] Response sent:`, response);
+    return NextResponse.json(response);
+  } catch (error) {
+    console.error(`[${requestId}] Error details:`, {
       message: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,
-      tool,
-      model
+      tool
     });
-    
-    // Return a user-friendly error message
-    let userErrorMessage = 'Uhhh... Something went wrong. Please try switching the model at top.';
-    
-    // Customize the message based on the error type or known error patterns
-    if (error instanceof Error && error.message.includes('SAFETY')) {
-      userErrorMessage = 'Content flagged for abusive or explicit material. Please revise to meet our guidelines.';
-    }
-    
-    return NextResponse.json({ 
-      error: userErrorMessage 
-    }, { 
-      status: 500 
-    });
-}
-
-  
-}
-
-async function handleOpenAIRequest(messages: any[]) {
-  const openaiApiKey = process.env.OPENAI_API_KEY;
-  if (!openaiApiKey) {
-    throw new Error('OpenAI API key is not set');
+    return NextResponse.json({ error: `An error occurred while using the ${tool}. Please try again.` }, { status: 500 });
   }
-
-  const response = await fetch('https://api.openai.com/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${openaiApiKey}`
-    },
-    body: JSON.stringify({
-      model: "gpt-4o-mini",
-      messages: messages,
-      max_tokens: 2000
-    })
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({ error: 'Failed to parse error response' }));
-    console.error('OpenAI API error:', errorData);
-    throw new Error(`OpenAI API error: ${JSON.stringify(errorData)}`);
-  }
-
-  const responseData = await response.json();
-  return responseData.choices[0].message.content.trim();
 }
 
-async function handleGeminiRequest(messages: any[]) {
+async function handleGeminiRequest(messages: any[], requestId: string) {
   const geminiApiKey = process.env.GEMINI_API_KEY;
   if (!geminiApiKey) {
     throw new Error('Gemini API key is not set');
   }
 
   const genAI = new GoogleGenerativeAI(geminiApiKey);
-  const geminiModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash", safetySettings: safetySettings });
+  const geminiModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash" }); // Removed safetySettings
 
   const prompt = messages[1].content;
-  console.log('Sending prompt to Gemini:', prompt);
-  
+  console.log(`[${requestId}] Sending prompt to Gemini:`, prompt);
+
   const result = await geminiModel.generateContent(prompt);
   if (!result) {
     throw new Error('No response from Gemini');
   }
-  
+
   const response = await result.response;
   const content = response.text().trim();
 
   if (!content) {
     throw new Error('Empty response from Gemini');
   }
-  
-  console.log('Received response from Gemini:', content);
+
+  console.log(`[${requestId}] Full Gemini response:`, content);
   return content;
 }
 
+// Message creation functions (unchanged)
 function createLinkedInBioMessages(data: z.infer<typeof BioRequestSchema>) {
   const { name, currentRole, experience, skills, goals } = data;
   return [
@@ -1100,21 +891,14 @@ function createLoveLetterWriterMessages(data: z.infer<typeof LoveLetterWriterSch
 function createRizzGeneratorMessages(data: z.infer<typeof RizzGeneratorSchema>) {
   const { target, tone, context, personalDetails, language, specificCompliments } = data;
   return [
-    { 
-      role: "system", 
-      content: "You are an expert in writing short, direct, and engaging rizz lines based on the user's input." 
-    },
-    { 
-      role: "user", 
-      content: `write 5 short rizz line based on the following:
+    { role: "system", content: "You are an expert in writing short, direct, and engaging rizz lines based on the user's input." },
+    { role: "user", content: `write 5 short rizz line based on the following:
         - Context: ${context}
         - Tone: ${tone}
         - Target: ${target}
         - Language: ${language}
         - Personal Details: ${personalDetails}
         - Compliments: ${specificCompliments}
-        Keep them under 200 characters and make them catchy, and to the point.`
-    }
+        Keep them under 200 characters and make them catchy, and to the point.` }
   ];
 }
-

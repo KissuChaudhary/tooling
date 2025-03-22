@@ -1,9 +1,10 @@
+// app/tools/ai-username-generator/page.tsx
 import UsernameGenerator from '@/components/UsernameGenerator';
 import ToolEngagement from '@/components/tool-engagement';
 import Head from 'next/head';
 import Script from 'next/script';
-import RelatedTools from '@/components/related-tools'
-import AdUnit from '@/components/AdUnit'
+import RelatedTools from '@/components/related-tools';
+import AdUnit from '@/components/AdUnit';
 import { User, Sparkles, Clock, Target, Fingerprint } from 'lucide-react';
 
 export const metadata = {
