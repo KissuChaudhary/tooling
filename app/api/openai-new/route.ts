@@ -184,7 +184,7 @@ export async function POST(request: NextRequest) {
 
   // Authentication check
   const authHeader = request.headers.get('authorization');
-  const { data: { user }, error: authError } = await supabase.auth.getUser(authHeader?.replace('Bearer ', '') || '');
+  const { data: { user } } = await supabase.auth.getUser(authHeader?.replace('Bearer ', '') || '');
   const userId = user?.id;
   const fingerprint = getFingerprint(request); // For logging only
 

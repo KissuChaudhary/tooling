@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useTheme } from 'next-themes';
 import { useState, useEffect } from 'react';
-import { Moon, Sun, Menu, X, Search, User, LogOut } from 'lucide-react';
+import { Moon, Sun, Menu, X, Search, LogOut } from 'lucide-react';
 import ToolSearch from './ToolSearch';
 import { createClient } from '@/utils/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -18,7 +18,6 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import LoginPopup from '@/components/LoginPopup';
 import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
 import type { Session } from '@supabase/supabase-js';
 
 export default function Header({ session }: { session: Session | null }) {
@@ -32,7 +31,6 @@ export default function Header({ session }: { session: Session | null }) {
   const [redirectUrl, setRedirectUrl] = useState<string>('');
   const [isSigningOut, setIsSigningOut] = useState<boolean>(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!session);
-  const router = useRouter();
   const supabase = createClient();
 
   useEffect(() => {

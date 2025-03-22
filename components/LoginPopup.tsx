@@ -27,23 +27,22 @@ export default function LoginPopup({ open, onOpenChange, redirectUrl }: LoginPop
     const url = redirectUrl || `${window.location.pathname}` || '/';
     setFinalRedirectUrl(url);
     console.log('LoginPopup - finalRedirectUrl:', url);
-
-    // Reset form state when the popup closes
+  
     if (!open) {
+      window.location.href = url; // Example use case (redirect when popup closes)
       setEmail('');
       setError('');
       setMessage('');
       setIsLoading(false);
     }
-
-    // Automatically close the popup after 5 seconds if a message is shown
     if (message) {
       const timer = setTimeout(() => {
         onOpenChange(false);
-      }, 5000); // 5 seconds
+      }, 5000);
       return () => clearTimeout(timer);
     }
   }, [open, redirectUrl, message, onOpenChange]);
+  
 
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
