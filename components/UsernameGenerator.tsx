@@ -6,13 +6,16 @@ import { Loader2, Clipboard, Check, AlertCircle, Plus, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import RequireAuth from '@/components/RequireAuth';
-import { getSession } from '@/lib/supabase'; // Import getSession
-import { useRouter } from 'next/navigation';
 import AdUnit from '@/components/AdUnit';
+import { Session } from '@supabase/supabase-js';
+import { createClient } from '@/utils/supabase/client';
 
+interface UsernameGeneratorProps {
+  session: Session | null;
+}
 
 interface FormData {
   interests: string[];
@@ -24,8 +27,7 @@ interface Errors {
   [key: string]: string;
 }
 
-export default function UsernameGenerator() {
-  const router = useRouter();
+export default function UsernameGenerator({ session }: UsernameGeneratorProps) {
   const [formData, setFormData] = useState<FormData>({
     interests: [''],
     style: 'fun',
@@ -36,7 +38,61 @@ export default function UsernameGenerator() {
   const [copied, setCopied] = useState<boolean>(false);
   const [errors, setErrors] = useState<Errors>({});
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
   const [rateLimitExceeded, setRateLimitExceeded] = useState<boolean>(false);
+  const supabase = createClient();
+
+  // Check authentication state and fetch access token
+  useEffect(() => {
+    const checkAuth = async () => {
+      // First, try using the server-side session if available
+      let authenticated = false;
+      if (session?.access_token) {
+        console.log('UsernameGenerator: Using server-side session access token');
+        const { data, error } = await supabase.auth.getUser(session.access_token);
+        console.log('UsernameGenerator: getUser with session token result:', { data, error });
+        authenticated = !error && !!data.user;
+        if (authenticated) {
+          setAccessToken(session.access_token);
+        }
+      }
+
+      // If not authenticated, fall back to client-side session
+      if (!authenticated) {
+        console.log('UsernameGenerator: Falling back to client-side session');
+        const { data, error } = await supabase.auth.getUser();
+        console.log('UsernameGenerator: getUser client-side result:', { data, error });
+        authenticated = !error && !!data.user;
+        if (authenticated) {
+          const { data: { session } } = await supabase.auth.getSession();
+          setAccessToken(session?.access_token || null);
+        }
+      }
+
+      setIsAuthenticated(authenticated);
+    };
+
+    checkAuth();
+
+    // Listen for auth state changes
+    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, newSession) => {
+      console.log('UsernameGenerator: onAuthStateChange event:', event, 'newSession:', newSession);
+      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+        const { data, error } = await supabase.auth.getUser();
+        console.log('UsernameGenerator: getUser in onAuthStateChange result:', { data, error });
+        const authenticated = !error && !!data.user;
+        setIsAuthenticated(authenticated);
+        setAccessToken(newSession?.access_token || null);
+      } else if (event === 'SIGNED_OUT') {
+        setIsAuthenticated(false);
+        setAccessToken(null);
+      }
+    });
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, [session]);
 
   // Rate limit window (20 minutes in milliseconds)
   const RATE_LIMIT_WINDOW = 20 * 60 * 1000;
@@ -51,14 +107,6 @@ export default function UsernameGenerator() {
       return () => clearTimeout(timer);
     }
   }, [rateLimitExceeded]);
-  useEffect(() => {
-    const hash = window.location.hash;
-    if (hash) {
-      // Tokens are in the URL fragment—log them (for debugging) and clear
-      console.log('Found tokens in URL:', hash);
-      window.history.replaceState({}, document.title, window.location.pathname);
-    }
-  }, []);
 
   const handleInterestChange = (index: number, value: string) => {
     const newInterests = [...formData.interests];
@@ -88,7 +136,10 @@ export default function UsernameGenerator() {
     e.preventDefault();
     if (!validateForm()) return;
 
-    if (!isAuthenticated) return;
+    if (!isAuthenticated) {
+      setErrors({ submit: 'Please login to generate usernames' });
+      return;
+    }
 
     setIsLoading(true);
     setErrors({});
@@ -100,7 +151,7 @@ export default function UsernameGenerator() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${(await getSession())?.access_token}`,
+          'Authorization': `Bearer ${accessToken || ''}`,
         },
         body: JSON.stringify({
           tool: 'aiUsernameGenerator',
@@ -135,13 +186,16 @@ export default function UsernameGenerator() {
   return (
     <div className="max-w-7xl mx-auto p-4 mt-10">
       <h1 className="text-4xl font-extrabold mb-8 text-center tracking-tight">Free AI Username Generator</h1>
-      <p className="text-xl text-center mb-12 max-w-3xl mx-auto">Generate unique and creative usernames based on your interests and style preferences with our username generator ai.</p>
-      <AdUnit 
-          client="ca-pub-7915372771416695"
-          slot="8441706260"
-          style={{ marginBottom: '20px' }}
-        />
-      <RequireAuth onAuthChange={setIsAuthenticated} />
+      <p className="text-xl text-center mb-12 max-w-3xl mx-auto">
+        Generate unique and creative usernames based on your interests and style preferences with our username generator AI.
+      </p>
+      <AdUnit
+        client="ca-pub-7915372771416695"
+        slot="8441706260"
+        style={{ marginBottom: '20px' }}
+      />
+      {/* Keep RequireAuth as a UI alert, but don't use it for access control */}
+      {!isAuthenticated && <RequireAuth session={session} onAuthChange={() => {}} />}
 
       <div className="flex flex-col md:flex-row gap-8">
         <Card className="w-full md:w-1/2">
@@ -151,7 +205,7 @@ export default function UsernameGenerator() {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <Label htmlFor="interests" className="text-sm font-medium text-gray-400">
+                <Label htmlFor="interests" className="text-sm font-medium">
                   Interests
                 </Label>
                 {formData.interests.map((interest, index) => (
@@ -194,12 +248,14 @@ export default function UsernameGenerator() {
                 )}
               </div>
               <div>
-                <Label htmlFor="style" className="text-sm font-medium text-gray-400">
+                <Label htmlFor="style" className="text-sm font-medium">
                   Style
                 </Label>
                 <Select
                   value={formData.style}
-                  onValueChange={(value: 'fun' | 'professional' | 'creative' | 'gaming') => setFormData(prev => ({ ...prev, style: value }))}
+                  onValueChange={(value: 'fun' | 'professional' | 'creative' | 'gaming') =>
+                    setFormData(prev => ({ ...prev, style: value }))
+                  }
                 >
                   <SelectTrigger className="w-full mt-1">
                     <SelectValue placeholder="Select style" />
@@ -213,7 +269,7 @@ export default function UsernameGenerator() {
                 </Select>
               </div>
               <div>
-                <Label htmlFor="numberOfUsernames" className="text-sm font-medium text-gray-400">
+                <Label htmlFor="numberOfUsernames" className="text-sm font-medium">
                   Number of Usernames
                 </Label>
                 <Select
@@ -230,7 +286,7 @@ export default function UsernameGenerator() {
                   </SelectContent>
                 </Select>
               </div>
-              <Button type="submit" className="w-full" disabled={isLoading || rateLimitExceeded || !isAuthenticated}>
+              <Button type="submit" className="w-full" disabled={isLoading || rateLimitExceeded}>
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -238,8 +294,6 @@ export default function UsernameGenerator() {
                   </>
                 ) : rateLimitExceeded ? (
                   'Rate Limit Exceeded'
-                ) : !isAuthenticated ? (
-                  'Login to Generate'
                 ) : (
                   'Generate Usernames'
                 )}
@@ -264,7 +318,7 @@ export default function UsernameGenerator() {
                 <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-md mb-4 max-h-96 overflow-y-auto">
                   <ul className="list-disc list-inside">
                     {generatedUsernames.map((username, index) => (
-                      <li key={index} className="mb-2 text-gray-900 dark:text-gray-100">{username}</li>
+                      <li key={index} className="mb-2">{username}</li>
                     ))}
                   </ul>
                 </div>

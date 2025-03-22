@@ -1,9 +1,12 @@
 // components/LoginPopup.tsx
+"use client";
+
 import React, { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { useToast } from "@/components/ui/use-toast";
 
 interface LoginPopupProps {
   open: boolean;
@@ -17,34 +20,51 @@ export default function LoginPopup({ open, onOpenChange, redirectUrl }: LoginPop
   const [message, setMessage] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [finalRedirectUrl, setFinalRedirectUrl] = useState<string>('');
+  const supabase = createClient();
+  const { toast } = useToast();
 
   useEffect(() => {
     const url = redirectUrl || `${window.location.pathname}` || '/';
     setFinalRedirectUrl(url);
     console.log('LoginPopup - finalRedirectUrl:', url);
-  }, [redirectUrl]);
+
+    // Reset form state when the popup closes
+    if (!open) {
+      setEmail('');
+      setError('');
+      setMessage('');
+      setIsLoading(false);
+    }
+
+    // Automatically close the popup after 5 seconds if a message is shown
+    if (message) {
+      const timer = setTimeout(() => {
+        onOpenChange(false);
+      }, 5000); // 5 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [open, redirectUrl, message, onOpenChange]);
 
   const handleGoogleSignIn = async () => {
-    const redirectTo = `${window.location.origin}/api/auth/confirm?next=${encodeURIComponent(finalRedirectUrl)}`;
-    console.log('Google Sign-In - redirectTo:', redirectTo);
-
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo,
-        queryParams: {
-          access_type: 'offline',
-          prompt: 'consent',
-          response_type: 'code', // Ensure we get an authorization code
+    setIsLoading(true);
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
         },
-      },
-    });
+      });
 
-    if (error) {
-      setError(error.message);
-      console.error('Google Sign-In error:', error);
-    } else {
-      console.log('Google Sign-In initiated:', data);
+      if (error) throw error;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An unexpected error occurred');
+      console.error('Google Sign-In error:', err);
+      toast({
+        title: 'Error',
+        description: 'Failed to sign in with Google. Please try again.',
+        variant: 'destructive',
+      });
+      setIsLoading(false);
     }
   };
 
@@ -67,46 +87,34 @@ export default function LoginPopup({ open, onOpenChange, redirectUrl }: LoginPop
     setIsLoading(true);
 
     try {
-      const redirectTo = `${window.location.origin}/api/auth/confirm?next=${encodeURIComponent(finalRedirectUrl)}`;
-      console.log('Magic Link Sign-In - redirectTo:', redirectTo);
-
       const userExists = await checkUserExists(email);
 
-      if (userExists) {
-        const { error: linkError } = await supabase.auth.signInWithOtp({
-          email,
-          options: {
-            emailRedirectTo: redirectTo,
-            shouldCreateUser: false,
-          },
-        });
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          shouldCreateUser: !userExists,
+        },
+      });
 
-        if (linkError) {
-          setError(linkError.message);
-          setIsLoading(false);
-          return;
-        }
-      } else {
-        const { error } = await supabase.auth.signInWithOtp({
-          email,
-          options: {
-            emailRedirectTo: redirectTo,
-          },
-        });
-
-        if (error) {
-          setError(error.message);
-          setIsLoading(false);
-          return;
-        }
-      }
+      if (error) throw error;
 
       setMessage('Magic link sent! Check your email to continue.');
-      setIsLoading(false);
+      toast({
+        title: 'Check your email',
+        description: 'We’ve sent you a magic link to sign in.',
+      });
+      // Do NOT close the popup here; let the useEffect handle it after a delay
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unexpected error occurred');
-      setIsLoading(false);
       console.error('Magic Link Sign-In error:', err);
+      toast({
+        title: 'Error',
+        description: 'Failed to send magic link. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -118,9 +126,7 @@ export default function LoginPopup({ open, onOpenChange, redirectUrl }: LoginPop
       />
       <path
         fill="#34A853"
-        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-
-
-3.57-2.77c-1.04.7-2.36 1.11-3.71 1.11-2.85 0-5.27-1.92-6.13-4.5H1.5v2.82C3.38 20.38 7.44 23 12 23z"
+        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-1.04.7-2.36 1.11-3.71 1.11-2.85 0-5.27-1.92-6.13-4.5H1.5v2.82C3.38 20.38 7.44 23 12 23z"
       />
       <path
         fill="#FBBC05"
@@ -148,9 +154,10 @@ export default function LoginPopup({ open, onOpenChange, redirectUrl }: LoginPop
           <Button
             onClick={handleGoogleSignIn}
             className="w-full flex items-center justify-center bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 shadow-sm"
+            disabled={isLoading}
           >
             <GoogleIcon />
-            Sign in with Google
+            {isLoading ? 'Connecting...' : 'Sign in with Google'}
           </Button>
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
@@ -167,6 +174,7 @@ export default function LoginPopup({ open, onOpenChange, redirectUrl }: LoginPop
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+              disabled={isLoading}
             />
             {error && (
               <p className="text-sm text-red-600">{error}</p>
@@ -176,7 +184,7 @@ export default function LoginPopup({ open, onOpenChange, redirectUrl }: LoginPop
             )}
             <Button
               onClick={handleMagicLinkSignIn}
-              disabled={isLoading}
+              disabled={isLoading || !email}
               className="w-full bg-indigo-600 text-white hover:bg-indigo-700 flex items-center justify-center"
             >
               {isLoading ? (

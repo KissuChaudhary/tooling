@@ -2,77 +2,79 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getSession, signOut, supabase } from '@/lib/supabase';
-import { AuthChangeEvent, Session } from '@supabase/supabase-js';
+import { createClient } from '@/utils/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import LoginPopup from '@/components/LoginPopup';
-import { AlertTriangle } from 'lucide-react'; // For the warning icon
+import { AlertTriangle } from 'lucide-react';
+import { Session } from '@supabase/supabase-js';
 
 interface RequireAuthProps {
+  session: Session | null;
   onAuthChange: (isAuthenticated: boolean) => void;
 }
 
-export default function RequireAuth({ onAuthChange }: RequireAuthProps) {
+export default function RequireAuth({ session, onAuthChange }: RequireAuthProps) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [showLoginPopup, setShowLoginPopup] = useState<boolean>(false);
+  const supabase = createClient();
 
   useEffect(() => {
-    const checkSession = async () => {
-      const session = await getSession();
-      const authenticated = !!session;
+    const checkAuth = async () => {
+      let authenticated = false;
+
+      // First, try to get the user using the session's access token if available
+      if (session?.access_token) {
+        console.log('RequireAuth: Using server-side session access token');
+        const { data, error } = await supabase.auth.getUser(session.access_token);
+        console.log('RequireAuth: getUser with session token result:', { data, error });
+        authenticated = !error && !!data.user;
+      }
+
+      // If not authenticated, try to get the user from the client-side session
+      if (!authenticated) {
+        console.log('RequireAuth: Falling back to client-side session');
+        const { data, error } = await supabase.auth.getUser();
+        console.log('RequireAuth: getUser client-side result:', { data, error });
+        authenticated = !error && !!data.user;
+      }
+
       setIsAuthenticated(authenticated);
       onAuthChange(authenticated);
       setLoading(false);
     };
 
-    checkSession();
+    checkAuth();
 
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (event: AuthChangeEvent, session: Session | null) => {
-        const authenticated = !!session;
+    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, newSession) => {
+      console.log('RequireAuth: onAuthStateChange event:', event, 'newSession:', newSession);
+      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+        const { data, error } = await supabase.auth.getUser();
+        console.log('RequireAuth: getUser in onAuthStateChange result:', { data, error });
+        const authenticated = !error && !!data.user;
         setIsAuthenticated(authenticated);
         onAuthChange(authenticated);
         if (authenticated) {
           setShowLoginPopup(false);
         }
+      } else if (event === 'SIGNED_OUT') {
+        setIsAuthenticated(false);
+        onAuthChange(false);
       }
-    );
+    });
 
     return () => {
-      authListener?.subscription.unsubscribe();
+      authListener.subscription.unsubscribe();
     };
-  }, [onAuthChange]);
-
-  const handleLogout = async () => {
-    try {
-      await signOut();
-    } catch (error) {
-      console.error('Error signing out:', error);
-    }
-  };
+  }, [onAuthChange, session]);
 
   if (loading) {
     return (
       <div className="flex justify-center items-center h-16">
-        <svg
-          className="animate-spin h-5 w-5 text-gray-500"
-          viewBox="0 0 24 24"
-        >
-          <circle
-            className="opacity-25"
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            strokeWidth="4"
-          />
-          <path
-            className="opacity-75"
-            fill="currentColor"
-            d="M4 12a8 8 0 018-8v8h-8z"
-          />
+        <svg className="animate-spin h-5 w-5 text-gray-500" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8h-8z" />
         </svg>
       </div>
     );
@@ -87,9 +89,7 @@ export default function RequireAuth({ onAuthChange }: RequireAuthProps) {
               <AlertTriangle className="h-5 w-5 text-yellow-500" />
             </div>
             <div>
-              <AlertTitle className="text-base font-semibold text-gray-900">
-                Login Required
-              </AlertTitle>
+              <AlertTitle className="text-base font-semibold text-gray-900">Login Required</AlertTitle>
               <AlertDescription className="text-sm text-gray-600">
                 Please login to continue using this tool.
               </AlertDescription>

@@ -1,15 +1,42 @@
 // app/tools/ai-username-generator/page.tsx
 import UsernameGenerator from '@/components/UsernameGenerator';
 import ToolEngagement from '@/components/tool-engagement';
-import Head from 'next/head';
 import Script from 'next/script';
 import RelatedTools from '@/components/related-tools';
 import AdUnit from '@/components/AdUnit';
 import { User, Sparkles, Clock, Target, Fingerprint } from 'lucide-react';
+import { createClient } from '@/utils/supabase/server';
+import { cookies } from 'next/headers';
 
+// Define metadata using the metadata export (replaces Head)
 export const metadata = {
-  title: "AI Username Generator | Create Unique and Creative Usernames",
-  description: "Generate unique and creative usernames with our AI Username Generator. Perfect for social media, gaming, or any online presence.",
+  title: 'AI Username Generator | Create Unique and Creative Usernames',
+  description:
+    'Generate unique and creative usernames with our AI Username Generator. Perfect for social media, gaming, or any online presence.',
+  openGraph: {
+    title: 'AI Username Generator | Create Unique and Creative Usernames',
+    description:
+      'Generate unique and creative usernames with our AI Username Generator. Perfect for social media, gaming, or any online presence.',
+    url: 'https://sazeai.com/tools/ai-username-generator',
+    siteName: 'Saze AI',
+    images: [
+      {
+        url: 'https://sazeai.com/screenshot.png',
+        width: 1200,
+        height: 630,
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'AI Username Generator | Create Unique and Creative Usernames',
+    description:
+      'Generate unique and creative usernames with our AI Username Generator. Perfect for social media, gaming, or any online presence.',
+    images: ['https://sazeai.com/favicon.jpg'],
+    creator: '@SazeAI',
+  },
 };
 
 interface BenefitCardProps {
@@ -48,110 +75,121 @@ const StepItem: React.FC<StepItemProps> = ({ number, title, description }) => (
   </div>
 );
 
-export default function AIUsernameGeneratorPage() {
+export default async function AIUsernameGeneratorPage() {
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
   return (
-    <>
-      <Head>
-        <title>{metadata.title}</title>
-        <meta name="description" content={metadata.description} />
-      </Head>
+    <div className="min-h-screen" style={{ paddingBottom: '3rem' }}>
+      {/* Schema Script */}
       <Script id="schema-ai-username-generator" type="application/ld+json">
         {JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "WebPage",
-          "name": "AI Username Generator - Saze AI",
-          "description": "Generate unique and creative usernames with our AI Username Generator. Perfect for social media, gaming, or any online presence.",
-          "url": "https://sazeai.com/tools/ai-username-generator",
+          '@context': 'https://schema.org',
+          '@type': 'WebPage',
+          name: 'AI Username Generator - Saze AI',
+          description:
+            'Generate unique and creative usernames with our AI Username Generator. Perfect for social media, gaming, or any online presence.',
+          url: 'https://sazeai.com/tools/ai-username-generator',
         })}
       </Script>
-      <div className="min-h-screen" style={{ paddingBottom: '3rem' }}>
-        <UsernameGenerator />
-        <ToolEngagement 
-          toolName="AI Username Generator"
-        />
-        <AdUnit 
-          client="ca-pub-7915372771416695"
-          slot="8441706260"
-          style={{ marginBottom: '20px' }}
-        />
-        <RelatedTools currentToolLink="/tools/ai-username-generator" />
-        {/* Benefits Section */}
-        <section className="py-12 bg-white bg-gradient-to-b dark:from-gray-900 dark:to-gray-800">
-          <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-extrabold sm:text-4xl mb-8 text-center">What is AI Username Generator</h2>
-            <p className="leading-relaxed text-base">
-              Introducing AI Username Generator by SazeAI, your ultimate solution for creating unique and creative usernames. Harnessing the power of advanced AI, this innovative tool generates personalized usernames based on your interests and style preferences. Whether you're setting up a new social media account, creating a gaming persona, or establishing an online presence, AI Username Generator ensures you get distinctive, memorable usernames every time.
-            </p>
+
+      <UsernameGenerator session={session} />
+      <ToolEngagement toolName="AI Username Generator" />
+      <AdUnit
+        client="ca-pub-7915372771416695"
+        slot="8441706260"
+        style={{ marginBottom: '20px' }}
+      />
+      <RelatedTools currentToolLink="/tools/ai-username-generator" />
+
+      {/* Benefits Section */}
+      <section className="py-12 bg-white bg-gradient-to-b dark:from-gray-900 dark:to-gray-800">
+        <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-extrabold sm:text-4xl mb-8 text-center">
+            What is AI Username Generator
+          </h2>
+          <p className="leading-relaxed text-base">
+            Introducing AI Username Generator by SazeAI, your ultimate solution for creating unique
+            and creative usernames. Harnessing the power of advanced AI, this innovative tool
+            generates personalized usernames based on your interests and style preferences. Whether
+            you're setting up a new social media account, creating a gaming persona, or establishing
+            an online presence, AI Username Generator ensures you get distinctive, memorable
+            usernames every time.
+          </p>
+        </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-extrabold sm:text-4xl mb-8 text-center">
+            Benefits of Using the AI Username Generator
+          </h2>
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            <BenefitCard
+              icon={<Sparkles size={24} />}
+              title="Unique Creations"
+              description="Generate one-of-a-kind usernames that stand out from the crowd."
+            />
+            <BenefitCard
+              icon={<User size={24} />}
+              title="Personalized Results"
+              description="Get usernames tailored to your interests and style preferences."
+            />
+            <BenefitCard
+              icon={<Clock size={24} />}
+              title="Time-Saving"
+              description="Instantly generate multiple username options, saving you time and effort."
+            />
+            <BenefitCard
+              icon={<Target size={24} />}
+              title="Versatile Use"
+              description="Perfect for social media, gaming, forums, and any online platform."
+            />
+            <BenefitCard
+              icon={<Fingerprint size={24} />}
+              title="Brand Identity"
+              description="Create usernames that align with your personal or professional brand."
+            />
           </div>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-extrabold sm:text-4xl mb-8 text-center">
-              Benefits of Using the AI Username Generator
-            </h2>
-            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-              <BenefitCard
-                icon={<Sparkles size={24} />}
-                title="Unique Creations"
-                description="Generate one-of-a-kind usernames that stand out from the crowd."
-              />
-              <BenefitCard
-                icon={<User size={24} />}
-                title="Personalized Results"
-                description="Get usernames tailored to your interests and style preferences."
-              />
-              <BenefitCard
-                icon={<Clock size={24} />}
-                title="Time-Saving"
-                description="Instantly generate multiple username options, saving you time and effort."
-              />
-              <BenefitCard
-                icon={<Target size={24} />}
-                title="Versatile Use"
-                description="Perfect for social media, gaming, forums, and any online platform."
-              />
-              <BenefitCard
-                icon={<Fingerprint size={24} />}
-                title="Brand Identity"
-                description="Create usernames that align with your personal or professional brand."
-              />
-            </div>
+        </div>
+      </section>
+
+      {/* How to Use Section */}
+      <section className="py-12 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-extrabold text-gray-900 mb-8 text-center">
+            How to Use the AI Username Generator
+          </h2>
+          <div className="space-y-8">
+            <StepItem
+              number="1"
+              title="Enter Your Interests"
+              description="Input your interests or keywords that reflect your personality or brand."
+            />
+            <StepItem
+              number="2"
+              title="Select Your Style"
+              description="Choose a style preference: fun, professional, creative, or gaming."
+            />
+            <StepItem
+              number="3"
+              title="Choose the Number of Usernames"
+              description="Decide how many username options you want to generate."
+            />
+            <StepItem
+              number="4"
+              title="Generate and Review"
+              description="Click 'Generate Usernames' and review the AI-generated options."
+            />
           </div>
-        </section>
-        {/* How to Use Section */}
-        <section className="py-12 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-extrabold text-gray-900 mb-8 text-center">
-              How to Use the AI Username Generator
-            </h2>
-            <div className="space-y-8">
-              <StepItem
-                number="1"
-                title="Enter Your Interests"
-                description="Input your interests or keywords that reflect your personality or brand."
-              />
-              <StepItem
-                number="2"
-                title="Select Your Style"
-                description="Choose a style preference: fun, professional, creative, or gaming."
-              />
-              <StepItem
-                number="3"
-                title="Choose the Number of Usernames"
-                description="Decide how many username options you want to generate."
-              />
-              <StepItem
-                number="4"
-                title="Generate and Review"
-                description="Click 'Generate Usernames' and review the AI-generated options."
-              />
-            </div>
-          </div>
-        </section>
-        <AdUnit 
-          client="ca-pub-7915372771416695"
-          slot="8441706260"
-          style={{ marginBottom: '20px' }}
-        />
-      </div>
-    </>
+        </div>
+      </section>
+
+      <AdUnit
+        client="ca-pub-7915372771416695"
+        slot="8441706260"
+        style={{ marginBottom: '20px' }}
+      />
+    </div>
   );
 }

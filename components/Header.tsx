@@ -5,9 +5,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useTheme } from 'next-themes';
 import { useState, useEffect } from 'react';
-import { Moon, Sun, Menu, X, Search, LogOut } from 'lucide-react';
+import { Moon, Sun, Menu, X, Search, User, LogOut } from 'lucide-react';
 import ToolSearch from './ToolSearch';
-import { supabase, getSession, signOut } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -17,35 +17,44 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import LoginPopup from '@/components/LoginPopup';
-import { toast } from 'sonner'; 
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+import type { Session } from '@supabase/supabase-js';
 
-export default function Header() {
+export default function Header({ session }: { session: Session | null }) {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);
   const [showLoginPopup, setShowLoginPopup] = useState<boolean>(false);
   const [redirectUrl, setRedirectUrl] = useState<string>('');
-  const [isSigningOut, setIsSigningOut] = useState<boolean>(false); // Loading state for sign-out
+  const [isSigningOut, setIsSigningOut] = useState<boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!session);
+  const router = useRouter();
+  const supabase = createClient();
 
   useEffect(() => {
     setMounted(true);
-
     setRedirectUrl(`${window.location.origin}${window.location.pathname}`);
 
-    const checkSession = async () => {
-      const session = await getSession();
-      setUser(session?.user || null);
+    // Check initial authentication state
+    const checkAuth = async () => {
+      const { data, error } = await supabase.auth.getUser();
+      setIsAuthenticated(!error && !!data.user);
     };
-    checkSession();
+    checkAuth();
 
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user || null);
-      if (session?.user) {
-        setShowLoginPopup(false);
+    // Listen for auth state changes
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, newSession) => {
+      console.log('Header: onAuthStateChange event:', event, 'newSession:', newSession);
+      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+        setIsAuthenticated(true);
+      } else if (event === 'SIGNED_OUT') {
+        setIsAuthenticated(false);
+        // Force a full page reload to ensure all components update
+        window.location.href = '/';
       }
     });
 
@@ -59,19 +68,9 @@ export default function Header() {
       setLastScrollY(currentScrollY);
     };
 
-    const clearHash = () => {
-      if (window.location.hash) {
-        console.log('Clearing tokens from URL:', window.location.hash);
-        window.history.replaceState({}, document.title, window.location.pathname);
-      }
-    };
-
-    clearHash();
-    window.addEventListener('popstate', clearHash);
     window.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
-      window.removeEventListener('popstate', clearHash);
       window.removeEventListener('scroll', handleScroll);
       authListener.subscription.unsubscribe();
     };
@@ -87,20 +86,29 @@ export default function Header() {
 
   const handleSignOut = async () => {
     setIsSigningOut(true);
+
+    // Set a timeout to prevent the UI from getting stuck
+    const signOutTimeout = setTimeout(() => {
+      setIsSigningOut(false);
+      toast.error('Sign out timed out. Please try again.');
+      // Force a full page reload as a fallback
+      window.location.href = '/';
+    }, 5000); // 5 seconds timeout
+
     try {
-      // Sign out using Supabase
-      await signOut();
-
-      // Clear custom cookies set by /api/auth/confirm
-      document.cookie = 'sb-access-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure; samesite=lax';
-      document.cookie = 'sb-refresh-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure; samesite=lax';
-
-      // No need to setUser(null) here; onAuthStateChange will handle it
-      toast.success('Signed out successfully'); // Optional: user feedback
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        throw error;
+      }
+      toast.success('Signed out successfully');
+      // The onAuthStateChange handler will handle the redirect
     } catch (error) {
       console.error('Sign out error:', error);
-      toast.error('Failed to sign out. Please try again.'); // Optional: user feedback
+      toast.error('Failed to sign out. Please try again.');
+      // Force a full page reload as a fallback
+      window.location.href = '/';
     } finally {
+      clearTimeout(signOutTimeout);
       setIsSigningOut(false);
     }
   };
@@ -184,16 +192,16 @@ export default function Header() {
                 </div>
               </button>
               {mounted && (
-                user ? (
+                isAuthenticated ? (
                   <DropdownMenu>
                     <DropdownMenuTrigger className="relative w-10 h-10 rounded-full p-0 focus:outline-none">
                       <Avatar>
                         <AvatarImage
-                          src={user.user_metadata?.avatar_url || ''}
+                          src={session?.user.user_metadata?.avatar_url || ''}
                           alt="User profile"
                         />
                         <AvatarFallback>
-                          {user.email ? user.email[0].toUpperCase() : 'U'}
+                          {session?.user.email ? session.user.email[0].toUpperCase() : 'U'}
                         </AvatarFallback>
                       </Avatar>
                     </DropdownMenuTrigger>
