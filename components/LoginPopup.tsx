@@ -11,10 +11,9 @@ import { useToast } from "@/components/ui/use-toast";
 interface LoginPopupProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  redirectUrl?: string;
 }
 
-export default function LoginPopup({ open, onOpenChange, redirectUrl }: LoginPopupProps) {
+export default function LoginPopup({ open, onOpenChange }: LoginPopupProps) {
   const [email, setEmail] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [message, setMessage] = useState<string>('');
