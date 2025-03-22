@@ -19,29 +19,24 @@ export default function LoginPopup({ open, onOpenChange, redirectUrl }: LoginPop
   const [error, setError] = useState<string>('');
   const [message, setMessage] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [finalRedirectUrl, setFinalRedirectUrl] = useState<string>('');
   const supabase = createClient();
   const { toast } = useToast();
 
   useEffect(() => {
-    const url = redirectUrl || `${window.location.pathname}` || '/';
-    setFinalRedirectUrl(url);
-    console.log('LoginPopup - finalRedirectUrl:', url);
-  
     if (!open) {
-      window.location.href = url; // Example use case (redirect when popup closes)
       setEmail('');
       setError('');
       setMessage('');
       setIsLoading(false);
     }
+  
     if (message) {
       const timer = setTimeout(() => {
-        onOpenChange(false);
+        onOpenChange(false);  // Automatically close popup after 5 seconds if there's a message
       }, 5000);
       return () => clearTimeout(timer);
     }
-  }, [open, redirectUrl, message, onOpenChange]);
+  }, [open, message, onOpenChange]);
   
 
   const handleGoogleSignIn = async () => {
