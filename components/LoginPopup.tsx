@@ -11,13 +11,15 @@ import { useToast } from "@/components/ui/use-toast";
 interface LoginPopupProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  redirectUrl?: string; // Optional redirect URL
 }
 
-export default function LoginPopup({ open, onOpenChange }: LoginPopupProps) {
+export default function LoginPopup({ open, onOpenChange, redirectUrl }: LoginPopupProps) {
   const [email, setEmail] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [message, setMessage] = useState<string>('');
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState<boolean>(false); // Separate loader for Google login
+  const [isMagicLinkLoading, setIsMagicLinkLoading] = useState<boolean>(false); // Separate loader for magic link
   const supabase = createClient();
   const { toast } = useToast();
 
@@ -26,12 +28,13 @@ export default function LoginPopup({ open, onOpenChange }: LoginPopupProps) {
       setEmail('');
       setError('');
       setMessage('');
-      setIsLoading(false);
+      setIsGoogleLoading(false);
+      setIsMagicLinkLoading(false);
     }
   
     if (message) {
       const timer = setTimeout(() => {
-        onOpenChange(false);  // Automatically close popup after 5 seconds if there's a message
+        onOpenChange(false); // Automatically close popup after 5 seconds if there's a message
       }, 5000);
       return () => clearTimeout(timer);
     }
@@ -39,7 +42,8 @@ export default function LoginPopup({ open, onOpenChange }: LoginPopupProps) {
   
 
   const handleGoogleSignIn = async () => {
-    setIsLoading(true);
+    setIsGoogleLoading(true); // Set Google loader
+    setIsMagicLinkLoading(false); // Disable Magic Link loader if it was running
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -57,7 +61,8 @@ export default function LoginPopup({ open, onOpenChange }: LoginPopupProps) {
         description: 'Failed to sign in with Google. Please try again.',
         variant: 'destructive',
       });
-      setIsLoading(false);
+    } finally {
+      setIsGoogleLoading(false); // Reset Google loader after request
     }
   };
 
@@ -77,7 +82,8 @@ export default function LoginPopup({ open, onOpenChange }: LoginPopupProps) {
   const handleMagicLinkSignIn = async () => {
     setError('');
     setMessage('');
-    setIsLoading(true);
+    setIsMagicLinkLoading(true); // Set Magic Link loader
+    setIsGoogleLoading(false); // Disable Google loader if it was running
 
     try {
       const userExists = await checkUserExists(email);
@@ -97,7 +103,6 @@ export default function LoginPopup({ open, onOpenChange }: LoginPopupProps) {
         title: 'Check your email',
         description: 'We’ve sent you a magic link to sign in.',
       });
-      // Do NOT close the popup here; let the useEffect handle it after a delay
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unexpected error occurred');
       console.error('Magic Link Sign-In error:', err);
@@ -107,7 +112,7 @@ export default function LoginPopup({ open, onOpenChange }: LoginPopupProps) {
         variant: 'destructive',
       });
     } finally {
-      setIsLoading(false);
+      setIsMagicLinkLoading(false); // Reset Magic Link loader after request
     }
   };
 
@@ -144,14 +149,15 @@ export default function LoginPopup({ open, onOpenChange }: LoginPopupProps) {
           </p>
         </DialogHeader>
         <div className="space-y-6 p-4">
-          <Button
+        <Button
             onClick={handleGoogleSignIn}
             className="w-full flex items-center justify-center bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 shadow-sm"
-            disabled={isLoading}
+            disabled={isGoogleLoading}
           >
             <GoogleIcon />
-            {isLoading ? 'Connecting...' : 'Sign in with Google'}
+            {isGoogleLoading ? 'Connecting...' : 'Sign in with Google'}
           </Button>
+
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t border-gray-300" />
@@ -160,45 +166,29 @@ export default function LoginPopup({ open, onOpenChange }: LoginPopupProps) {
               <span className="px-2 bg-white text-gray-500">Or use email</span>
             </div>
           </div>
-          <div className="space-y-4">
-            <Input
+
+          <Input
               type="email"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
-              disabled={isLoading}
+              disabled={isGoogleLoading || isMagicLinkLoading}
             />
-            {error && (
-              <p className="text-sm text-red-600">{error}</p>
-            )}
-            {message && (
-              <p className="text-sm text-green-600">{message}</p>
-            )}
+            {error && <p className="text-sm text-red-600">{error}</p>}
+            {message && <p className="text-sm text-green-600">{message}</p>}
             <Button
               onClick={handleMagicLinkSignIn}
-              disabled={isLoading || !email}
+              disabled={isMagicLinkLoading || !email}
               className="w-full bg-indigo-600 text-white hover:bg-indigo-700 flex items-center justify-center"
             >
-              {isLoading ? (
+              {isMagicLinkLoading ? (
                 <>
                   <svg
                     className="animate-spin h-5 w-5 mr-2 text-white"
                     viewBox="0 0 24 24"
                   >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    />
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8v8h-8z"
-                    />
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8h-8z" />
                   </svg>
                   Sending...
                 </>
@@ -206,8 +196,8 @@ export default function LoginPopup({ open, onOpenChange }: LoginPopupProps) {
                 'Send Magic Link'
               )}
             </Button>
-          </div>
         </div>
+
         <DialogFooter className="sm:justify-end">
           <Button
             variant="outline"
